@@ -1,0 +1,4 @@
+services:
+    cms.model:
+        class:        BiberLtd\Core\Bundles\ContentManagementBundle\Services\ContentManagementModel
+        arguments:    [@kernel, "default", "doctrine"]
