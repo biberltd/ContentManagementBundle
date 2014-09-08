@@ -1,10 +1,10 @@
 biberltd_core_content_management_manage:
     pattern:  pages/{sortcolumn}/{sortorder}/{page_number}
-    defaults: { _controller: BiberLtdCoreBundlesContentManagementBundle:Manage:pageList }
+    defaults: { _controller: BiberLtdBundleContentManagementBundle:Manage:pageList }
     pattern:  pages/{page_id_or_code}
-    defaults: { _controller: BiberLtdCoreBundlesContentManagementBundle:Manage:pageEdit }
+    defaults: { _controller: BiberLtdBundleContentManagementBundle:Manage:pageEdit }
     pattern:  pages/new
-    defaults: { _controller: BiberLtdCoreBundlesContentManagementBundle:Manage:pageNew }
+    defaults: { _controller: BiberLtdBundleContentManagementBundle:Manage:pageNew }
     pattern:  pages/delete
-    defaults: { _controller: BiberLtdCoreBundlesContentManagementBundle:Manage:pageDelete }
+    defaults: { _controller: BiberLtdBundleContentManagementBundle:Manage:pageDelete }
     

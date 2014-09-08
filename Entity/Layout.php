@@ -1,5 +1,5 @@
 <?php
-namespace BiberLtd\Core\Bundles\ContentManagementBundle\Entity;
+namespace BiberLtd\Bundle\ContentManagementBundle\Entity;
 /**
  * @name        layout
  * @package		BiberLtd\Core\AccessManagementBundle
@@ -48,33 +48,33 @@ class Layout extends CoreLocalizableEntity
 
     /** 
      * @ORM\OneToMany(
-     *     targetEntity="BiberLtd\Core\Bundles\ContentManagementBundle\Entity\ModulesOfLayout",
+     *     targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\ModulesOfLayout",
      *     mappedBy="layout"
      * )
      */
     private $modules_of_layout;
 
     /** 
-     * @ORM\OneToMany(targetEntity="BiberLtd\Core\Bundles\ContentManagementBundle\Entity\Page", mappedBy="layout")
+     * @ORM\OneToMany(targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\Page", mappedBy="layout")
      */
     private $pages;
 
     /** 
      * @ORM\OneToMany(
-     *     targetEntity="BiberLtd\Core\Bundles\ContentManagementBundle\Entity\LayoutLocalization",
+     *     targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\LayoutLocalization",
      *     mappedBy="layout"
      * )
      */
     protected $localizations;
 
     /** 
-     * @ORM\ManyToOne(targetEntity="BiberLtd\Core\Bundles\SiteManagementBundle\Entity\Site")
+     * @ORM\ManyToOne(targetEntity="BiberLtd\Bundle\SiteManagementBundle\Entity\Site")
      * @ORM\JoinColumn(name="site", referencedColumnName="id")
      */
     private $site;
 
     /** 
-     * @ORM\ManyToOne(targetEntity="BiberLtd\Core\Bundles\ContentManagementBundle\Entity\Theme", inversedBy="layouts")
+     * @ORM\ManyToOne(targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\Theme", inversedBy="layouts")
      * @ORM\JoinColumn(name="theme", referencedColumnName="id", nullable=false)
      */
     private $theme;

@@ -540,7 +540,7 @@
     </association>
     <comment caption="ContentManagementBundle Pricing" description="files_of_page: 195 TL&#10;layout: 150 TL&#10;layout_localization: 130 TL&#10;module: 150 TL&#10;modules_of_layout: 215 TL&#10;modules_of_layout_localization: 110 TL&#10;navigation: 105 TL&#10;navigation_localization: 150 TL&#10;navigation_item: 355 TL&#10;navigation_item_localization: 150 TL&#10;page: 170 TL&#10;page_localization: 210 TL&#10;theme: 205 TL&#10;theme_localization: 110 TL&#10;&#10;toplam: 2,405 TL" uuid="2a3deb99-11a0-43db-acd9-b583ce3259a3"/>
     <orm-attributes>
-      <attribute name="namespace">BiberLtd\Core\Bundles\ContentManagementBundle\Entity</attribute>
+      <attribute name="namespace">BiberLtd\Bundle\ContentManagementBundle\Entity</attribute>
       <attribute name="filename-format">entity-name-only</attribute>
       <attribute name="file-suffix">without-suffix</attribute>
     </orm-attributes>

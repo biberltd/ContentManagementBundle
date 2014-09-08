@@ -14,7 +14,7 @@
  * @description Model / Entity class.
  *
  */
-namespace BiberLtd\Core\Bundles\ContentManagementBundle\Entity;
+namespace BiberLtd\Bundle\ContentManagementBundle\Entity;
 use Doctrine\ORM\Mapping AS ORM;
 use BiberLtd\Core\CoreLocalizableEntity;
 /** 
@@ -55,7 +55,7 @@ class ModulesOfLayout extends CoreLocalizableEntity
 
     /** 
      * @ORM\OneToMany(
-     *     targetEntity="BiberLtd\Core\Bundles\ContentManagementBundle\Entity\ModulesOfLayoutLocalization",
+     *     targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\ModulesOfLayoutLocalization",
      *     mappedBy="modules_of_layout"
      * )
      */
@@ -63,7 +63,7 @@ class ModulesOfLayout extends CoreLocalizableEntity
 
     /** 
      * @ORM\ManyToOne(
-     *     targetEntity="BiberLtd\Core\Bundles\ContentManagementBundle\Entity\Layout",
+     *     targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\Layout",
      *     inversedBy="modules_of_layout"
      * )
      * @ORM\JoinColumn(name="layout", referencedColumnName="id", nullable=false, onDelete="CASCADE")
@@ -72,7 +72,7 @@ class ModulesOfLayout extends CoreLocalizableEntity
 
     /** 
      * @ORM\ManyToOne(
-     *     targetEntity="BiberLtd\Core\Bundles\ContentManagementBundle\Entity\Page",
+     *     targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\Page",
      *     inversedBy="modules_of_layout"
      * )
      * @ORM\JoinColumn(name="page", referencedColumnName="id", nullable=false, onDelete="CASCADE")
@@ -81,7 +81,7 @@ class ModulesOfLayout extends CoreLocalizableEntity
 
     /** 
      * @ORM\ManyToOne(
-     *     targetEntity="BiberLtd\Core\Bundles\ContentManagementBundle\Entity\Module",
+     *     targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\Module",
      *     inversedBy="modules_of_layout"
      * )
      * @ORM\JoinColumn(name="module", referencedColumnName="id", nullable=false, onDelete="CASCADE")

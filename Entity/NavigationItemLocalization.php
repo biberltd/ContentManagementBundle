@@ -14,7 +14,7 @@
  * @description Model / Entity class.
  *
  */
-namespace BiberLtd\Core\Bundles\ContentManagementBundle\Entity;
+namespace BiberLtd\Bundle\ContentManagementBundle\Entity;
 use Doctrine\ORM\Mapping AS ORM;
 use BiberLtd\Core\CoreEntity;
 /**
@@ -50,7 +50,7 @@ class NavigationItemLocalization extends CoreEntity
 
     /**
      * @ORM\Id
-     * @ORM\ManyToOne(targetEntity="BiberLtd\Core\Bundles\MultiLanguageSupportBundle\Entity\Language")
+     * @ORM\ManyToOne(targetEntity="BiberLtd\Bundle\MultiLanguageSupportBundle\Entity\Language")
      * @ORM\JoinColumn(name="language", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
     private $language;
@@ -58,7 +58,7 @@ class NavigationItemLocalization extends CoreEntity
     /**
      * @ORM\Id
      * @ORM\ManyToOne(
-     *     targetEntity="BiberLtd\Core\Bundles\ContentManagementBundle\Entity\NavigationItem",
+     *     targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\NavigationItem",
      *     inversedBy="localizations"
      * )
      * @ORM\JoinColumn(name="navigation_item", referencedColumnName="id", nullable=false, onDelete="CASCADE")
@@ -116,7 +116,7 @@ class NavigationItemLocalization extends CoreEntity
      *
      * @use             $this->setModified()
      *
-     * @param           BiberLtd\Core\Bundles\MultiLanguageSupportBundle\Entity\Language                   $language
+     * @param           BiberLtd\Bundle\MultiLanguageSupportBundle\Entity\Language                   $language
      *
      * @return          object                  $this
      */
@@ -137,7 +137,7 @@ class NavigationItemLocalization extends CoreEntity
      * @since           1.0.0
      * @version         1.2.0
      *
-     * @return          BiberLtd\Core\Bundles\MultiLanguageSupportBundle\Entity\Language           $this->language
+     * @return          BiberLtd\Bundle\MultiLanguageSupportBundle\Entity\Language           $this->language
      */
     public function getLanguage() {
         return $this->language;
@@ -157,7 +157,7 @@ class NavigationItemLocalization extends CoreEntity
      *
      * @param           mixed $navigation_item
      *
-     * @return          BiberLtd\Core\Bundles\ContentManagementBundle\Entity\NavigationItem                $this
+     * @return          BiberLtd\Bundle\ContentManagementBundle\Entity\NavigationItem                $this
      */
     public function setNavigationItem($navigation_item) {
         if(!$this->setModified('navigation_item', $navigation_item)->isModified()) {
@@ -176,7 +176,7 @@ class NavigationItemLocalization extends CoreEntity
      * @since           1.0.0
      * @version         1.0.0
      *
-     * @return          BiberLtd\Core\Bundles\ContentManagementBundle\Entity\NavigationItem           $this->navigation_item
+     * @return          BiberLtd\Bundle\ContentManagementBundle\Entity\NavigationItem           $this->navigation_item
      */
     public function getNavigationItem() {
         return $this->navigation_item;

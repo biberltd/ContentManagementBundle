@@ -14,7 +14,7 @@
  * @description Model / Entity class.
  *
  */
-namespace BiberLtd\Core\Bundles\ContentManagementBundle\Entity;
+namespace BiberLtd\Bundle\ContentManagementBundle\Entity;
 use Doctrine\ORM\Mapping AS ORM;
 use BiberLtd\Core\CoreLocalizableEntity;
 /** 
@@ -72,25 +72,25 @@ class Theme extends CoreLocalizableEntity
     private $count_layouts;
 
     /** 
-     * @ORM\OneToMany(targetEntity="BiberLtd\Core\Bundles\ContentManagementBundle\Entity\Layout", mappedBy="theme")
+     * @ORM\OneToMany(targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\Layout", mappedBy="theme")
      */
     private $layouts;
 
     /** 
      * @ORM\OneToMany(
-     *     targetEntity="BiberLtd\Core\Bundles\ContentManagementBundle\Entity\ThemeLocalization",
+     *     targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\ThemeLocalization",
      *     mappedBy="theme"
      * )
      */
     protected $localizations;
 
     /** 
-     * @ORM\OneToMany(targetEntity="BiberLtd\Core\Bundles\ContentManagementBundle\Entity\Module", mappedBy="theme")
+     * @ORM\OneToMany(targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\Module", mappedBy="theme")
      */
     private $modules;
 
     /** 
-     * @ORM\ManyToOne(targetEntity="BiberLtd\Core\Bundles\SiteManagementBundle\Entity\Site")
+     * @ORM\ManyToOne(targetEntity="BiberLtd\Bundle\SiteManagementBundle\Entity\Site")
      * @ORM\JoinColumn(name="site", referencedColumnName="id", onDelete="CASCADE")
      */
     private $site;
