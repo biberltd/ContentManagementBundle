@@ -1,3 +1,10 @@
-biber_ltd_content_management_homepage:
-    path:     /hello/{name}
-    defaults: { _controller: BiberLtdContentManagementBundle:Default:index }
+biberltd_core_content_management_manage:
+    pattern:  pages/{sortcolumn}/{sortorder}/{page_number}
+    defaults: { _controller: BiberLtdCoreBundlesContentManagementBundle:Manage:pageList }
+    pattern:  pages/{page_id_or_code}
+    defaults: { _controller: BiberLtdCoreBundlesContentManagementBundle:Manage:pageEdit }
+    pattern:  pages/new
+    defaults: { _controller: BiberLtdCoreBundlesContentManagementBundle:Manage:pageNew }
+    pattern:  pages/delete
+    defaults: { _controller: BiberLtdCoreBundlesContentManagementBundle:Manage:pageDelete }
+    
