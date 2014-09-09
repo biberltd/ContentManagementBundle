@@ -1,0 +1,567 @@
+<?xml version="1.0"?>
+<skipper version="3.0.0.1104" mvc="Symfony2" orm="Doctrine2">
+  <module name="ContentManagementBundle" import-format="Doctrine2Php" import-path="../Entity" uuid="8c6e8bbc-980a-4f9f-a4ab-152e8e74b3fd">
+    <entity name="ModulesOfLayout" description="Associates modules with layouts." uuid="ccfcaf8f-feee-4582-a201-a7b81aded041">
+      <field name="id" description="System given id." type="integer" size="10" required="true" unique="true" primary="true" auto-increment="true" uuid="602a4363-d200-43e5-b3b8-2a787bdc7f67"/>
+      <field name="layout" description="Associated layout." type="integer" size="10" required="true" uuid="a16b27e2-4c11-4b13-9d91-0378f39cd49f"/>
+      <field name="module" description="Associated module." type="integer" size="10" required="true" uuid="21916d77-47f8-49f4-a509-3040774271bf"/>
+      <field name="page" description="Associated page." type="integer" size="15" required="true" uuid="4c623468-d2fd-430a-9218-fa5d1fa1de12"/>
+      <field name="section" description="Section key as placed in HTML." type="string" size="45" uuid="d9d4d0cc-c058-4f3d-9460-44917a816b5e"/>
+      <field name="sort_order" description="Custom sort order." type="integer" size="10" default="1" uuid="406e7727-8899-4f22-b57f-b6573d55d3a2"/>
+      <field name="style" description="Extra style guide / trigger if needed." type="string" size="45" uuid="77fc43e5-9ad6-4d77-94fc-356d43cc0322"/>
+      <index name="idx_u_modules_of_layout_id" unique="true">
+        <index-field name="id"/>
+      </index>
+      <index name="idx_u_modules_of_layout" unique="true">
+        <index-field name="layout"/>
+        <index-field name="module"/>
+        <index-field name="page"/>
+        <index-field name="section"/>
+      </index>
+      <index name="idx_n_modules_of_layout_section">
+        <index-field name="section"/>
+      </index>
+      <orm-attributes>
+        <attribute name="options">
+          <attribute name="charset">utf8</attribute>
+          <attribute name="collate">utf8_turkish_ci</attribute>
+          <attribute name="engine">innodb</attribute>
+        </attribute>
+        <attribute name="table">modules_of_layout</attribute>
+        <attribute name="export-file-name">ModulesOfLayout.php</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="ModulesOfLayout" to="Layout" caption="idx_f_modules_of_layout_layout" owner-alias="modules_of_layout" inverse-alias="layout" uuid="47dde64b-5283-4007-83d0-3de289361247">
+      <association-field from="layout" to="id"/>
+      <orm-attributes>
+        <attribute name="on-delete">CASCADE</attribute>
+      </orm-attributes>
+    </association>
+    <association from="ModulesOfLayout" to="Page" caption="idx_f_modules_of_layout_page" owner-alias="modules_of_layout" inverse-alias="page" uuid="35b5ce6e-6adb-4f1b-83d6-107f9d5bbfe8">
+      <association-field from="page" to="id"/>
+      <orm-attributes>
+        <attribute name="on-delete">CASCADE</attribute>
+      </orm-attributes>
+    </association>
+    <association from="ModulesOfLayout" to="Module" caption="idx_f_modules_of_layout_module" owner-alias="modules_of_layout" inverse-alias="module" uuid="acbd35a7-9062-4041-8ebf-315e40a57a3a">
+      <association-field from="module" to="id"/>
+      <orm-attributes>
+        <attribute name="on-delete">CASCADE</attribute>
+      </orm-attributes>
+    </association>
+    <entity name="ModulesOfLayoutLocalization" description="Stores localized values of layout modules." uuid="bd133097-afda-4232-a902-ff867d2295e5">
+      <field name="module_of_layout" description="Localized module of layout." required="true" primary="true" uuid="f1dc688e-6d09-4105-bc93-1e270e055304"/>
+      <field name="language" description="Localization language." type="integer" size="5" required="true" primary="true" uuid="48f82222-fe53-4449-bbb2-c5b19018b733"/>
+      <field name="content" description="Localized content of layout's module." type="text" uuid="03a532a9-ad1c-4fda-9d3b-ffdab7385ef9"/>
+      <index name="idx_u_modules_of_layout_localization" unique="true">
+        <index-field name="module_of_layout"/>
+        <index-field name="language"/>
+      </index>
+      <orm-attributes>
+        <attribute name="options">
+          <attribute name="charset">utf8</attribute>
+          <attribute name="collate">utf8_turkish_ci</attribute>
+          <attribute name="engine">innodb</attribute>
+        </attribute>
+        <attribute name="table">modules_of_layout_localization</attribute>
+        <attribute name="export-file-name">ModulesOfLayoutLocalization.php</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="ModulesOfLayoutLocalization" to="Language" caption="idx_f_modules_of_layout_localization_language" inverse-alias="language" uuid="70b69e76-9b05-4f02-b56d-76fe709e639d">
+      <association-field from="language" to="id"/>
+      <orm-attributes>
+        <attribute name="on-delete">CASCADE</attribute>
+      </orm-attributes>
+    </association>
+    <association from="ModulesOfLayoutLocalization" to="ModulesOfLayout" caption="idx_f_modules_of_layout_localization_module_of_layout" owner-alias="localizations" inverse-alias="modules_of_layout" uuid="b2be8dcb-4a99-47db-b5ca-3f31626e5742">
+      <association-field from="module_of_layout" to="id"/>
+      <orm-attributes>
+        <attribute name="on-delete">CASCADE</attribute>
+      </orm-attributes>
+    </association>
+    <entity name="Navigation" description="Stores navigation definitions." uuid="f4a94f85-38f8-44d1-8ab0-988266d87859">
+      <field name="id" description="System given id." type="integer" size="10" required="true" unique="true" primary="true" auto-increment="true" uuid="133bf599-de70-4f85-83df-a47e7bed505b"/>
+      <field name="code" description="System code. Cannot be modified." type="string" size="45" required="true" uuid="5bbe52dc-328a-4433-aca0-c18740bc2198"/>
+      <field name="date_added" description="Date when the navigation is added." type="datetime" required="true" uuid="46ed6f6a-3b8c-42c4-a847-9d0afae7ecdc"/>
+      <field name="site" description="Site where navigation belongs to." type="integer" size="10" uuid="b96091d6-aac0-4606-b1fa-275db0939dbe"/>
+      <index name="idx_u_navigation_id" unique="true">
+        <index-field name="id"/>
+      </index>
+      <index name="idx_u_navigation_code" unique="true">
+        <index-field name="code"/>
+      </index>
+      <index name="idx_n_date_added">
+        <index-field name="date_added"/>
+      </index>
+      <orm-attributes>
+        <attribute name="options">
+          <attribute name="charset">utf8</attribute>
+          <attribute name="collate">utf8_turkish_ci</attribute>
+          <attribute name="engine">innodb</attribute>
+        </attribute>
+        <attribute name="export-file-name">Navigation.php</attribute>
+        <attribute name="table">navigation</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="Navigation" to="Site" caption="idx_f_navigation_site" inverse-alias="site" uuid="149e41ca-41cd-4166-a4d3-a7c7018aa1a1">
+      <association-field from="site" to="id"/>
+      <orm-attributes>
+        <attribute name="on-delete">CASCADE</attribute>
+      </orm-attributes>
+    </association>
+    <entity name="NavigationLocalization" description="Holds localized values of navigation definitions." uuid="18d2375d-c0b8-4fb0-92a4-25d0d48bcbb9">
+      <field name="navigation" description="Localized navigation." type="integer" size="10" required="true" primary="true" uuid="855d8724-0dda-44f9-84ef-25e562ab7f71"/>
+      <field name="language" description="Localization language." type="integer" size="5" required="true" primary="true" uuid="ed055ff1-e17c-44ed-9709-5a18bbf76f75"/>
+      <field name="name" description="Localized name of navigation." type="string" size="45" required="true" uuid="5d1bc64a-c149-420b-91aa-9e13c2bfd356"/>
+      <field name="url_key" description="Localized url key of navigation." type="string" size="55" required="true" uuid="04a16b03-5945-4d58-a7d0-e086f129b458"/>
+      <field name="description" description="Localized description of navigation." type="string" size="255" uuid="b431230f-003f-46c4-bb9a-4b71720813f4"/>
+      <index name="idx_u_navigation_localization" unique="true">
+        <index-field name="navigation"/>
+        <index-field name="language"/>
+      </index>
+      <index name="idx_u_navigation_localization_url_key" unique="true">
+        <index-field name="navigation"/>
+        <index-field name="language"/>
+        <index-field name="url_key"/>
+      </index>
+      <orm-attributes>
+        <attribute name="options">
+          <attribute name="charset">utf8</attribute>
+          <attribute name="collate">utf8_turkish_ci</attribute>
+          <attribute name="engine">innodb</attribute>
+        </attribute>
+        <attribute name="table">navigation_localization</attribute>
+        <attribute name="export-file-name">NavigationLocalization.php</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="NavigationLocalization" to="Language" caption="idx_f_navigation_localization_language" inverse-alias="language" uuid="2cda077b-3425-40b8-bcaf-085bfeed5885">
+      <association-field from="language" to="id"/>
+      <orm-attributes>
+        <attribute name="on-delete">CASCADE</attribute>
+      </orm-attributes>
+    </association>
+    <association from="NavigationLocalization" to="Navigation" caption="idx_f_navigation_localization_navigation" owner-alias="localizations" inverse-alias="navigation" uuid="64fe9ccc-c2b7-43f0-a4d5-1e2aaa5b3a22">
+      <association-field from="navigation" to="id"/>
+      <orm-attributes>
+        <attribute name="on-delete">CASCADE</attribute>
+      </orm-attributes>
+    </association>
+    <entity name="NavigationItem" description="Holds definitions of navigaiton items." uuid="f6426096-db5d-4316-9fa9-ea4db7dc2d9a">
+      <field name="id" description="System given id." type="integer" size="10" required="true" unique="true" primary="true" auto-increment="true" uuid="73f8aa59-859d-4cb6-b02c-0a1e49d446ed"/>
+      <field name="url" description="URL of navigation item" type="text" required="true" uuid="27e23d2a-34dc-42c8-a9ba-2fe8f45ca9e1"/>
+      <field name="target" description="b:blank; s:self" type="string" size="1" default="b" required="true" uuid="027abc90-a3de-4304-bc8e-41f8447a5865"/>
+      <field name="sort_order" description="Custom sort order." type="integer" size="10" default="1" required="true" uuid="6b54518c-3681-43cc-8eed-77279d20c067"/>
+      <field name="navigation" description="Navigation that item belongs to." type="integer" size="10" required="true" uuid="a9dab726-8105-4f7d-840e-c4fb5b93d923"/>
+      <field name="page" description="If linked to an internal page, the page id." type="integer" size="15" uuid="1ef8ca10-9c9e-4b4d-9037-222cc94e7af8"/>
+      <field name="parent" description="If sub menu item the parent id." type="integer" size="10" uuid="9cdaff3f-324c-48bf-95f2-c11768520302"/>
+      <field name="is_child" description="y:yes;n:no" type="string" size="1" default="n" required="true" uuid="8f7e2d23-5a05-4488-975a-6c36dd60a8d6"/>
+      <field name="icon" description="Icon file name." type="string" uuid="7b029e66-8925-4335-933e-45e04ddc4a50"/>
+      <index name="idx_u_navigation_item_id" unique="true">
+        <index-field name="id"/>
+      </index>
+      <orm-attributes>
+        <attribute name="options">
+          <attribute name="charset">utf8</attribute>
+          <attribute name="collate">utf8_turkish_ci</attribute>
+          <attribute name="engine">innodb</attribute>
+        </attribute>
+        <attribute name="table">navigation_item</attribute>
+        <attribute name="export-file-name">NavigationItem.php</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="NavigationItem" to="Page" caption="idx_f_navigation_item_page" owner-alias="navigation_items" inverse-alias="page" uuid="24b7bd30-7d2a-4baf-bf7a-c2310f27dd42">
+      <association-field from="page" to="id"/>
+      <orm-attributes>
+        <attribute name="on-delete">RESTRICT</attribute>
+      </orm-attributes>
+    </association>
+    <association from="NavigationItem" to="NavigationItem" caption="idx_f_navigation_item_parent" owner-alias="navigation_items" inverse-alias="parent" uuid="1cea9dc4-b145-4e35-a992-d12840d89124">
+      <association-field from="parent" to="id"/>
+      <orm-attributes>
+        <attribute name="on-delete">CASCADE</attribute>
+      </orm-attributes>
+    </association>
+    <association from="NavigationItem" to="Navigation" caption="idx_f_navigation_item_navigation" owner-alias="navigation_items" inverse-alias="navigation" uuid="b9959be9-c646-4900-b154-c187fe55dc21">
+      <association-field from="navigation" to="id"/>
+      <orm-attributes>
+        <attribute name="on-delete">CASCADE</attribute>
+      </orm-attributes>
+    </association>
+    <entity name="NavigationItemLocalization" description="Holds localized values of navigation item entries." uuid="038eb4b3-a479-4827-af6c-fb5eefc60295">
+      <field name="navigation_item" description="Localized navigation item." type="integer" size="10" required="true" primary="true" uuid="f4def8e6-7464-4984-8d95-8a8fffb6df26"/>
+      <field name="language" description="Localized language." type="integer" size="5" required="true" primary="true" uuid="edfbffdc-a903-4f81-87e5-b379662dee3c"/>
+      <field name="title" description="Localized title of navigation item." type="string" size="45" required="true" uuid="59e917a8-ecb8-4679-a1e9-e3c497b4c211"/>
+      <field name="url_key" description="Localized url key of navigation item." type="string" size="55" required="true" uuid="9770f0a8-e4b6-4169-a59d-f68586b875f5"/>
+      <field name="description" description="Localized description of the navigation item." type="string" size="255" uuid="58110865-482b-43f5-878c-38e3a16819e8"/>
+      <index name="idx_u_navigation_item_localization" unique="true">
+        <index-field name="navigation_item"/>
+        <index-field name="language"/>
+      </index>
+      <index name="idx_u_navigation_item_localization_url_key" unique="true">
+        <index-field name="navigation_item"/>
+        <index-field name="language"/>
+        <index-field name="url_key"/>
+      </index>
+      <orm-attributes>
+        <attribute name="options">
+          <attribute name="charset">utf8</attribute>
+          <attribute name="collate">utf8_turkish_ci</attribute>
+          <attribute name="engine">innodb</attribute>
+        </attribute>
+        <attribute name="table">navigation_item_localization</attribute>
+        <attribute name="export-file-name">NavigationItemLocalization.php</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="NavigationItemLocalization" to="Language" caption="idx_f_navigation_item_localization_language" inverse-alias="language" uuid="b54d630f-3659-4d09-808c-2d2af5deec3f">
+      <association-field from="language" to="id"/>
+      <orm-attributes>
+        <attribute name="on-delete">CASCADE</attribute>
+      </orm-attributes>
+    </association>
+    <association from="NavigationItemLocalization" to="NavigationItem" caption="idx_f_navigation_item_localization_navigation_item" owner-alias="localizations" inverse-alias="navigation_item" uuid="29f2fb47-b345-4fbc-a5a0-2b2ba6fb2cd9">
+      <association-field from="navigation_item" to="id"/>
+      <orm-attributes>
+        <attribute name="on-delete">CASCADE</attribute>
+      </orm-attributes>
+    </association>
+    <entity name="FilesOfPage" description="Associates files with pages." uuid="324ca93b-931a-4969-bd0f-4d6ddadd65e2">
+      <field name="file" description="Associated file." type="integer" size="15" required="true" primary="true" uuid="0a13170e-2fc7-4c91-a8d5-94c5edd1ed2f"/>
+      <field name="page" description="Associated file." type="integer" size="15" required="true" primary="true" uuid="dd163436-614f-4ae4-864d-d34b68e4afe8"/>
+      <field name="date_added" description="Date when file is added to page." type="datetime" required="true" uuid="49b5c1a9-91e6-4dcf-92e5-d40c1c14636f"/>
+      <field name="count_view" description="View count." type="integer" size="10" default="0" required="true" uuid="9902d422-8c37-4825-af2f-48eac72b28c2"/>
+      <field name="language" description="If available the language of file." type="integer" size="5" uuid="b285c0bc-fca0-4f77-81f0-7f9a6e4492d0"/>
+      <field name="sort_order" description="Custom sort order." type="integer" size="10" default="1" required="true" uuid="dcb86d81-1fb1-4e23-b54b-f3d2bffff046"/>
+      <index name="idx_files_of_page" unique="true">
+        <index-field name="file"/>
+        <index-field name="page"/>
+      </index>
+      <index name="idx_n_files_of_page_date_added">
+        <index-field name="date_added"/>
+      </index>
+      <orm-attributes>
+        <attribute name="options">
+          <attribute name="charset">utf8</attribute>
+          <attribute name="collate">utf8_turkish_ci</attribute>
+          <attribute name="engine">innodb</attribute>
+        </attribute>
+        <attribute name="table">files_of_page</attribute>
+        <attribute name="export-file-name">FilesOfPage.php</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="FilesOfPage" to="File" caption="idx_f_files_of_page_file" inverse-alias="file" uuid="a91fdfe5-9e1c-4b9e-80a5-403371506e50">
+      <association-field from="file" to="id"/>
+      <orm-attributes>
+        <attribute name="on-delete">CASCADE</attribute>
+      </orm-attributes>
+    </association>
+    <association from="FilesOfPage" to="Language" caption="idx_f_files_of_page_language" inverse-alias="language" uuid="7e27a82a-b71f-4c76-ae74-9a834e1204d7">
+      <association-field from="language" to="id"/>
+      <orm-attributes>
+        <attribute name="on-delete">CASCADE</attribute>
+      </orm-attributes>
+    </association>
+    <association from="FilesOfPage" to="Page" caption="idx_f_files_of_page_page" inverse-alias="page" uuid="da53f451-b428-4314-81b2-77a33fff73bd">
+      <association-field from="page" to="id"/>
+      <orm-attributes>
+        <attribute name="on-delete">CASCADE</attribute>
+      </orm-attributes>
+    </association>
+    <entity name="Page" description="Stores a list of page definitions." uuid="624b7417-9633-4967-8134-1143a3c59cee">
+      <field name="id" description="System given id." type="integer" size="15" required="true" unique="true" primary="true" auto-increment="true" uuid="38393131-3639-4e6b-926d-e18781b3ed08"/>
+      <field name="code" description="Unique code that is used by the system." type="string" size="45" required="true" uuid="5dd62b0a-9655-4d41-9a92-113d44730e28"/>
+      <field name="status" description="x: not editable, e:editable by user, s:editable by support technician" type="string" size="1" default="e" required="true" uuid="91241c19-49cd-4374-abd6-9393cc8f061d"/>
+      <field name="layout" description="Layout of page." type="integer" size="10" required="true" uuid="afec93f5-19f8-4eab-8a5f-66f81db2d1b5"/>
+      <field name="site" description="Site that page belongs to." type="integer" size="10" required="true" uuid="1fd982a6-fd6c-473a-aed7-506e6e677eec"/>
+      <field name="bundle_name" description="Symfony2 Bundle Name that page template is located in." type="string" size="155" uuid="cd82a9c0-b729-4484-8f64-375f54a15018"/>
+      <index name="idx_u_page_id" unique="true">
+        <index-field name="id"/>
+      </index>
+      <index name="idx_u_page_code" unique="true">
+        <index-field name="code"/>
+      </index>
+      <orm-attributes>
+        <attribute name="table">page</attribute>
+        <attribute name="options">
+          <attribute name="charset">utf8</attribute>
+          <attribute name="collate">utf8_Turkish_ci</attribute>
+          <attribute name="engine">innodb</attribute>
+        </attribute>
+        <attribute name="export-file-name">Page.php</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="Page" to="Site" caption="idx_f_page_site" inverse-alias="site" uuid="e00589ce-8698-4b44-ae67-e35e123f6cfd">
+      <association-field from="site" to="id"/>
+    </association>
+    <association from="Page" to="Layout" caption="idx_f_page_layout" owner-alias="pages" inverse-alias="layout" uuid="96ef4de6-ccd3-4418-8713-bfdb6f375848">
+      <association-field from="layout" to="id"/>
+      <orm-attributes>
+        <attribute name="on-delete">CASCADE</attribute>
+      </orm-attributes>
+    </association>
+    <entity name="Layout" description="Stores layout definitions." uuid="921ff6b8-95d9-4cc7-aaba-c0fe7796d960">
+      <field name="id" description="System given id." type="integer" size="10" required="true" unique="true" primary="true" auto-increment="true" uuid="a85c98bd-4328-4c99-9ff5-2157694514da"/>
+      <field name="code" description="Code of layout. Cannot be modified." type="string" size="45" required="true" unique="true" uuid="97732722-42b2-48f4-a4f7-54a77ffefc98"/>
+      <field name="html" description="HTML content; base64 encoded." type="text" uuid="1b90bf52-f3c6-4c19-8376-902239543b3b"/>
+      <field name="theme" description="Theme folder that layoug belongs to." type="integer" size="10" required="true" uuid="ebb31b22-8e71-4b77-9005-d0b622ead303"/>
+      <field name="site" description="Site that layout is defined for." type="integer" size="10" uuid="f6d935d1-90db-4eb3-a2e2-6f6d017cdec2"/>
+      <index name="idx_u_layout_id" unique="true">
+        <index-field name="id"/>
+      </index>
+      <index name="idx_layout_code" unique="true">
+        <index-field name="code"/>
+      </index>
+      <orm-attributes>
+        <attribute name="table">layout</attribute>
+        <attribute name="export-file-name">Layout.php</attribute>
+        <attribute name="options">
+          <attribute name="charset">utf8</attribute>
+          <attribute name="collate">utf8_turkish_ci</attribute>
+          <attribute name="engine">innodb</attribute>
+        </attribute>
+      </orm-attributes>
+    </entity>
+    <association from="Layout" to="Site" caption="idx_f_layput_site" inverse-alias="site" uuid="f97aa60c-8856-4645-bd75-d633be75a09d">
+      <association-field from="site" to="id"/>
+    </association>
+    <association from="Layout" to="Theme" caption="idx_f_layout_theme" owner-alias="layouts" inverse-alias="theme" uuid="22eb08bd-07af-4369-9199-984154907f3d">
+      <association-field from="theme" to="id"/>
+    </association>
+    <entity name="Theme" description="Stores a list of theme definitions." uuid="b38846a2-ace4-4213-a336-ffe331a6461e">
+      <field name="id" description="System given id." type="integer" size="10" required="true" unique="true" primary="true" auto-increment="true" uuid="dd677233-9d8a-41b3-9ea2-affe07c3d929"/>
+      <field name="folder" description="Folder name." type="string" size="45" required="true" uuid="ca9c1549-fea4-47cd-8e16-c4c2dfeec49c"/>
+      <field name="type" description="f:front end, c:control panel" type="string" size="1" default="f" required="true" uuid="df33f28b-5850-4db1-bd42-87f7b7c82022"/>
+      <field name="date_added" description="Date when theme is added." type="datetime" required="true" uuid="30ccbd74-2e94-4b34-abf2-4c3b8e5c5b31"/>
+      <field name="date_updated" description="Date when the is last updated." type="datetime" required="true" uuid="841d10b2-c88b-4f2b-8b81-6c3ca0482d40"/>
+      <field name="count_modules" description="Number of modules within this theme." type="integer" default="0" required="true" uuid="ea21cab6-9771-4c82-b6bd-d1419924af2c"/>
+      <field name="count_layouts" description="Number of layouts within this theme." type="integer" default="0" uuid="9067e0f1-1b7f-487e-b494-9975bab4d327"/>
+      <field name="site" description="Site that theme belongs to." type="integer" size="10" uuid="c371b794-eecb-46f1-a5c3-3a397572dffc"/>
+      <index name="idx_u_theme_id" unique="true">
+        <index-field name="id"/>
+      </index>
+      <index name="idx_u_theme_folder" unique="true">
+        <index-field name="folder"/>
+      </index>
+      <index name="idx_n_theme_date_added">
+        <index-field name="date_added"/>
+      </index>
+      <index name="idx_n_theme_updated">
+        <index-field name="date_updated"/>
+      </index>
+      <orm-attributes>
+        <attribute name="options">
+          <attribute name="charset">utf8</attribute>
+          <attribute name="collate">utf8_turkish_ci</attribute>
+          <attribute name="engine">innodb</attribute>
+        </attribute>
+        <attribute name="table">theme</attribute>
+        <attribute name="export-file-name">Theme.php</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="Theme" to="Site" caption="idx_f_theme_site" inverse-alias="site" uuid="4dfcb668-bedc-4f4a-a0fb-363b256d2396">
+      <association-field from="site" to="id"/>
+      <orm-attributes>
+        <attribute name="on-delete">CASCADE</attribute>
+      </orm-attributes>
+    </association>
+    <entity name="PageLocalization" description="Holds localized values for each page entry." uuid="1fd3f551-8b28-4f98-9e54-1c23dc8abf8f">
+      <field name="page" description="Localized page." type="integer" size="15" primary="true" uuid="fa156bcc-6e50-4b47-a5ec-a5401e13e0b4"/>
+      <field name="language" description="Localization language." type="integer" size="5" required="true" primary="true" uuid="bddc6416-54a8-42f9-8ee9-1d41e7b27576"/>
+      <field name="title" description="Localized page title." type="string" size="155" required="true" uuid="d83e728a-0160-4e4b-b106-2da95f9a36a0"/>
+      <field name="url_key" description="Localized url key of page." type="string" size="255" required="true" uuid="6f701731-d48d-4aa0-9f91-eed925e20672"/>
+      <field name="content" description="Localized page content." type="text" uuid="bf2d3065-c68e-4c25-9954-70913f3af4b0"/>
+      <field name="meta_title" description="Localized meta title of page." type="string" size="155" uuid="fabd0bfb-7faa-4497-acd7-6490ad0d605f"/>
+      <field name="meta_description" description="Localized meta description of page." type="string" size="255" uuid="8875e737-a8e7-48f1-9da1-82c3f0252846"/>
+      <field name="meta_keywords" description="Localized meta keywords of page." type="string" size="255" uuid="d1a128fe-f5c6-4a94-8b1e-2745c6bd52d6"/>
+      <index name="idx_u_page_localization" unique="true">
+        <index-field name="page"/>
+        <index-field name="language"/>
+      </index>
+      <index name="idx_u_page_url_key" unique="true">
+        <index-field name="page"/>
+        <index-field name="language"/>
+        <index-field name="url_key"/>
+      </index>
+      <orm-attributes>
+        <attribute name="options">
+          <attribute name="charset">utf8</attribute>
+          <attribute name="collate">utf8_turkish_ci</attribute>
+          <attribute name="engine">innodb</attribute>
+        </attribute>
+        <attribute name="table">page_localization</attribute>
+        <attribute name="export-file-name">PageLocalization.php</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="PageLocalization" to="Language" caption="idx_f_page_localization_language" inverse-alias="language" uuid="4e627535-43de-4ee5-bd16-bfda6f75d243">
+      <association-field from="language" to="id"/>
+      <orm-attributes>
+        <attribute name="on-delete">CASCADE</attribute>
+      </orm-attributes>
+    </association>
+    <association from="PageLocalization" to="Page" caption="idx_f_page_localization_page" owner-alias="localizations" inverse-alias="page" uuid="96d6e630-c148-493f-9534-9efe3e9a2887">
+      <association-field from="page" to="id"/>
+      <orm-attributes>
+        <attribute name="on-delete">CASCADE</attribute>
+      </orm-attributes>
+    </association>
+    <entity name="LayoutLocalization" description="Holds localized values for each layout." uuid="e9eaf564-22cd-4569-85ed-abed6f3c62e3">
+      <field name="layout" description="Localized layout." type="integer" size="10" required="true" primary="true" uuid="c83afe8d-0438-4561-8b8b-2451106064b1"/>
+      <field name="language" description="Localization language." type="integer" size="5" required="true" primary="true" uuid="9fd66157-d6a1-4eed-8de4-9847d7b03e03"/>
+      <field name="name" description="Localized name of layout." type="string" size="45" required="true" uuid="ccbea2c6-1677-4fe4-8f70-2842286188a1"/>
+      <field name="url_key" description="Localized url key." type="string" size="55" required="true" uuid="3384ca0d-f247-42ea-bc06-267d9a9c1416"/>
+      <index name="idx_u_layout_localization" unique="true">
+        <index-field name="layout"/>
+        <index-field name="language"/>
+      </index>
+      <index name="idx_u_layout_localization_url_key" unique="true">
+        <index-field name="layout"/>
+        <index-field name="language"/>
+        <index-field name="url_key"/>
+      </index>
+      <orm-attributes>
+        <attribute name="options">
+          <attribute name="charset">utf8</attribute>
+          <attribute name="collate">utf8_turkish_ci</attribute>
+          <attribute name="engine">innodb</attribute>
+        </attribute>
+        <attribute name="table">layout_localizatiom</attribute>
+        <attribute name="export-file-name">LayoutLocalization.php</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="LayoutLocalization" to="Language" caption="idx_f_layout_localization_language" inverse-alias="language" uuid="9ca2edc5-f53f-43cc-a65f-cc382e5009b3">
+      <association-field from="language" to="id"/>
+      <orm-attributes>
+        <attribute name="on-delete">CASCADE</attribute>
+      </orm-attributes>
+    </association>
+    <association from="LayoutLocalization" to="Layout" caption="idx_f_layout_localization_layout" owner-alias="localizations" inverse-alias="layout" uuid="64fa1adc-ac53-4ba2-bd0a-e6cb0b69aa7d">
+      <association-field from="layout" to="id"/>
+      <orm-attributes>
+        <attribute name="on-delete">CASCADE</attribute>
+      </orm-attributes>
+    </association>
+    <entity name="ThemeLocalization" description="Localized values of theme entries." uuid="372d8d15-5aff-495b-b67b-8951d511cfee">
+      <field name="theme" description="Theme to be localized." type="integer" size="10" required="true" primary="true" uuid="2a6c6503-c69d-4926-9935-a7214422ba54"/>
+      <field name="language" description="Localization language." type="integer" size="5" required="true" primary="true" uuid="be19b1eb-7ac0-424c-a117-45934fbdb8ae"/>
+      <field name="name" description="Localized name of theme." type="string" size="45" required="true" uuid="2a227a70-b015-45d8-b31e-9df7669026a9"/>
+      <index name="idx_u_theme_localization" unique="true">
+        <index-field name="theme"/>
+        <index-field name="language"/>
+      </index>
+      <orm-attributes>
+        <attribute name="options">
+          <attribute name="charset">utf8</attribute>
+          <attribute name="collate">utf8_turkish_ci</attribute>
+          <attribute name="engine">innodb</attribute>
+        </attribute>
+        <attribute name="table">theme_localization</attribute>
+        <attribute name="export-file-name">ThemeLocalization.php</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="ThemeLocalization" to="Language" caption="idx_f_layout_localization_language" inverse-alias="language" uuid="8dcda5f0-28eb-4698-b79d-a9a0ad175508">
+      <association-field from="language" to="id"/>
+      <orm-attributes>
+        <attribute name="on-delete">CASCADE</attribute>
+      </orm-attributes>
+    </association>
+    <association from="ThemeLocalization" to="Theme" caption="idx_f_theme_localization_theme" owner-alias="localizations" inverse-alias="theme" uuid="812bbe96-8b81-4ee6-a177-b8e054d3dda7">
+      <association-field from="theme" to="id"/>
+      <orm-attributes>
+        <attribute name="on-delete">CASCADE</attribute>
+      </orm-attributes>
+    </association>
+    <entity name="Module" description="Stores a list of module definitions." uuid="8c660e90-eddd-4e5c-9c5c-7b2b8e21784f">
+      <field name="id" description="System given id." type="integer" required="true" unique="true" primary="true" auto-increment="true" uuid="5d3d208f-43d8-47c9-a8e1-9383a8b8bf98"/>
+      <field name="code" description="System access code. cannot be modified." type="string" size="45" required="true" unique="true" uuid="71f1b82a-932b-46e3-96db-70aa2df8aabd"/>
+      <field name="html" description="HTML code including template variables." type="text" uuid="941905c6-ffd0-4527-b49d-647e879c8713"/>
+      <field name="theme" description="Theme that module belongs to." type="integer" size="10" required="true" uuid="471b03d0-ae0f-460f-96c5-184f3e93000d"/>
+      <field name="site" description="Site that module belongs to." type="integer" size="10" uuid="48d55d74-a68b-4599-bbbf-88a6c3983aa7"/>
+      <field name="bundle_name" description="Symfony2 Bundle name where module template is located." type="string" size="155" uuid="56af2f59-a5d3-4ae7-ac5d-751d6b63ff51"/>
+      <field name="bundle_folder" description="Symfont2 view folder such as Widgets, Modules." type="string" size="155" uuid="cc990693-5d3b-45a3-8d0d-018d84d146d9"/>
+      <index name="idx_u_module_id" unique="true">
+        <index-field name="id"/>
+      </index>
+      <index name="idx_u_module_code" unique="true">
+        <index-field name="code"/>
+      </index>
+      <orm-attributes>
+        <attribute name="options">
+          <attribute name="charset">utf8</attribute>
+          <attribute name="collate">utf8_turkish_ci</attribute>
+          <attribute name="engine">innodb</attribute>
+        </attribute>
+        <attribute name="table">module</attribute>
+        <attribute name="export-file-name">Module.php</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="Module" to="Theme" caption="idx_f_module_theme" owner-alias="modules" inverse-alias="theme" uuid="dcaee1ef-70bf-4523-8c98-603811f409df">
+      <association-field from="theme" to="id"/>
+      <orm-attributes>
+        <attribute name="on-delete">CASCADE</attribute>
+      </orm-attributes>
+    </association>
+    <association from="Module" to="Site" caption="idx_f_module_site" inverse-alias="site" uuid="3c197a51-0674-4a8b-8466-b8bf6d436b40">
+      <association-field from="site" to="id"/>
+      <orm-attributes>
+        <attribute name="on-delete">CASCADE</attribute>
+      </orm-attributes>
+    </association>
+    <entity name="ModuleLocalization" description="Stores localized values for each module entry." uuid="04679cdf-3190-4578-a614-6e50b8886594">
+      <field name="module" description="Localized module." type="integer" required="true" primary="true" uuid="707e0cb9-b465-4656-8632-159334df31d3"/>
+      <field name="language" description="Localization language." type="integer" size="5" required="true" primary="true" uuid="909aec0f-ec8f-4d36-9c89-d20af2b8d383"/>
+      <field name="name" description="Localized name of module." type="string" size="45" required="true" uuid="f645dd17-c4a0-4e0e-8956-bebbc68c3385"/>
+      <field name="url_key" description="Localized url key of module." type="string" size="55" required="true" uuid="5ca19a35-4344-4f0e-9308-5f84aa9a5e84"/>
+      <index name="idx_u_module_localization" unique="true">
+        <index-field name="module"/>
+        <index-field name="language"/>
+      </index>
+      <index name="idx_module_localization_url_key" unique="true">
+        <index-field name="module"/>
+        <index-field name="language"/>
+        <index-field name="url_key"/>
+      </index>
+      <orm-attributes>
+        <attribute name="table">module_localization</attribute>
+        <attribute name="export-file-name">ModuleLocalization.php</attribute>
+        <attribute name="options">
+          <attribute name="charset">utf8</attribute>
+          <attribute name="collate">utf8_turkish_ci</attribute>
+          <attribute name="engine">innodb</attribute>
+        </attribute>
+      </orm-attributes>
+    </entity>
+    <association from="ModuleLocalization" to="Language" caption="idx_f_module_localization_language" inverse-alias="language" uuid="5eb19f96-065c-4a21-a664-3e935b15e040">
+      <association-field from="language" to="id"/>
+      <orm-attributes>
+        <attribute name="on-delete">CASCADE</attribute>
+      </orm-attributes>
+    </association>
+    <association from="ModuleLocalization" to="Module" caption="idx_f_module_localization_module" owner-alias="localizations" inverse-alias="module" uuid="a8ae2823-cd98-456b-bb22-e69865dc2979">
+      <association-field from="module" to="id"/>
+    </association>
+    <comment caption="ContentManagementBundle Pricing" description="files_of_page: 195 TL&#10;layout: 150 TL&#10;layout_localization: 130 TL&#10;module: 150 TL&#10;modules_of_layout: 215 TL&#10;modules_of_layout_localization: 110 TL&#10;navigation: 105 TL&#10;navigation_localization: 150 TL&#10;navigation_item: 355 TL&#10;navigation_item_localization: 150 TL&#10;page: 170 TL&#10;page_localization: 210 TL&#10;theme: 205 TL&#10;theme_localization: 110 TL&#10;&#10;toplam: 2,405 TL" uuid="2a3deb99-11a0-43db-acd9-b583ce3259a3"/>
+    <orm-attributes>
+      <attribute name="namespace">BiberLtd\Core\Bundles\ContentManagementBundle\Entity</attribute>
+      <attribute name="filename-format">entity-name-only</attribute>
+      <attribute name="file-suffix">without-suffix</attribute>
+    </orm-attributes>
+  </module>
+  <visual-data>
+    <entity uuid="038eb4b3-a479-4827-af6c-fb5eefc60295" bg-color="4294967295" hdr-color="4292006610" position-x="1100" position-y="599" size-x="0" size-x2="144" size-y="0" size-y2="87"/>
+    <entity uuid="04679cdf-3190-4578-a614-6e50b8886594" bg-color="4294967295" hdr-color="4292006610" position-x="500" position-y="499" size-x="0" size-x2="110" size-y="0" size-y2="73"/>
+    <entity uuid="18d2375d-c0b8-4fb0-92a4-25d0d48bcbb9" bg-color="4294967295" hdr-color="4292006610" position-x="1100" position-y="149" size-x="0" size-x2="123" size-y="0" size-y2="87"/>
+    <entity uuid="1fd3f551-8b28-4f98-9e54-1c23dc8abf8f" bg-color="4294967295" hdr-color="4292006610" position-x="101" position-y="349" size-x="0" size-x2="149" size-y="0" size-y2="129"/>
+    <comment uuid="2a3deb99-11a0-43db-acd9-b583ce3259a3" bg-color="4294941056" position-x="1" position-y="67" size-x="0" size-x2="199" size-y="0" size-y2="224" txt-color="4278190080"/>
+    <entity uuid="324ca93b-931a-4969-bd0f-4d6ddadd65e2" bg-color="4294967295" hdr-color="4292006610" position-x="900" position-y="649" size-x="0" size-x2="125" size-y="0" size-y2="101"/>
+    <entity uuid="372d8d15-5aff-495b-b67b-8951d511cfee" bg-color="4294967295" hdr-color="4292006610" position-x="800" position-y="199" size-x="0" size-x2="110" size-y="0" size-y2="59"/>
+    <entity uuid="624b7417-9633-4967-8134-1143a3c59cee" bg-color="4294967295" hdr-color="4292006610" position-x="250" position-y="99" size-x="0" size-x2="104" size-y="0" size-y2="87"/>
+    <entity uuid="8c660e90-eddd-4e5c-9c5c-7b2b8e21784f" bg-color="4294967295" hdr-color="4292006610" position-x="250" position-y="499" size-x="0" size-x2="104" size-y="0" size-y2="87"/>
+    <module uuid="8c6e8bbc-980a-4f9f-a4ab-152e8e74b3fd" bg-color="4291231744" size-x="0" size-x2="1300" size-y="-49" size-y2="799"/>
+    <entity uuid="921ff6b8-95d9-4cc7-aaba-c0fe7796d960" bg-color="4294967295" hdr-color="4292006610" position-x="450" position-y="99" size-x="0" size-x2="104" size-y="0" size-y2="87"/>
+    <entity uuid="b38846a2-ace4-4213-a336-ffe331a6461e" bg-color="4294967295" hdr-color="4292006610" position-x="600" position-y="249" size-x="0" size-x2="126" size-y="0" size-y2="129"/>
+    <entity uuid="bd133097-afda-4232-a902-ff867d2295e5" bg-color="4294967295" hdr-color="4292006610" position-x="650" position-y="649" size-x="0" size-x2="152" size-y="0" size-y2="59"/>
+    <entity uuid="ccfcaf8f-feee-4582-a201-a7b81aded041" bg-color="4294967295" hdr-color="4292006610" position-x="350" position-y="649" size-x="0" size-x2="120" size-y="0" size-y2="115"/>
+    <entity uuid="e9eaf564-22cd-4569-85ed-abed6f3c62e3" bg-color="4294967295" hdr-color="4292006610" position-x="400" position-y="349" size-x="0" size-x2="110" size-y="0" size-y2="73"/>
+    <entity uuid="f4a94f85-38f8-44d1-8ab0-988266d87859" bg-color="4294967295" hdr-color="4292006610" position-x="950" position-y="249" size-x="0" size-x2="100" size-y="0" size-y2="73"/>
+    <entity uuid="f6426096-db5d-4316-9fa9-ea4db7dc2d9a" bg-color="4294967295" hdr-color="4292006610" position-x="900" position-y="449" size-x="0" size-x2="121" size-y="0" size-y2="129"/>
+  </visual-data>
+</skipper>

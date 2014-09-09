@@ -1,0 +1,3 @@
+biber_ltd_content_management_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: BiberLtdContentManagementBundle:Default:index }

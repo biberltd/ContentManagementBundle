@@ -1,0 +1,7 @@
+parameters:
+#    biber_ltd_content_management.example.class: BiberLtd\Bundle\ContentManagementBundle\Example
+
+services:
+#    biber_ltd_content_management.example:
+#        class: %biber_ltd_content_management.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]
