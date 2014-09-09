@@ -1,9 +1,9 @@
 <?php
-namespace BiberLtd\Core\Bundles\ContentManagementBundle\Entity;
+namespace BiberLtd\Bundle\ContentManagementBundle\Entity;
 use Doctrine\ORM\Mapping AS ORM;
 /**
  * @name        navigation
- * @package		BiberLtd\Core\AccessManagementBundle
+ * @package		BiberLtd\Bundle\CoreBundle\AccessManagementBundle
  *
  * @author		Can Berkol
  * @version     1.2.0
@@ -15,7 +15,7 @@ use Doctrine\ORM\Mapping AS ORM;
  * @description Model / Entity class.
  *
  */
-use BiberLtd\Core\CoreLocalizableEntity;
+use BiberLtd\Bundle\CoreBundle\CoreLocalizableEntity;
 /** 
  * @ORM\Entity
  * @ORM\Table(
@@ -49,7 +49,7 @@ class Navigation extends CoreLocalizableEntity
 
     /** 
      * @ORM\OneToMany(
-     *     targetEntity="BiberLtd\Core\Bundles\ContentManagementBundle\Entity\NavigationLocalization",
+     *     targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\NavigationLocalization",
      *     mappedBy="navigation"
      * )
      */
@@ -57,14 +57,14 @@ class Navigation extends CoreLocalizableEntity
 
     /** 
      * @ORM\OneToMany(
-     *     targetEntity="BiberLtd\Core\Bundles\ContentManagementBundle\Entity\NavigationItem",
+     *     targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\NavigationItem",
      *     mappedBy="navigation"
      * )
      */
     private $navigation_items;
 
     /** 
-     * @ORM\ManyToOne(targetEntity="BiberLtd\Core\Bundles\SiteManagementBundle\Entity\Site")
+     * @ORM\ManyToOne(targetEntity="BiberLtd\Bundle\SiteManagementBundle\Entity\Site")
      * @ORM\JoinColumn(name="site", referencedColumnName="id", onDelete="CASCADE")
      */
     private $site;

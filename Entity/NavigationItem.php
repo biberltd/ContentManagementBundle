@@ -1,7 +1,7 @@
 <?php
 /**
  * @name        NavigationItem
- * @package		BiberLtd\Core\ContentManagementBundle
+ * @package		BiberLtd\Bundle\CoreBundle\ContentManagementBundle
  *
  * @author		Can Berkol
  *
@@ -14,9 +14,9 @@
  * @description Model / Entity class.
  *
  */
-namespace BiberLtd\Core\Bundles\ContentManagementBundle\Entity;
+namespace BiberLtd\Bundle\ContentManagementBundle\Entity;
 use Doctrine\ORM\Mapping AS ORM;
-use BiberLtd\Core\CoreLocalizableEntity;
+use BiberLtd\Bundle\CoreBundle\CoreLocalizableEntity;
 /**
  * @ORM\Entity
  * @ORM\Table(
@@ -61,7 +61,7 @@ class NavigationItem extends CoreLocalizableEntity
 
     /**
      * @ORM\OneToMany(
-     *     targetEntity="BiberLtd\Core\Bundles\ContentManagementBundle\Entity\NavigationItem",
+     *     targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\NavigationItem",
      *     mappedBy="parent"
      * )
      */
@@ -69,7 +69,7 @@ class NavigationItem extends CoreLocalizableEntity
 
     /**
      * @ORM\OneToMany(
-     *     targetEntity="BiberLtd\Core\Bundles\ContentManagementBundle\Entity\NavigationItemLocalization",
+     *     targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\NavigationItemLocalization",
      *     mappedBy="navigation_item"
      * )
      */
@@ -77,7 +77,7 @@ class NavigationItem extends CoreLocalizableEntity
 
     /**
      * @ORM\ManyToOne(
-     *     targetEntity="BiberLtd\Core\Bundles\ContentManagementBundle\Entity\Page",
+     *     targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\Page",
      *     inversedBy="navigation_items"
      * )
      * @ORM\JoinColumn(name="page", referencedColumnName="id", onDelete="RESTRICT")
@@ -87,7 +87,7 @@ class NavigationItem extends CoreLocalizableEntity
 
     /** 
      * @ORM\ManyToOne(
-     *     targetEntity="BiberLtd\Core\Bundles\ContentManagementBundle\Entity\NavigationItem",
+     *     targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\NavigationItem",
      *     inversedBy="navigation_items"
      * )
      * @ORM\JoinColumn(name="parent", referencedColumnName="id", onDelete="CASCADE")
@@ -97,7 +97,7 @@ class NavigationItem extends CoreLocalizableEntity
 
     /**
      * @ORM\ManyToOne(
-     *     targetEntity="BiberLtd\Core\Bundles\ContentManagementBundle\Entity\Navigation",
+     *     targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\Navigation",
      *     inversedBy="navigation_items"
      * )
      * @ORM\JoinColumn(name="navigation", referencedColumnName="id", nullable=false, onDelete="CASCADE")

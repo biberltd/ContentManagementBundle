@@ -1,7 +1,7 @@
 <?php
 /**
  * @name        PageLocalization
- * @package		BiberLtd\Core\ContentManagementBundle
+ * @package		BiberLtd\Bundle\CoreBundle\ContentManagementBundle
  *
  * @author		Murat Ünal
  *
@@ -14,10 +14,10 @@
  * @description Model / Entity class.
  *
  */
-namespace BiberLtd\Core\Bundles\ContentManagementBundle\Entity;
-use BiberLtd\Core\CoreLocalizableEntity;
+namespace BiberLtd\Bundle\ContentManagementBundle\Entity;
+use BiberLtd\Bundle\CoreBundle\CoreLocalizableEntity;
 use Doctrine\ORM\Mapping AS ORM;
-use BiberLtd\Core\CoreEntity;
+use BiberLtd\Bundle\CoreBundle\CoreEntity;
 /** 
  * @ORM\Entity
  * @ORM\Table(
@@ -63,7 +63,7 @@ class PageLocalization extends CoreEntity
 
     /** 
      * @ORM\Id
-     * @ORM\ManyToOne(targetEntity="BiberLtd\Core\Bundles\MultiLanguageSupportBundle\Entity\Language")
+     * @ORM\ManyToOne(targetEntity="BiberLtd\Bundle\MultiLanguageSupportBundle\Entity\Language")
      * @ORM\JoinColumn(name="language", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
     private $language;
@@ -71,7 +71,7 @@ class PageLocalization extends CoreEntity
     /** 
      * @ORM\Id
      * @ORM\ManyToOne(
-     *     targetEntity="BiberLtd\Core\Bundles\ContentManagementBundle\Entity\Page",
+     *     targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\Page",
      *     inversedBy="localizations"
      * )
      * @ORM\JoinColumn(name="page", referencedColumnName="id", onDelete="CASCADE")

@@ -1,9 +1,9 @@
 <?php
-namespace BiberLtd\Core\Bundles\ContentManagementBundle\Entity;
+namespace BiberLtd\Bundle\ContentManagementBundle\Entity;
 
 /**
  * @name        module
- * @package		BiberLtd\Core\AccessManagementBundle
+ * @package		BiberLtd\Bundle\CoreBundle\AccessManagementBundle
  *
  * @author      Can Berkol
  * @author		Murat Ünal
@@ -17,7 +17,7 @@ namespace BiberLtd\Core\Bundles\ContentManagementBundle\Entity;
  *
  */
 use Doctrine\ORM\Mapping AS ORM;
-use BiberLtd\Core\CoreLocalizableEntity;
+use BiberLtd\Bundle\CoreBundle\CoreLocalizableEntity;
 /** 
  * @ORM\Entity
  * @ORM\Table(
@@ -60,7 +60,7 @@ class Module extends CoreLocalizableEntity
 
     /** 
      * @ORM\OneToMany(
-     *     targetEntity="BiberLtd\Core\Bundles\ContentManagementBundle\Entity\ModulesOfLayout",
+     *     targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\ModulesOfLayout",
      *     mappedBy="module"
      * )
      */
@@ -68,20 +68,20 @@ class Module extends CoreLocalizableEntity
 
     /** 
      * @ORM\OneToMany(
-     *     targetEntity="BiberLtd\Core\Bundles\ContentManagementBundle\Entity\ModuleLocalization",
+     *     targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\ModuleLocalization",
      *     mappedBy="module"
      * )
      */
     protected $localizations;
 
     /** 
-     * @ORM\ManyToOne(targetEntity="BiberLtd\Core\Bundles\ContentManagementBundle\Entity\Theme", inversedBy="modules")
+     * @ORM\ManyToOne(targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\Theme", inversedBy="modules")
      * @ORM\JoinColumn(name="theme", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
     private $theme;
 
     /** 
-     * @ORM\ManyToOne(targetEntity="BiberLtd\Core\Bundles\SiteManagementBundle\Entity\Site")
+     * @ORM\ManyToOne(targetEntity="BiberLtd\Bundle\SiteManagementBundle\Entity\Site")
      * @ORM\JoinColumn(name="site", referencedColumnName="id", onDelete="CASCADE")
      */
     private $site;

@@ -1,8 +1,8 @@
 <?php
-namespace BiberLtd\Core\Bundles\ContentManagementBundle\Entity;
+namespace BiberLtd\Bundle\ContentManagementBundle\Entity;
 /**
  * @name        files_of_page
- * @package		BiberLtd\Core\AccessManagementBundle
+ * @package		BiberLtd\Bundle\CoreBundle\AccessManagementBundle
  *
  * @author		Can Berkol
  *              Murat Ünal
@@ -16,7 +16,7 @@ namespace BiberLtd\Core\Bundles\ContentManagementBundle\Entity;
  *
  */
 use Doctrine\ORM\Mapping AS ORM;
-use BiberLtd\Core\CoreEntity;
+use BiberLtd\Bundle\CoreBundle\CoreEntity;
 
 /** 
  * @ORM\Entity
@@ -46,20 +46,20 @@ class FilesOfPage extends CoreEntity
 
     /** 
      * @ORM\Id
-     * @ORM\ManyToOne(targetEntity="BiberLtd\Core\Bundles\FileManagementBundle\Entity\File")
+     * @ORM\ManyToOne(targetEntity="BiberLtd\Bundle\FileManagementBundle\Entity\File")
      * @ORM\JoinColumn(name="file", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
     private $file;
 
     /** 
-     * @ORM\ManyToOne(targetEntity="BiberLtd\Core\Bundles\MultiLanguageSupportBundle\Entity\Language")
+     * @ORM\ManyToOne(targetEntity="BiberLtd\Bundle\MultiLanguageSupportBundle\Entity\Language")
      * @ORM\JoinColumn(name="language", referencedColumnName="id", onDelete="CASCADE")
      */
     private $language;
 
     /** 
      * @ORM\Id
-     * @ORM\ManyToOne(targetEntity="BiberLtd\Core\Bundles\ContentManagementBundle\Entity\Page")
+     * @ORM\ManyToOne(targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\Page")
      * @ORM\JoinColumn(name="page", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
     private $page;

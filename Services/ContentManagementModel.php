@@ -64,21 +64,21 @@
  *
  */
 
-namespace BiberLtd\Core\Bundles\ContentManagementBundle\Services;
+namespace BiberLtd\Bundle\ContentManagementBundle\Services;
 
 /** Extends CoreModel */
-use BiberLtd\Core\CoreModel;
+use BiberLtd\Bundle\CoreBundle\CoreModel;
 /** Entities to be used */
-use BiberLtd\Core\Bundles\ContentManagementBundle\Entity as BundleEntity;
-use BiberLtd\Core\Bundles\MultiLanguageSupportBundle\Entity as MLSEntity;
-use BiberLtd\Core\Bundles\FileManagementBundle\Entity as FileBundleEntity;
+use BiberLtd\Bundle\ContentManagementBundle\Entity as BundleEntity;
+use BiberLtd\Bundle\MultiLanguageSupportBundle\Entity as MLSEntity;
+use BiberLtd\Bundle\FileManagementBundle\Entity as FileBundleEntity;
 /** Helper Models */
-use BiberLtd\Core\Bundles\SiteManagementBundle\Services as SMMService;
-use BiberLtd\Core\Bundles\MultiLanguageSupportBundle\Services as MLSService;
-use BiberLtd\Core\Bundles\FileManagementBundle\Services as FileService;
+use BiberLtd\Bundle\SiteManagementBundle\Services as SMMService;
+use BiberLtd\Bundle\MultiLanguageSupportBundle\Services as MLSService;
+use BiberLtd\Bundle\FileManagementBundle\Services as FileService;
 /** Core Service */
-use BiberLtd\Core\Services as CoreServices;
-use BiberLtd\Core\Exceptions as CoreExceptions;
+use BiberLtd\Bundle\CoreBundle\Services as CoreServices;
+use BiberLtd\Bundle\CoreBundle\Exceptions as CoreExceptions;
 
 class ContentManagementModel extends CoreModel
 {
@@ -3874,7 +3874,7 @@ class ContentManagementModel extends CoreModel
 
         $query_str .= $where_str . $group_str . $order_str;
         $query = $this->em->createQuery($query_str);
-//        $query->setFetchMode('BiberLtd\Core\Bundles\ContentManagementBundle\Entity\ModulesOfLayout', 'module', 'EAGER');
+//        $query->setFetchMode('BiberLtd\Bundle\ContentManagementBundle\Entity\ModulesOfLayout', 'module', 'EAGER');
         if ($limit != null) {
             if (isset($limit['start']) && isset($limit['count'])) {
                 /** If limit is set */
