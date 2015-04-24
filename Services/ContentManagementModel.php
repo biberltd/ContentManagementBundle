@@ -3,64 +3,17 @@
 /**
  * ContentManagementModel Class
  *
- * This class acts as a database proxy model for ContentManagementBundle functionalities.
- *
  * @vendor      BiberLtd
- * @package        Core\Bundles\ContentManagementBundle
- * @subpackage    Services
+ * @package     BiberLtd\Bundle\ContentManagementBundle
+ * @subpackage  Services
  * @name        ContentManagementBundle
  *
- * @author        Can Berkol
+ * @author      Can Berkol
  *
  * @copyright   Biber Ltd. (www.biberltd.com)
  *
- * @version     1.1.8
- * @date        26.03.2014
- *
- * =============================================================================================================
- * !! INSTRUCTIONS ON IMPORTANT ASPECTS OF MODEL METHODS !!!
- *
- * Each model function must return a $response ARRAY.
- * The array must contain the following keys and corresponding values.
- *
- * $response = array(
- *              'result'    =>   An array that contains the following keys:
- *                               'set'         Actual result set returned from ORM or null
- *                               'total_rows'  0 or number of total rows
- *                               'last_insert_id' The id of the item that is added last (if insert action)
- *              'error'     =>   true if there is an error; false if there is none.
- *              'code'      =>   null or a semantic and short English string that defines the error concanated
- *                               with dots, prefixed with err and the initials of the name of model class.
- *                               EXAMPLE: err.amm.action.not.found success messages have a prefix called scc..
- *
- *                               NOTE: DO NOT FORGET TO ADD AN ENTRY FOR ERROR CODE IN BUNDLE'S
- *                               RESOURCES/TRANSLATIONS FOLDER FOR EACH LANGUAGE.
- * =============================================================================================================
- * TODOs:
- * Do not forget to implement SITE, ORDER, AND PAGINATION RELATED FUNCTIONALITY
- *
- * @todo v1.0.1     add_modules_to_page_layout()
- * @todo v1.0.1     delete_files_of_page()
- * @todo v1.0.1     delete_modules_of_layout()
- * @todo v1.0.2     delete_navigation_items_of_parent()                 => delete_navigation_items()
- * @todo v1.0.1     increment_view_count_of_file_of_page()              => update_files_of_page()
- * @todo v1.0.1     insert_file_of_page()                               => insert_files_of_page()
- * @todo v1.0.1     insert_files_of_page()
- * @todo v1.0.2     list_files_of_pages_viewed_between()                => list_files_of_page()
- * @todo v1.0.2     list_files_of_page_viewed_less_than()               => list_files_of_page()
- * @todo v1.0.2     list_files_of_page_viewed_more_than()               => list_files_of_page()
- * @todo v1.0.2     list_navigation_items_pointing_a_page()             => list_navigation_items()
- * @todo v1.0.1     list_navigations_of_site()                          => list_navigations()
- * @todo v1.0.2     list_themes_added_after()                           => list_themes()
- * @todo v1.0.2     list_themes_added_before()                          => list_themes()
- * @todo v1.0.2     list_themes_added_between()                         => list_themes()
- * @todo v1.0.2     list_themes_added_on()                              => list_themes()
- * @todo v1.0.1     move_navigation_item_to_navigation()                => move_navigation_items_to_navigation()
- * @todo v1.0.1     move_navigation_items_to_navigation()               => update_navigation_items()
- * @todo v1.0.1     remove_files_from_page()
- * @todo v1.0.1     remove_modules_from_page_layout()
- * @todo v1.0.1     update_file_of_page()                               => update_files_of_pages()
- * @todo v1.0.1     update_files_of_page()
+ * @version     1.1.9
+ * @date        24.04.2015
  *
  */
 
@@ -118,7 +71,8 @@ class ContentManagementModel extends CoreModel
             'navigation_localization' => array('name' => 'ContentManagementBundle:NavigationLocalization', 'alias' => 'nloc'),
             'page' => array('name' => 'ContentManagementBundle:Page', 'alias' => 'p'),
             'page_localization' => array('name' => 'ContentManagementBundle:PageLocalization', 'alias' => 'ploc'),
-            'theme' => array('name' => 'ContentManagementBundle:Theme', 'alias' => 't'),
+			'page_revision' => array('name' => 'ContentManagementBundle:PageRevision', 'alias' => 'pr'),
+			'theme' => array('name' => 'ContentManagementBundle:Theme', 'alias' => 't'),
             'theme_localization' => array('name' => 'ContentManagementBundle:ThemeLocalization', 'alias' => 'tloc'),
         );
     }
@@ -540,17 +494,16 @@ class ContentManagementModel extends CoreModel
     }
 
     /**
-     * @name            deleteNavigation ()
-     *                Deletes an existing navigation from database.
+     * @name            deleteNavigation()
      *
-     * @since            1.0.1
+     * @since           1.0.1
      * @version         1.1.0
      * @author          Can Berkol
      *
      * @use             $this->deleteNavigations()
      *
-     * @param           mixed $navigation Navigation entity, id, code or url key.
-     * @param           string $by
+     * @param           mixed 			$navigation
+     * @param           string 			$by
      *
      * @return          mixed           $response
      */
@@ -561,10 +514,9 @@ class ContentManagementModel extends CoreModel
 
     /**
      * @name            deleteNavigations ()
-     *                Deletes provided navigations from database.
      *
-     * @since            1.0.1
-     * @version         1.1.0
+     * @since           1.0.1
+     * @version         1.1.9
      * @author          Can Berkol
      *
      * @use             $this->doesNavigationExist()
@@ -575,8 +527,7 @@ class ContentManagementModel extends CoreModel
      *
      * @return          array           $response
      */
-    public function deletNavigations($collection, $by = 'entity')
-    {
+    public function deleteNavigations($collection, $by = 'entity'){
         $this->resetResponse();
         $by_opts = array('entity', 'id', 'code', 'url_key');
         if (!in_array($by, $by_opts)) {
@@ -837,36 +788,97 @@ class ContentManagementModel extends CoreModel
 
     /**
      * @name            deletePage ()
-     *                Deletes an existing page from database.
      *
-     * @since            1.0.0
-     * @version         1.01.0
+     * @since           1.0.0
+     * @version         1.1.0
      * @author          Can Berkol
      *
      * @use             $this->deletePages()
      *
-     * @param           mixed $page Page entity, id, or code.
-     * @param           string $by
+     * @param           mixed 			$page
+     * @param           string 			$by
      * @return          mixed           $response
      */
-    public function deletePage($page, $by = 'entity')
-    {
+    public function deletePage($page, $by = 'entity') {
         return $this->deletePages(array($page), $by);
     }
 
+	/**
+	 * @name            deletePageRevision()
+	 *
+	 * @since           1.1.9
+	 * @version         1.1.9
+	 * @author          Can Berkol
+	 *
+	 * @use             $this->deletePageRevisions()
+	 *
+	 * @param           mixed 			$revision
+	 * @param           string 			$by
+	 *
+	 * @return          mixed           $response
+	 */
+	public function deletePageRevision($revision, $by = 'entity'){
+		return $this->deletePageRevisions(array($revision), $by);
+	}
+
+	/**
+	 * @name            deletePageRevisions()
+	 *
+	 * @since           1.1.9
+	 * @version         1.1.9
+	 * @author          Can Berkol
+	 *
+	 * @use             $this->createException()
+	 *
+	 * @param           array           $collection             Collection consists one of the following: PageRevision
+	 *
+	 * @return          array           $response
+	 */
+	public function deletePageRevisions($collection){
+		$this->resetResponse();
+		/** Parameter must be an array */
+		if (!is_array($collection)) {
+			return $this->createException('InvalidCollection', 'The $collection parameter must be an array collection.', 'msg.error.invalid.collection.array');
+		}
+		$countDeleted = 0;
+		foreach ($collection as $entry){
+			if($entry instanceof BundleEntity\PageRevision){
+				$this->em->remove($entry);
+				$countDeleted++;
+			}
+		}
+		if ($countDeleted < 1) {
+			$this->response['error'] = true;
+			$this->response['code'] = 'msg.error.db.delete.failed';
+
+			return $this->response;
+		}
+		$this->em->flush();
+		$this->response = array(
+			'rowCount' => 0,
+			'result' => array(
+				'set' => null,
+				'total_rows' => $countDeleted,
+				'last_insert_id' => null,
+			),
+			'error' => false,
+			'code' => 'msg.success.db.delete',
+		);
+		return $this->response;
+	}
+
     /**
-     * @name            delete_pages ()
-     *                Deletes provided pages from database.
+     * @name            deletePages()
      *
-     * @since            1.0.0
+     * @since           1.0.0
      * @version         1.1.0
      * @author          Can Berkol
      *
      * @use             $this->doesPageExist()
      * @use             $this->createException()
      *
-     * @param           array $collection Collection of Page entities, numeric page ids, or string page codes.
-     * @param           string $by Accepts the following options: entity, id, code, url_key
+     * @param           array 			$collection 	Collection of Page entities, numeric page ids, or string page codes.
+     * @param           string 			$by Accepts 	the following options: entity, id, code, url_key
      *
      * @return          array           $response
      */
@@ -1452,12 +1464,62 @@ class ContentManagementModel extends CoreModel
         );
         return $this->response;
     }
-
+	/**
+	 * @name            getLastRevisionOfPage()
+	 *
+	 * @since           1.1.9
+	 * @version         1.1.9
+	 *
+	 * @author          Can Berkol
+	 *
+	 * @page			mixed			$page
+	 * @return          mixed           $response
+	 */
+	public function getLastRevisionOfPage($page){
+		if(is_object($page) && $page instanceof BundleEntity\Page){
+			$pageId = $page->getId();
+		}
+		elseif(is_numeric($page)){
+			$response = $this->getPage($page, 'id');
+			if(!$response['error']){
+				$pageId = $response['result']['set']->getId();
+			}
+		}
+		elseif(is_string($page)){
+			$response = $this->getPage($page, 'url_key');
+			if(!$response['error']){
+				$pageId = $response['result']['set']->getId();
+			}
+		}
+		$filter[] = array(
+			'glue' => 'and',
+			'condition' => array(
+				array(
+					'glue' => 'and',
+					'condition' => array('column' =>$this->entity['page_revision']['alias']. '.page', 'comparison' => '=', 'value' => $pageId),
+				)
+			)
+		);
+		$response = $this->listPageRevisions($filter, array('date_added' => 'desc'), array('start' => 0, 'count' => 1));
+		/**
+		 * Prepare & Return Response
+		 */
+		$this->response = array(
+			'rowCount' => $this->response['rowCount'],
+			'result' => array(
+				'set' => $response['result']['set'][0],
+				'total_rows' => 1,
+				'last_insert_id' => null,
+			),
+			'error' => false,
+			'code' => 'scc.db.entity.exist',
+		);
+		return $this->response;
+	}
     /**
      * @name            getLayout ()
-     *                Returns details of a layout.
      *
-     * @since            1.0.1
+     * @since           1.0.1
      * @version         1.0.1
      * @author          Can Berkol
      *
@@ -2147,7 +2209,91 @@ class ContentManagementModel extends CoreModel
         return $this->response;
     }
 
-    /**
+	/**
+	 * @name            getPageRevision()
+	 *
+	 * @since           1.1.9
+	 * @version         1.1.9
+	 *
+	 * @author          Can Berkol
+	 *
+	 * @use             $this->createException()
+	 * @use             $this->listPageRevisions()
+	 * @use             $this->resetResponse()
+	 *
+	 * @param           mixed           $page
+	 * @param			mixed			$language
+	 * @param			integer			$revisionNumber
+	 *
+	 * @return          mixed           $response
+	 */
+	public function getPageRevision($page, $language, $revisionNumber){
+		$this->resetResponse();
+
+		if (!$page instanceof BundleEntity\Page && !is_numeric($page) && !is_string($page)) {
+			return $this->createException('InvalidParameter', '$page parameter must hold BiberLtd\\Core\\Bundles\\ContentManagementBundle\\Entity\\Page entity, a string representing url_key, or an integer representing database row id.', 'msg.error.invalid.parameter.page');
+		}
+
+		if (is_object($page)) {
+			$pageId = $page->getId();
+		}
+		elseif(is_numeric($page)){
+			$pageId = $page;
+		}
+		elseif(is_string($page)){
+			$response = $this->getPage($page, 'url_key');
+			if($response['error']){
+				return $this->createException('InvalidParameter', '$page parameter must hold BiberLtd\\Core\\Bundles\\ContentManagementBundle\\Entity\\Page entity, a string representing url_key, or an integer representing database row id.', 'msg.error.invalid.parameter.page');
+			}
+			$pageId = $response['result']['set'];
+		}
+
+		$mlsModel = $this->kernel->getContainer()->get('multilanguagesupport.model');
+		if (!$language instanceof MLSEntity\Language && !is_integer($language) && !is_string($language)) {
+			return $this->createException('InvalidParameter', 'Language', 'err.invalid.parameter.language');
+		}
+
+		if (is_object($language)) {
+			$languageId = $language->getId();
+		}
+		elseif(is_numeric($language)){
+			$languageId = $language;
+		}
+		elseif(is_string($language)){
+			$response = $mlsModel->getLanguage($language, 'iso_code');
+			if($response['error']){
+				return $this->createException('InvalidParameter', '$page parameter must hold BiberLtd\\Core\\Bundles\\ContentManagementBundle\\Entity\\Page entity, a string representing url_key, or an integer representing database row id.', 'msg.error.invalid.parameter.page');
+			}
+			$pageId = $response['result']['set'];
+		}
+
+		$q = 'SELECT '.$this->entity['page_revision']['alias']
+			.' FROM '.$this->entity['page_revision']['name'].' '.$this->entity['page_revision']['alias']
+			.' WHERE '.$this->entity['page_revision']['name'].'.page = '.$pageId
+			.' AND '.$this->entity['page_revision']['name'].'.language = '.$languageId
+			.' AND '.$this->entity['page_revision']['name'].'.revision_number = '.$revisionNumber;
+
+		$query = $this->em->createQuery($q);
+
+		$result = $query->getResult();
+
+		/**
+		 * Prepare & Return Response
+		 */
+		$this->response = array(
+			'rowCount' => $this->response['rowCount'],
+			'result' => array(
+				'set' => $result,
+				'total_rows' => 1,
+				'last_insert_id' => null,
+			),
+			'error' => false,
+			'code' => 'msg.success.db.entry.exists',
+		);
+		return $this->response;
+	}
+
+	/**
      * @name            getPageLocalization ()
      *                  Returns the entity's localization in a specific language.
      *
@@ -2674,7 +2820,111 @@ class ContentManagementModel extends CoreModel
         );
         return $this->response;
     }
+	/**
+	 * @name            insertPageRevision()
+	 *
+	 * @since           1.1.9
+	 * @version         1.1.9
+	 * @author          Can Berkol
+	 *
+	 * @use             $this->insertPageRevisions()
+	 *
+	 * @param           mixed			$revision
+	 *
+	 * @return          array           $response
+	 */
+	public function insertPageRevision($revision) {
+		return $this->insertPageRevisions(array($revision));
+	}
 
+	/**
+	 * @name            insertPageRevisions()
+	 *
+	 * @since           1.1.9
+	 * @version         1.1.9
+	 * @author          Can Berkol
+	 *
+	 * @use             $this->createException()
+	 *
+	 * @param           array 			$collection
+	 *
+	 * @return          array           $response
+	 */
+	public function insertPageRevisions($collection) {
+		$this->resetResponse();
+		/** Parameter must be an array */
+		if (!is_array($collection)) {
+			return $this->createException('InvalidParameter', 'Array', 'err.invalid.parameter.collection');
+		}
+		$countInserts = 0;
+		$insertedItems = array();
+		foreach ($collection as $data) {
+			if ($data instanceof BundleEntity\PageRevision) {
+				$entity = $data;
+				$this->em->persist($entity);
+				$insertedItems[] = $entity;
+				$countInserts++;
+			}
+			else if (is_object($data)) {
+				$entity = new BundleEntity\PageRevision();
+				foreach ($data as $column => $value) {
+					$set = 'set' . $this->translateColumnName($column);
+					switch ($column) {
+						case 'language':
+							$lModel = $this->kernel->getContainer()->get('multilanguagesupport.model');
+							$response = $lModel->getLanguage($value, 'id');
+							if (!$response['error']) {
+								$entity->$set($response['result']['set']);
+							} else {
+								$response = $lModel->getLanguage($value, 'iso_code');
+								if (!$response['error']) {
+									$entity->$set($response['result']['set']);
+								} else {
+									new CoreExceptions\EntityDoesNotExist($this->kernel, $value);
+								}
+							}
+							unset($response, $sModel);
+							break;
+						case 'page':
+							$response = $this->getPage($value, 'id');
+							if (!$response['error']) {
+								$entity->$set($response['result']['set']);
+							} else {
+								new CoreExceptions\EntityDoesNotExist($this->kernel, $value);
+							}
+							unset($response, $sModel);
+							break;
+						default:
+							$entity->$set($value);
+							break;
+					}
+				}
+				$this->em->persist($entity);
+				$insertedItems[] = $entity;
+
+				$countInserts++;
+			} else {
+				new CoreExceptions\InvalidDataException($this->kernel);
+			}
+		}
+		if ($countInserts > 0) {
+			$this->em->flush();
+		}
+		/**
+		 * Prepare & Return Response
+		 */
+		$this->response = array(
+			'rowCount' => $this->response['rowCount'],
+			'result' => array(
+				'set' => $insertedItems,
+				'total_rows' => $countInserts,
+				'last_insert_id' => $entity->getId(),
+			),
+			'error' => false,
+			'code' => 'scc.db.insert.done',
+		);
+		return $this->response;
+	}
     /**
      * @name            insertPages ()
      *                Inserts one or more pages into database.
@@ -4475,7 +4725,77 @@ class ContentManagementModel extends CoreModel
         return $this->response;
 
     }
+	/**
+	 * @name            listPageRevisions()
+	 *
+	 * @since           1.1.9
+	 * @version         1.1.9
+	 * @author          Can Berkol
+	 * @param           array 			$filter
+	 * @param			array			$sortOrder
+	 * @param			array			$limit
+	 * @param			integer			$site
+	 * @param			string			$queryStr
+	 *
+	 * @return          array           $response
+	 */
+	public function listPageRevisions($filter = null, $sortOrder = null, $limit = null, $site = 1, $queryStr = null){
+		$this->resetResponse();
+		if (!is_array($sortOrder) && !is_null($sortOrder)) {
+			return $this->createException('InvalidSortOrderException', '', 'err.invalid.parameter.sortorder');
+		}
 
+		$orderStr = '';
+		$whereStr = '';
+		$groupStr = '';
+		$filterStr = '';
+
+		$queryStr = 'SELECT '.$this->entity['page_revision']['alias']
+			.' FROM '.$this->entity['page_revision']['alias']['name'].' '.$this->entity['page_revision']['alias'];
+
+		if ($sortOrder != null) {
+			foreach ($sortOrder as $column => $direction) {
+				switch ($column) {
+					default:
+						$column = $this->entity['page_revision']['alias'].'.'.$column;
+						break;
+				}
+				$orderStr .= ' '.$column.' '.strtoupper($direction).', ';
+			}
+			$orderStr = rtrim($orderStr, ', ');
+			$orderStr = ' ORDER BY '.$orderStr.' ';
+		}
+
+		/**
+		 * Prepare WHERE section of query.
+		 */
+		if ($filter != null) {
+			$filter_str = $this->prepareWhere($filter);
+			$whereStr .= ' WHERE ' . $filter_str;
+		}
+
+		$queryStr .= $whereStr.$groupStr.$orderStr;
+
+		$query = $this->em->createQuery($queryStr);
+
+		$query = $this->addLimit($query, $limit);
+		/**
+		 * Prepare & Return Response
+		 */
+		$result = $query->getResult();
+
+		$this->response = array(
+			'rowCount' => $this->response['rowCount'],
+			'result' => array(
+				'set' => $result,
+				'total_rows' => count($result),
+				'last_insert_id' => null,
+			),
+			'error' => false,
+			'code' => 'scc.db.entry.exist',
+		);
+		return $this->response;
+	}
     /**
      * @name            listPages ()
      *                List pages from database based on a variety of conditions.
@@ -5015,7 +5335,118 @@ class ContentManagementModel extends CoreModel
     {
         return $this->updatePages(array($page));
     }
+	/**
+	 * @name            updatePageRevision()
+	 *
+	 * @since           1.1.9
+	 * @version         1.1.9
+	 * @author          Can Berkol
+	 *
+	 * @use             $this->updatePageRevisions()
+	 *
+	 * @param           mixed 			$revision
+	 *
+	 * @return          mixed           $response
+	 */
+	public function updatePageRevision($revision){
+		return $this->updatePageRevisions(array($revision));
+	}
+	/**
+	 * @name            updatePageRevisions()
+	 *
+	 * @since           1.1.9
+	 * @version         1.1.9
+	 * @author          Can Berkol
+	 *
+	 * @use             $this->createException()
+	 *
+	 * @param           array 			$collection
+	 *
+	 * @return          array           $response
+	 */
+	public function updatePageRevisions($collection) {
+		$this->resetResponse();
+		/** Parameter must be an array */
+		if (!is_array($collection)) {
+			return $this->createException('InvalidParameter', 'Array', 'err.invalid.parameter.collection');
+		}
+		$countUpdates = 0;
+		$updatedItems = array();
+		foreach ($collection as $data) {
+			if ($data instanceof BundleEntity\PageRevision) {
+				$entity = $data;
+				$this->em->persist($entity);
+				$updatedItems[] = $entity;
+				$countUpdates++;
+			}
+			else if (is_object($data)) {
+				if (!property_exists($data, 'date_updated')) {
+					$data->date_updated = new \DateTime('now', new \DateTimeZone($this->kernel->getContainer()->getParameter('app_timezone')));
+				}
+				if (property_exists($data, 'date_added')) {
+					unset($data->date_added);
+				}
+				$response = $this->getPageRevision($data->page, $data->language, $data->revision_number);
+				if ($response['error']) {
+					return $this->createException('EntityDoesNotExist', 'PageRevision', 'err.invalid.entity');
+				}
+				$oldEntity = $response['result']['set'];
 
+				foreach ($data as $column => $value) {
+					$set = 'set' . $this->translateColumnName($column);
+					switch ($column) {
+						case 'page':
+							$pModel = $this->kernel->getContainer()->get('productManagement.model');
+							$response = $pModel->getPage($value, 'id');
+							if (!$response['error']) {
+								$oldEntity->$set($response['result']['set']);
+							} else {
+								new CoreExceptions\EntityDoesNotExistException($this->kernel, $value);
+							}
+							unset($response, $pModel);
+							break;
+						case 'language':
+							$lModel = $this->kernel->getContainer()->get('multilanguagesupport.model');
+							$response = $lModel->getLanguage($value, 'id');
+							if (!$response['error']) {
+								$oldEntity->$set($response['result']['set']);
+							} else {
+								new CoreExceptions\EntityDoesNotExistException($this->kernel, $value);
+							}
+							unset($response, $lModel);
+							break;
+						default:
+							$oldEntity->$set($value);
+							break;
+					}
+					if ($oldEntity->isModified()) {
+						$this->em->persist($oldEntity);
+						$countUpdates++;
+						$updatedItems[] = $oldEntity;
+					}
+				}
+			} else {
+				new CoreExceptions\InvalidDataException($this->kernel);
+			}
+		}
+		if ($countUpdates > 0) {
+			$this->em->flush();
+		}
+		/**
+		 * Prepare & Return Response
+		 */
+		$this->response = array(
+			'rowCount' => $this->response['rowCount'],
+			'result' => array(
+				'set' => $updatedItems,
+				'total_rows' => $countUpdates,
+				'last_insert_id' => null,
+			),
+			'error' => false,
+			'code' => 'scc.db.update.done',
+		);
+		return $this->response;
+	}
     /**
      * @name            updatePages ()
      *                Updates one or more group details in database.
@@ -5992,6 +6423,24 @@ class ContentManagementModel extends CoreModel
 
 /**
  * Change Log
+ * **************************************
+ * v1.1.9                      24.04.2015
+ * TW #3568871
+ * Can Berkol
+ * **************************************
+ * A deleteNvigations()
+ * A deletePageRevision()
+ * A deletePageRevisions()
+ * A getLastRevisionOfPage()
+ * A getPageRevision()
+ * A insertPageRevision()
+ * A insertPageRevisions()
+ * A listPageRevisions()
+ * A listRevisionsOfPage()
+ * A updatePageRevision()
+ * A updatePageRevisions()
+ * D deletNavigations()
+ *
  * **************************************
  * v1.1.8                      Can Berkol
  * 29.03.2014
