@@ -18,14 +18,14 @@ namespace BiberLtd\Bundle\ContentManagementBundle\Entity;
  */
 use Doctrine\ORM\Mapping AS ORM;
 use BiberLtd\Bundle\CoreBundle\CoreLocalizableEntity;
-/** 
+/**
  * @ORM\Entity
  * @ORM\Table(
  *     name="module",
  *     options={"charset":"utf8","collate":"utf8_turkish_ci","engine":"innodb"},
  *     uniqueConstraints={
- *         @ORM\UniqueConstraint(name="idx_u_module_id", columns={"id"}),
- *         @ORM\UniqueConstraint(name="idx_u_module_code", columns={"code"})
+ *         @ORM\UniqueConstraint(name="idxUModuleId", columns={"id"}),
+ *         @ORM\UniqueConstraint(name="idxUModuleCode", columns={"code"})
  *     }
  * )
  */

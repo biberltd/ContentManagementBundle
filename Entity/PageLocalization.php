@@ -18,14 +18,14 @@ namespace BiberLtd\Bundle\ContentManagementBundle\Entity;
 use BiberLtd\Bundle\CoreBundle\CoreLocalizableEntity;
 use Doctrine\ORM\Mapping AS ORM;
 use BiberLtd\Bundle\CoreBundle\CoreEntity;
-/** 
+/**
  * @ORM\Entity
  * @ORM\Table(
  *     name="page_localization",
  *     options={"charset":"utf8","collate":"utf8_turkish_ci","engine":"innodb"},
  *     uniqueConstraints={
- *         @ORM\UniqueConstraint(name="idx_u_page_localization", columns={"page","language"}),
- *         @ORM\UniqueConstraint(name="idx_u_page_url_key", columns={"page","language","url_key"})
+ *         @ORM\UniqueConstraint(name="idxUPageLocalization", columns={"page","language"}),
+ *         @ORM\UniqueConstraint(name="idxUPageUrlKey", columns={"page","language","url_key"})
  *     }
  * )
  */

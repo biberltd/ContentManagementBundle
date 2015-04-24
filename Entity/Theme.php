@@ -17,18 +17,19 @@
 namespace BiberLtd\Bundle\ContentManagementBundle\Entity;
 use Doctrine\ORM\Mapping AS ORM;
 use BiberLtd\Bundle\CoreBundle\CoreLocalizableEntity;
-/** 
+/**
  * @ORM\Entity
  * @ORM\Table(
  *     name="theme",
  *     options={"charset":"utf8","collate":"utf8_turkish_ci","engine":"innodb"},
  *     indexes={
- *         @ORM\Index(name="idx_n_theme_date_added", columns={"date_added"}),
- *         @ORM\Index(name="idx_n_theme_updated", columns={"date_updated"})
+ *         @ORM\Index(name="idxNThemeDateAdded", columns={"date_added"}),
+ *         @ORM\Index(name="idxNThemeDateUpdated", columns={"date_updated"}),
+ *         @ORM\Index(name="idxUThemeDateRemoved", columns={"date_removed"})
  *     },
  *     uniqueConstraints={
- *         @ORM\UniqueConstraint(name="idx_u_theme_id", columns={"id"}),
- *         @ORM\UniqueConstraint(name="idx_u_theme_folder", columns={"folder"})
+ *         @ORM\UniqueConstraint(name="idxUThemeId", columns={"id"}),
+ *         @ORM\UniqueConstraint(name="idxUThemeFolder", columns={"folder"})
  *     }
  * )
  */
@@ -70,6 +71,11 @@ class Theme extends CoreLocalizableEntity
      * @ORM\Column(type="integer", nullable=true)
      */
     private $count_layouts;
+
+	/**
+	 * @ORM\Column(type="datetime", nullable=true)
+	 */
+	public $date_removed;
 
     /** 
      * @ORM\OneToMany(targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\Layout", mappedBy="theme")

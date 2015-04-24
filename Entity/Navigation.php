@@ -2,29 +2,31 @@
 namespace BiberLtd\Bundle\ContentManagementBundle\Entity;
 use Doctrine\ORM\Mapping AS ORM;
 /**
- * @name        navigation
- * @package		BiberLtd\Bundle\CoreBundle\AccessManagementBundle
+ * @name        Navigation
+ * @package		BiberLtd\Core\ContentManagementBundle
  *
  * @author		Can Berkol
- * @version     1.2.0
- * @date        19.12.2013
+ * @version     1.2.1
+ * @date        24.05.2015
  *
  * @copyright   Biber Ltd. (http://www.biberltd.com)
  * @license     GPL v3.0
  *
- * @description Model / Entity class.
- *
  */
 use BiberLtd\Bundle\CoreBundle\CoreLocalizableEntity;
-/** 
+/**
  * @ORM\Entity
  * @ORM\Table(
  *     name="navigation",
  *     options={"charset":"utf8","collate":"utf8_turkish_ci","engine":"innodb"},
- *     indexes={@ORM\Index(name="idx_n_date_added", columns={"date_added"})},
+ *     indexes={
+ *         @ORM\Index(name="idxNNaviagationDateAdded", columns={"date_added"}),
+ *         @ORM\Index(name="idxNNavigationDateRemoved", columns={"date_removed"}),
+ *         @ORM\Index(name="idxNNavigationDateUpdated", columns={"date_updated"})
+ *     },
  *     uniqueConstraints={
- *         @ORM\UniqueConstraint(name="idx_u_navigation_id", columns={"id"}),
- *         @ORM\UniqueConstraint(name="idx_u_navigation_code", columns={"code"})
+ *         @ORM\UniqueConstraint(name="idxUNaviagationId", columns={"id"}),
+ *         @ORM\UniqueConstraint(name="idxUNaviagationCode", columns={"code"})
  *     }
  * )
  */
@@ -47,6 +49,16 @@ class Navigation extends CoreLocalizableEntity
      */
     public $date_added;
 
+	/**
+	 * @ORM\Column(type="datetime", nullable=true)
+	 */
+	public $date_removed;
+
+	/**
+	 * @ORM\Column(type="datetime", nullable=false)
+	 */
+	public $date_updated;
+
     /** 
      * @ORM\OneToMany(
      *     targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\NavigationLocalization",
@@ -61,7 +73,7 @@ class Navigation extends CoreLocalizableEntity
      *     mappedBy="navigation"
      * )
      */
-    private $navigation_items;
+    private $items;
 
     /** 
      * @ORM\ManyToOne(targetEntity="BiberLtd\Bundle\SiteManagementBundle\Entity\Site")
@@ -196,9 +208,52 @@ class Navigation extends CoreLocalizableEntity
     public function getSite() {
         return $this->site;
     }
+
+	/**
+	 * @name    	getItems ()
+	 *
+	 * @author  Can Berkol
+	 *
+	 * @since   1.0.0
+	 * @version 1.0.0
+	 *
+	 * @return  mixed
+	 */
+	public function getItems() {
+		return $this->items;
+	}
+
+	/**
+	 * @name        setItems ()
+	 *
+	 * @author  Can Berkol
+	 *
+	 * @since   1.0.0
+	 * @version 1.0.0
+	 *
+	 * @param mixed $items
+	 *
+	 * @return $this
+	 */
+	public function setItems($items) {
+		if (!$this->setModified('items', $items)->isModified()) {
+			return $this;
+		}
+		$this->items = $items;
+
+		return $this;
+	}
 }
 /**
  * Change Log:
+ * **************************************
+ * v1.2.1                      24.04.2015
+ * TW #3568843,
+ * Can Berkol
+ * **************************************
+ * A getItems()
+ * A setItems()
+ *
  * **************************************
  * v1.2.0                      Can Berkol
  * 19.12.2013

@@ -1,12 +1,12 @@
 <?php
 /**
  * @name        NavigationItem
- * @package		BiberLtd\Bundle\CoreBundle\ContentManagementBundle
+ * @package		BiberLtd\Core\ContentManagementBundle
  *
  * @author		Can Berkol
  *
- * @version     1.0.2
- * @date        06.01.2014
+ * @version     1.0.3
+ * @date        24.04.2015
  *
  * @copyright   Biber Ltd. (http://www.biberltd.com)
  * @license     GPL v3.0
@@ -22,7 +22,7 @@ use BiberLtd\Bundle\CoreBundle\CoreLocalizableEntity;
  * @ORM\Table(
  *     name="navigation_item",
  *     options={"charset":"utf8","collate":"utf8_turkish_ci","engine":"innodb"},
- *     uniqueConstraints={@ORM\UniqueConstraint(name="idx_u_navigation_item_id", columns={"id"})}
+ *     uniqueConstraints={@ORM\UniqueConstraint(name="idxUNavigationItemId", columns={"id"})}
  * )
  */
 class NavigationItem extends CoreLocalizableEntity
@@ -482,6 +482,13 @@ class NavigationItem extends CoreLocalizableEntity
 }
 /**
  * Change Log:
+ * **************************************
+ * v1.0.3					   24.04.2015
+ * TW #3568871
+ * Can Berkol
+ * **************************************
+ * A getParent()
+ *
  * **************************************
  * v1.0.2                      Can Berkol
  * 06.01.2014

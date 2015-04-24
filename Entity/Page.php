@@ -1,7 +1,7 @@
 <?php
 namespace BiberLtd\Bundle\ContentManagementBundle\Entity;
 /**
- * @name        page
+ * @name        Page
  * @package		BiberLtd\Bundle\CoreBundle\ContentManagementBundle
  *
  * @author		Murat Ünal
@@ -10,9 +10,6 @@ namespace BiberLtd\Bundle\ContentManagementBundle\Entity;
  *
  * @copyright   Biber Ltd. (http://www.biberltd.com)
  * @license     GPL v3.0
- *
- * @description Model / Entity class.
- *
  */
 use Doctrine\ORM\Mapping AS ORM;
 use BiberLtd\Bundle\CoreBundle\CoreLocalizableEntity;
@@ -23,8 +20,8 @@ use BiberLtd\Bundle\CoreBundle\CoreLocalizableEntity;
  *     name="page",
  *     options={"charset":"utf8","collate":"utf8_Turkish_ci","engine":"innodb"},
  *     uniqueConstraints={
- *         @ORM\UniqueConstraint(name="idx_u_page_id", columns={"id"}),
- *         @ORM\UniqueConstraint(name="idx_u_page_code", columns={"code"})
+ *         @ORM\UniqueConstraint(name="idxUPageId", columns={"id"}),
+ *         @ORM\UniqueConstraint(name="idxUPageCode", columns={"code"})
  *     }
  * )
  */

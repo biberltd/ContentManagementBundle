@@ -23,11 +23,8 @@ use BiberLtd\Bundle\CoreBundle\CoreEntity;
  *     name="navigation_item_localization",
  *     options={"charset":"utf8","collate":"utf8_turkish_ci","engine":"innodb"},
  *     uniqueConstraints={
- *         @ORM\UniqueConstraint(name="idx_u_navigation_item_localization", columns={"navigation_item","language"}),
- *         @ORM\UniqueConstraint(
- *             name="idx_u_navigation_item_localization_url_key",
- *             columns={"navigation_item","language","url_key"}
- *         )
+ *         @ORM\UniqueConstraint(name="idxUNavigationItemLocalization", columns={"navigation_item","language"}),
+ *         @ORM\UniqueConstraint(name="idxUNavigationItemUrlKey", columns={"navigation_item","language","url_key"})
  *     }
  * )
  */

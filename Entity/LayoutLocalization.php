@@ -17,14 +17,14 @@
 namespace BiberLtd\Bundle\ContentManagementBundle\Entity;
 use Doctrine\ORM\Mapping AS ORM;
 use BiberLtd\Bundle\CoreBundle\CoreEntity;
-/** 
+/**
  * @ORM\Entity
  * @ORM\Table(
  *     name="layout_localizatiom",
  *     options={"charset":"utf8","collate":"utf8_turkish_ci","engine":"innodb"},
  *     uniqueConstraints={
- *         @ORM\UniqueConstraint(name="idx_u_layout_localization", columns={"layout","language"}),
- *         @ORM\UniqueConstraint(name="idx_u_layout_localization_url_key", columns={"layout","language","url_key"})
+ *         @ORM\UniqueConstraint(name="idxULayoutLocalization", columns={"layout","language"}),
+ *         @ORM\UniqueConstraint(name="idxULayoutLocalizationUrlKey", columns={"layout","language","url_key"})
  *     }
  * )
  */
