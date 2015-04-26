@@ -5396,8 +5396,7 @@ class ContentManagementModel extends CoreModel
 					$set = 'set' . $this->translateColumnName($column);
 					switch ($column) {
 						case 'page':
-							$pModel = $this->kernel->getContainer()->get('productManagement.model');
-							$response = $pModel->getPage($value, 'id');
+							$response = $this->getPage($value, 'id');
 							if (!$response['error']) {
 								$oldEntity->$set($response['result']['set']);
 							} else {
