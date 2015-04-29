@@ -1,5 +1,4 @@
 <?php
-
 /**
  * ContentManagementModel Class
  *
@@ -12,8 +11,8 @@
  *
  * @copyright   Biber Ltd. (www.biberltd.com)
  *
- * @version     1.1.9
- * @date        24.04.2015
+ * @version     1.2.0
+ * @date        29.04.2015
  *
  */
 
@@ -4158,24 +4157,21 @@ class ContentManagementModel extends CoreModel
     }
 
     /**
-     * @name            listModulesOfPageLayouts ()
-     *                Lists modules located at a specific page and layout and return the modules grouped by section.
-     *
-     * @since            1.0.1
-     * @version         1.1.3
+     * @name            listModulesOfPageLayoutsGroupedBySection()
+	 *
+     * @since           1.0.1
+     * @version         1.2.0
      * @author          Can Berkol
      *
      * @use             $this->createException()
      *
-     * @param           array $page Page Entity
-     * @param           array $sortorder Array
-     *                                      'column'            => 'asc|desc'
-     * @param           array $limit
+     * @param           array 		$page
+     * @param           array 		$sortorder
+     * @param           array 		$limit
      *
-     * @return          array           $response
+     * @return          array		$response
      */
-    public function listModulesOfPageLayoutsGroupedBySection($page, $sortorder = null, $limit = null)
-    {
+    public function listModulesOfPageLayoutsGroupedBySection($page, $sortorder = null, $limit = null){
         $this->resetResponse();
         if (!$page instanceof BundleEntity\Page || !$page || is_null($page)) {
             return $this->createException('InvalidParameterException', 'BundleEntity\\Page','err.invalid.parameter.page');
@@ -4190,7 +4186,6 @@ class ContentManagementModel extends CoreModel
         $count = 0;
         foreach ($mops as $mop) {
             $modules[$mop->getSection()][$count]['entity'] = $mop->getModule();
-            $modules[$mop->getSection()][$count]['contents'] = $mop->getLocalizations();
             $modules[$mop->getSection()][$count]['style'] = $mop->getStyle();
             $count++;
         }
@@ -6422,6 +6417,13 @@ class ContentManagementModel extends CoreModel
 
 /**
  * Change Log
+ * **************************************
+ * v1.1.9                      29.04.2015
+ * TW #
+ * Can Berkol
+ * **************************************
+ * U listModulesOfPageLayoutsGroupedBySection()
+ *
  * **************************************
  * v1.1.9                      24.04.2015
  * TW #3568871
