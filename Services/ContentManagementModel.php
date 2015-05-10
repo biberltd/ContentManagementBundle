@@ -11,8 +11,8 @@
  *
  * @copyright   Biber Ltd. (www.biberltd.com)
  *
- * @version     1.2.1
- * @date        03.05.2015
+ * @version     1.2.2
+ * @date        10.05.2015
  *
  */
 
@@ -1924,7 +1924,8 @@ class ContentManagementModel extends CoreModel
 							$response = $sModel->getSite($value);
 							if (!$response->error->exist) {
 								$entity->$set($response->result->set);
-							} else {
+							}
+							else {
 								return $this->createException('EntityDoesNotExist', 'The site with the id / key / domain "'.$value.'" does not exist in database.', 'E:D:002');
 							}
 							unset($response, $sModel);
@@ -3730,7 +3731,7 @@ class ContentManagementModel extends CoreModel
 	 * @name            updatePageRevisions()
 	 *
 	 * @since           1.1.9
-	 * @version         1.2.1
+	 * @version         1.2.2
 	 * @author          Can Berkol
 	 *
 	 * @use             $this->createException()
@@ -3771,7 +3772,7 @@ class ContentManagementModel extends CoreModel
 					$set = 'set' . $this->translateColumnName($column);
 					switch ($column) {
 						case 'page':
-							$response = $this->getPage($value, 'id');
+							$response = $this->getPage($value);
 							if (!$response->error->exist) {
 								$oldEntity->$set($response->result->set);
 							}
@@ -3782,7 +3783,7 @@ class ContentManagementModel extends CoreModel
 							break;
 						case 'language':
 							$lModel = $this->kernel->getContainer()->get('multilanguagesupport.model');
-							$response = $lModel->getLanguage($value, 'id');
+							$response = $lModel->getLanguage($value);
 							if (!$response->error->exist) {
 								$oldEntity->$set($response->result->set);
 							}
@@ -4036,7 +4037,13 @@ class ContentManagementModel extends CoreModel
 /**
  * Change Log
  * **************************************
- * v1.2.1                     29.04.2015
+ * v1.2.2                      10.05.2015
+ * Can Berkol
+ * **************************************
+ * BF :: Old style method calls fixed.
+ *
+ * **************************************
+ * v1.2.1                     03.05.2015
  * Can Berkol
  * **************************************
  * CR :: Made compatible with CoreBundle v3.3.
