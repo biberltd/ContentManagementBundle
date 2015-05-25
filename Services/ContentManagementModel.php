@@ -11,8 +11,8 @@
  *
  * @copyright   Biber Ltd. (www.biberltd.com)
  *
- * @version     1.2.2
- * @date        10.05.2015
+ * @version     1.2.3
+ * @date        25.05.2015
  *
  */
 
@@ -44,12 +44,12 @@ class ContentManagementModel extends CoreModel
      * @version         1.2.1
      *
      * @param           object $kernel
-     * @param           string $db_connection Database connection key as set in app/config.yml
+     * @param           string $dbConnection Database connection key as set in app/config.yml
      * @param           string $orm ORM that is used.
      */
-    public function __construct($kernel, $db_connection = 'default', $orm = 'doctrine')
+    public function __construct($kernel, $dbConnection = 'default', $orm = 'doctrine')
     {
-        parent::__construct($kernel, $db_connection, $orm);
+        parent::__construct($kernel, $dbConnection, $orm);
 
         /**
          * Register entity names for easy reference.
@@ -1975,7 +1975,7 @@ class ContentManagementModel extends CoreModel
      */
     public function isFileAssociatedWithPage($file, $page, $bypass = false){
         $timeStamp = time();
-        $fModel = new FileService\FileManagementModel($this->kernel, $this->db_connection, $this->orm);
+        $fModel = new FileService\FileManagementModel($this->kernel, $this->dbConnection, $this->orm);
 
 		$response = $fModel->getFile($file);
 		if($response->error->exist){
@@ -3939,7 +3939,7 @@ class ContentManagementModel extends CoreModel
      * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
      */
     public function updateThemes($collection){
-        $this->resetResponse();
+        $timeStamp = time();
 		if (!is_array($collection)) {
 			return $this->createException('InvalidParameterValueException', 'Invalid parameter value. Parameter must be an array collection', 'E:S:001');
 		}
@@ -4036,6 +4036,12 @@ class ContentManagementModel extends CoreModel
 }
 /**
  * Change Log
+ * **************************************
+ * v1.2.3                      25.05.2015
+ * Can Berkol
+ * **************************************
+ * BF :: db_connection is replaced with dbConnection
+ *
  * **************************************
  * v1.2.2                      10.05.2015
  * Can Berkol
