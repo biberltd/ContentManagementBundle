@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50505
 File Encoding         : 65001
 
-Date: 2015-04-27 15:45:38
+Date: 2015-05-26 15:37:24
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -88,6 +88,7 @@ CREATE TABLE `module` (
   `theme` int(10) unsigned NOT NULL COMMENT 'Theme folder of the module.',
   `site` int(10) unsigned DEFAULT NULL COMMENT 'Site of module.',
   `bundle_name` varchar(155) COLLATE utf8_turkish_ci DEFAULT NULL,
+  `bundle_folder` varchar(255) COLLATE utf8_turkish_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `idxUModuleId` (`id`) USING BTREE,
   UNIQUE KEY `idxUModuleCode` (`code`) USING BTREE,

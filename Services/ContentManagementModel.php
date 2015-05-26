@@ -2060,7 +2060,7 @@ class ContentManagementModel extends CoreModel
 			'condition' => array(
 				array(
 					'glue' => 'and',
-					'condition' => array('column' => $this->entity['fop']['page'].'.id', 'comparison' => '=', 'value' => $page->getId()),
+					'condition' => array('column' => $this->entity['fop']['alias'].'.id', 'comparison' => '=', 'value' => $page->getId()),
 				)
 			)
 		);
@@ -2416,7 +2416,7 @@ class ContentManagementModel extends CoreModel
 			'condition' => array(
 				array(
 					'glue' => 'and',
-					'condition' => array('column' => $this->entity['mol']['page'].'.id', 'comparison' => '=', 'value' => $page->getId()),
+					'condition' => array('column' => $this->entity['mol']['alias'].'.id', 'comparison' => '=', 'value' => $page->getId()),
 				)
 			)
 		);
@@ -4042,6 +4042,7 @@ class ContentManagementModel extends CoreModel
  * BF :: Deprecated use of $this->resetResponse() is removed.
  * BF :: listPagesMethod() was trying to associate page_localization to navigation. Association now points to page.
  * BF :: Use header added for ModelResponse.
+ * BF :: Entity definition access kets fixed.
  *
  * **************************************
  * v1.2.3                      25.05.2015
