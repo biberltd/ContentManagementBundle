@@ -6,8 +6,8 @@ namespace BiberLtd\Bundle\ContentManagementBundle\Entity;
  *
  * @author		Can Berkol
  *              Murat Ünal
- * @version     1.0.4
- * @date        24.03.2014
+ * @version     1.0.5
+ * @date        26.05.2015
  *
  * @copyright   Biber Ltd. (http://www.biberltd.com)
  * @license     GPL v3.0
@@ -58,20 +58,20 @@ class FilesOfPage extends CoreEntity
 
 	/**
 	 * @ORM\Id
-	 * @ORM\ManyToOne(targetEntity="BiberLtd\Core\Bundles\FileManagementBundle\Entity\File")
+	 * @ORM\ManyToOne(targetEntity="BiberLtd\Bundle\FileManagementBundle\Entity\File")
 	 * @ORM\JoinColumn(name="file", referencedColumnName="id", nullable=false, onDelete="CASCADE")
 	 */
 	private $file;
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="BiberLtd\Core\Bundles\MultiLanguageSupportBundle\Entity\Language")
+	 * @ORM\ManyToOne(targetEntity="BiberLtd\Bundle\MultiLanguageSupportBundle\Entity\Language")
 	 * @ORM\JoinColumn(name="language", referencedColumnName="id", onDelete="CASCADE")
 	 */
 	private $language;
 
 	/**
 	 * @ORM\Id
-	 * @ORM\ManyToOne(targetEntity="BiberLtd\Core\Bundles\ContentManagementBundle\Entity\Page")
+	 * @ORM\ManyToOne(targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\Page")
 	 * @ORM\JoinColumn(name="page", referencedColumnName="id", nullable=false, onDelete="CASCADE")
 	 */
 	private $page;
@@ -273,6 +273,12 @@ class FilesOfPage extends CoreEntity
 }
 /**
  * Change Log:
+ * **************************************
+ * v1.0.5                      26.05.2015
+ * Can Berkol
+ * **************************************
+ * BF :: Entity name spaces in annotations have been fixed.
+ *
  * **************************************
  * v1.0.4					   24.04.2015
  * TW #

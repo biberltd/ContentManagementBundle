@@ -11,8 +11,8 @@
  *
  * @copyright   Biber Ltd. (www.biberltd.com)
  *
- * @version     1.2.3
- * @date        25.05.2015
+ * @version     1.2.4
+ * @date        26.05.2015
  *
  */
 
@@ -22,6 +22,7 @@ namespace BiberLtd\Bundle\ContentManagementBundle\Services;
 use BiberLtd\Bundle\CoreBundle\CoreModel;
 /** Entities to be used */
 use BiberLtd\Bundle\ContentManagementBundle\Entity as BundleEntity;
+use BiberLtd\Bundle\CoreBundle\Responses\ModelResponse;
 use BiberLtd\Bundle\MultiLanguageSupportBundle\Entity as MLSEntity;
 use BiberLtd\Bundle\FileManagementBundle\Entity as FileBundleEntity;
 /** Helper Models */
@@ -1273,13 +1274,12 @@ class ContentManagementModel extends CoreModel
 	 * @name            getPageRevision()
 	 *
 	 * @since           1.1.9
-	 * @version         1.2.1
+	 * @version         1.2.4
 	 *
 	 * @author          Can Berkol
 	 *
 	 * @use             $this->createException()
 	 * @use             $this->listPageRevisions()
-	 * @use             $this->resetResponse()
 	 *
 	 * @param           mixed           $page
 	 * @param			mixed			$language
@@ -2825,7 +2825,7 @@ class ContentManagementModel extends CoreModel
      * @name            listPages()
      *
      * @since           1.0.0
-     * @version         1.2.1
+     * @version         1.2.4
      * @author          Can Berkol
      *
      * @use             $this->createException()
@@ -2843,9 +2843,9 @@ class ContentManagementModel extends CoreModel
 		}
 		$oStr = $wStr = $gStr = $fStr = '';
 
-		$qStr = 'SELECT '.$this->entity['p']['alias'].', '.$this->entity['p']['alias']
+		$qStr = 'SELECT '.$this->entity['p']['alias'].', '.$this->entity['pl']['alias']
 			.' FROM '.$this->entity['pl']['name'].' '.$this->entity['pl']['alias']
-			.' JOIN '.$this->entity['pl']['alias'].'.navigation '.$this->entity['p']['alias'];
+			.' JOIN '.$this->entity['pl']['alias'].'.page '.$this->entity['p']['alias'];
 
 		if(!is_null($sortOrder)){
 			foreach($sortOrder as $column => $direction){
@@ -3109,7 +3109,7 @@ class ContentManagementModel extends CoreModel
 	 * @name            updateLayouts ()
 	 *
 	 * @since           1.0.1
-	 * @version         1.2.1
+	 * @version         1.2.4
 	 * @author          Can Berkol
 	 *
 	 * @use             $this->createException()
@@ -3118,8 +3118,7 @@ class ContentManagementModel extends CoreModel
 	 *
 	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
-	public function updateLayouts($collection)    {
-		$this->resetResponse();
+	public function updateLayouts($collection){
 		/** Parameter must be an array */
 		if (!is_array($collection)) {
 			return $this->createException('InvalidParameter', 'Array', 'err.invalid.parameter.collection');
@@ -4037,6 +4036,14 @@ class ContentManagementModel extends CoreModel
 /**
  * Change Log
  * **************************************
+ * v1.2.4                      26.05.2015
+ * Can Berkol
+ * **************************************
+ * BF :: Deprecated use of $this->resetResponse() is removed.
+ * BF :: listPagesMethod() was trying to associate page_localization to navigation. Association now points to page.
+ * BF :: Use header added for ModelResponse.
+ *
+ * **************************************
  * v1.2.3                      25.05.2015
  * Can Berkol
  * **************************************
@@ -4129,122 +4136,5 @@ class ContentManagementModel extends CoreModel
  * **************************************
  * B listItemsOfNavigation() bug fixes.
  * U listNavigationItemsOfNavigation() Now accepts string, integer or object for $navigation parameter.
- *
- * **************************************
- * v1.1.3                      Can Berkol
- * 01.12.2013
- * **************************************
- * U listModulesOfPageLayoutsGroupedBySection()
- *
- * **************************************
- * v1.1.2                      Can Berkol
- * 27.11.2013
- * **************************************
- * B getPage() Response return bug on error is fixed.
- * U getPage() Lazyloading JOIN added.
- * U listNavigations() Lazyloading JOIN added.
- *
- * **************************************
- * v1.1.1                      Can Berkol
- * 21.11.2013
- * **************************************
- * A listPages()
- * B listModulesOfPageLayoutsGroupedBySection()
- * D list_pages()
- *
- * **************************************
- * v1.1.0                      Can Berkol
- * 13.11.2013
- * **************************************
- * A getLayoutLocalization()
- * A getModuleLocalization()
- * A getNavigationLocalization()
- * A getNavigationItemLocalization()
- * A getPageLocalization()
- * A getThemeLocalization()
- * A listModulesOfPageLayouts
- * M function names are now camelCase.
- *
- * **************************************
- * v1.0.2                      Can Berkol
- * 10.10.2013
- * **************************************
- * A update_module()
- * A update_modules()
- *
- * **************************************
- * v1.0.1                      Can Berkol
- * 09.09.2013
- * **************************************
- * A delete_layout()
- * A delete_layouts()
- * A delete_module()
- * A delete_modules()
- * A delete_navigation()
- * A delete_navigations()
- * A delete_navigation_item()
- * A delete_navigation_items()
- * A delete_theme()
- * A delete_themes()
- * A does_layout_exist()
- * A does_module_exist()
- * A does_navigation_exists()
- * A does_navigation_item_exists()
- * A does_theme_exists()
- * A getLayout()
- * A getNavigation()
- * A getNavigationItem()
- * A insert_navigation()
- * A insert_navigations()
- * A insert_navigation_item()
- * A insert_navigation_items()
- * A list_control_panel_themes()
- * A list_editable_pages()
- * A list_files_of_page()
- * A list_frontend_themes()
- * A list_items_of_navigation()
- * A list_layouts()
- * A list_layouts_of_theme()
- * A list_layouts_of_site()
- * A list_member_editable_pages()
- * A list_modules()
- * A list_modules_of_theme()
- * A list_modules_of_page_layout()
- * A list_modules_of_site()
- * A list_navigation_items()
- * A list_navigation_items_of_navigation()
- * A list_navigation_items_of_parent()
- * A list_navigations()
- * A list_not_editable_pages()
- * A list_pages_of_layout()
- * A list_pages_of_site()
- * A list_support_editable_pages()
- * A list_themes()
- * A list_themes_of_site()
- * A update_layout()
- * A update_layouts()
- * A update_navigation()
- * A update_navigations()
- * A update_navigation_item()
- * A update_navigation_items()
- * A update_theme()
- * A update_themes()
- *
- * **************************************
- * v1.0.0                      Can Berkol
- * 08.09.2013
- * **************************************
- * A __construct()
- * A __destruct()
- * A delete_page()
- * A delete_pages()
- * A does_page_exist()
- * A getModule()
- * A getPage()
- * A insert_pages()
- * A insert_page()
- * A list_pages()
- * A update_page()
- * A update_pages()
  *
  */
