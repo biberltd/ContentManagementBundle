@@ -13,7 +13,7 @@
  */
 
 namespace BiberLtd\Bundle\ContentManagementBundle\Entity;
-use BiberLtd\Core\CoreEntity;
+use BiberLtd\Bundle\CoreBundle\CoreEntity;
 use Doctrine\ORM\Mapping AS ORM;
 
 /**
