@@ -11,8 +11,8 @@
  *
  * @copyright   Biber Ltd. (www.biberltd.com)
  *
- * @version     1.2.4
- * @date        26.05.2015
+ * @version     1.2.5
+ * @date        04.06.2015
  *
  */
 
@@ -2330,7 +2330,7 @@ class ContentManagementModel extends CoreModel
      * @name            listModulesOfPageLayouts()
      *
      * @since           1.0.1
-     * @version         1.2.1
+     * @version         1.2.5
      * @author          Can Berkol
      *
      * @use             $this->createException()
@@ -2348,9 +2348,9 @@ class ContentManagementModel extends CoreModel
 		}
 		$oStr = $wStr = $gStr = $fStr = '';
 
-		$qStr = 'SELECT '.$this->entity['mol']['alias'].', '.$this->entity['m']['alias'] . ', '.$this->entity['l']['alias']
+		$qStr = 'SELECT '.$this->entity['mol']['alias'].', '.$this->entity['p']['alias'] . ', '.$this->entity['l']['alias']
             			. ' FROM ' . $this->entity['mol']['name'] . ' ' . $this->entity['mol']['alias']
-            			. ' JOIN ' . $this->entity['mol']['alias'] . '.module ' . $this->entity['m']['alias']
+            			. ' JOIN ' . $this->entity['mol']['alias'] . '.page ' . $this->entity['p']['alias']
            				. ' JOIN ' . $this->entity['mol']['alias'] . '.layout ' . $this->entity['l']['alias'];
 
 		if(!is_null($sortOrder)){
@@ -2393,7 +2393,7 @@ class ContentManagementModel extends CoreModel
      * @name            listModulesOfPageLayoutsGroupedBySection()
 	 *
      * @since           1.0.1
-     * @version         1.2.1
+     * @version         1.2.5
      * @author          Can Berkol
      *
      * @use             $this->createException()
@@ -2416,7 +2416,7 @@ class ContentManagementModel extends CoreModel
 			'condition' => array(
 				array(
 					'glue' => 'and',
-					'condition' => array('column' => $this->entity['mol']['alias'].'.id', 'comparison' => '=', 'value' => $page->getId()),
+					'condition' => array('column' => $this->entity['p']['alias'].'.id', 'comparison' => '=', 'value' => $page->getId()),
 				)
 			)
 		);
@@ -4035,6 +4035,12 @@ class ContentManagementModel extends CoreModel
 }
 /**
  * Change Log
+ * **************************************
+ * v1.2.5                      04.06.2015
+ * Can Berkol
+ * **************************************
+ * BF :: listModulesOFLayout & listModulesOfPageLayoutsGroupedBySection methods have been fixed.
+ *
  * **************************************
  * v1.2.4                      26.05.2015
  * Can Berkol
