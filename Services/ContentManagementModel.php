@@ -11,8 +11,8 @@
  *
  * @copyright   Biber Ltd. (www.biberltd.com)
  *
- * @version     1.2.5
- * @date        04.06.2015
+ * @version     1.2.6
+ * @date        12.06.2015
  *
  */
 
@@ -33,8 +33,7 @@ use BiberLtd\Bundle\FileManagementBundle\Services as FileService;
 use BiberLtd\Bundle\CoreBundle\Services as CoreServices;
 use BiberLtd\Bundle\CoreBundle\Exceptions as CoreExceptions;
 
-class ContentManagementModel extends CoreModel
-{
+class ContentManagementModel extends CoreModel{
 
     /**
      * @name            __construct()
@@ -1369,7 +1368,7 @@ class ContentManagementModel extends CoreModel
      * @name            insertNavigationLocalizations ()
      *
      * @since           1.1.6
-     * @version         1.2.1
+     * @version         1.2.6
      * @author          Can Berkol
      *
      * @use             $this->createException()
@@ -1392,34 +1391,33 @@ class ContentManagementModel extends CoreModel
 				$insertedItems[] = $entity;
 				$countInserts++;
 			}
-			else if(is_object($data)){
-				$entity = new BundleEntity\NavigationLocalization();
-				foreach($data as $column => $value){
-					$set = 'set'.$this->translateColumnName($column);
-					switch($column){
-						case 'language':
-							$lModel = $this->kernel->getContainer()->get('multilanguagesupport.model');
-							$response = $lModel->getLanguage($value);
-							if(!$response->error->exists){
-								$entity->$set($response->result->set);
-							}
-							unset($response, $lModel);
-							break;
-						case 'navigation':
-							$response = $this->getNavigation($value);
-							if(!$response->error->exists){
-								$entity->$set($response->result->set);
-							}
-							unset($response, $lModel);
-							break;
-						default:
-							$entity->$set($value);
-							break;
+			else{
+				$nav = $data['entity'];
+				foreach($data['localizations'] as $locale => $translation){
+					$entity = new BundleEntity\NavigationLocalization();
+					$lModel = $this->kernel->getContainer()->get('multilanguagesupport.model');
+					$response = $lModel->getLanguage($locale);
+					if($response->error->exist){
+						return $response;
 					}
+					$entity->setLanguage($response->result->set);
+					unset($response);
+					$entity->setNavigation($nav);
+					foreach($translation as $column => $value){
+						$set = 'set'.$this->translateColumnName($column);
+						switch($column){
+							default:
+								if(is_object($value) || is_array($value)){
+									$value = json_encode($value);
+								}
+								$entity->$set($value);
+								break;
+						}
+					}
+					$this->em->persist($entity);
+					$insertedItems[] = $entity;
+					$countInserts++;
 				}
-				$this->em->persist($entity);
-				$insertedItems[] = $entity;
-				$countInserts++;
 			}
 		}
 		if($countInserts > 0){
@@ -1430,7 +1428,7 @@ class ContentManagementModel extends CoreModel
 	}
 
     /**
-     * @name            insertNavigations ()
+     * @name            insertNavigations()
      *
      * @since           1.0.1
      * @version         1.2.1
@@ -1540,7 +1538,7 @@ class ContentManagementModel extends CoreModel
 	 * @name            insertNavigationItemLocalizations ()
 	 *
 	 * @since           1.1.6
-	 * @version         1.2.1
+	 * @version         1.2.6
 	 * @author          Can Berkol
 	 *
 	 * @use             $this->createException()
@@ -1563,34 +1561,33 @@ class ContentManagementModel extends CoreModel
 				$insertedItems[] = $entity;
 				$countInserts++;
 			}
-			else if(is_object($data)){
-				$entity = new BundleEntity\NavigationItemLocalization();
-				foreach($data as $column => $value){
-					$set = 'set'.$this->translateColumnName($column);
-					switch($column){
-						case 'language':
-							$lModel = $this->kernel->getContainer()->get('multilanguagesupport.model');
-							$response = $lModel->getLanguage($value);
-							if(!$response->error->exists){
-								$entity->$set($response->result->set);
-							}
-							unset($response, $lModel);
-							break;
-						case 'navigation_item':
-							$response = $this->getNavigationItem($value);
-							if(!$response->error->exists){
-								$entity->$set($response->result->set);
-							}
-							unset($response, $lModel);
-							break;
-						default:
-							$entity->$set($value);
-							break;
+			else{
+				$navItem = $data['entity'];
+				foreach($data['localizations'] as $locale => $translation){
+					$entity = new BundleEntity\NavigationItemLocalization();
+					$lModel = $this->kernel->getContainer()->get('multilanguagesupport.model');
+					$response = $lModel->getLanguage($locale);
+					if($response->error->exist){
+						return $response;
 					}
+					$entity->setLanguage($response->result->set);
+					unset($response);
+					$entity->setNavigationItem($navItem);
+					foreach($translation as $column => $value){
+						$set = 'set'.$this->translateColumnName($column);
+						switch($column){
+							default:
+								if(is_object($value) || is_array($value)){
+									$value = json_encode($value);
+								}
+								$entity->$set($value);
+								break;
+						}
+					}
+					$this->em->persist($entity);
+					$insertedItems[] = $entity;
+					$countInserts++;
 				}
-				$this->em->persist($entity);
-				$insertedItems[] = $entity;
-				$countInserts++;
 			}
 		}
 		if($countInserts > 0){
@@ -1722,7 +1719,7 @@ class ContentManagementModel extends CoreModel
 	 * @name            insertPageLocalizations()
 	 *
 	 * @since           1.1.6
-	 * @version         1.2.1
+	 * @version         1.2.6
 	 * @author          Can Berkol
 	 *
 	 * @use             $this->createException()
@@ -1745,34 +1742,33 @@ class ContentManagementModel extends CoreModel
 				$insertedItems[] = $entity;
 				$countInserts++;
 			}
-			else if(is_object($data)){
-				$entity = new BundleEntity\PageLocalization();
-				foreach($data as $column => $value){
-					$set = 'set'.$this->translateColumnName($column);
-					switch($column){
-						case 'language':
-							$lModel = $this->kernel->getContainer()->get('multilanguagesupport.model');
-							$response = $lModel->getLanguage($value);
-							if(!$response->error->exists){
-								$entity->$set($response->result->set);
-							}
-							unset($response, $lModel);
-							break;
-						case 'page':
-							$response = $this->getPage($value);
-							if(!$response->error->exists){
-								$entity->$set($response->result->set);
-							}
-							unset($response, $lModel);
-							break;
-						default:
-							$entity->$set($value);
-							break;
+			else{
+				$page = $data['entity'];
+				foreach($data['localizations'] as $locale => $translation){
+					$entity = new BundleEntity\PageLocalization();
+					$lModel = $this->kernel->getContainer()->get('multilanguagesupport.model');
+					$response = $lModel->getLanguage($locale);
+					if($response->error->exist){
+						return $response;
 					}
+					$entity->setLanguage($response->result->set);
+					unset($response);
+					$entity->setPage($page);
+					foreach($translation as $column => $value){
+						$set = 'set'.$this->translateColumnName($column);
+						switch($column){
+							default:
+								if(is_object($value) || is_array($value)){
+									$value = json_encode($value);
+								}
+								$entity->$set($value);
+								break;
+						}
+					}
+					$this->em->persist($entity);
+					$insertedItems[] = $entity;
+					$countInserts++;
 				}
-				$this->em->persist($entity);
-				$insertedItems[] = $entity;
-				$countInserts++;
 			}
 		}
 		if($countInserts > 0){
@@ -3090,6 +3086,45 @@ class ContentManagementModel extends CoreModel
 		return $response;
 	}
 	/**
+	 * @name            markPagesAsDeleted()
+	 *
+	 * @since           1.2.6
+	 * @version         1.2.6
+	 *
+	 * @author          Can Berkol
+	 *
+	 * @use             $this->createException()
+	 *
+	 * @param           array 			$collection
+	 *
+	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+	public function markPagesAsDeleted($collection){
+		$timeStamp = time();
+		if (!is_array($collection)) {
+			return $this->createException('InvalidParameterValueException', 'Invalid parameter value. Parameter must be an array collection', 'E:S:001');
+		}
+		$now = new \DateTime('now', new \DateTimeZone($this->kernel->getContainer()->getParameter('app_timezone')));
+		$toUpdate = array();
+		foreach ($collection as $page) {
+			if(!$page instanceof BundleEntity\Page){
+				$response = $this->getPage($page);
+				if($response->error->exist){
+					return $response;
+				}
+				$page = $response->result->set;
+				unset($response);
+			}
+			$page->setStatus('d');
+			$toUpdate[] = $page;
+		}
+		$response = $this->updatePages($toUpdate);
+		$response->stats->execution->start = $timeStamp;
+		$response->stats->execution->end = time();
+
+		return $response;
+	}
+	/**
 	 * @name            updateLayout ()
 	 *
 	 * @since           1.0.1
@@ -4035,6 +4070,15 @@ class ContentManagementModel extends CoreModel
 }
 /**
  * Change Log
+ * **************************************
+ * v1.2.6                      12.06.2015
+ * Can Berkol
+ * **************************************
+ * BF :: insertNavigationLovalizations() rewritten.
+ * BF :: insertNavigationItemLovalizations() rewritten.
+ * BF :: insertPageLocalizations() rewritten.
+ * FR :: markPagesAsDeleted() implemented.
+ *
  * **************************************
  * v1.2.5                      04.06.2015
  * Can Berkol
