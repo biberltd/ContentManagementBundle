@@ -1,4 +1,5 @@
 <?php
+
 namespace BiberLtd\Bundle\ContentManagementBundle\Entity;
 /**
  * @name        FilesOfPage

@@ -1,4 +1,5 @@
 <?php
+
 namespace BiberLtd\Bundle\ContentManagementBundle\Entity;
 use Doctrine\ORM\Mapping AS ORM;
 /**

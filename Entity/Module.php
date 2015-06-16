@@ -1,4 +1,5 @@
 <?php
+
 namespace BiberLtd\Bundle\ContentManagementBundle\Entity;
 
 /**
@@ -59,10 +60,7 @@ class Module extends CoreLocalizableEntity
     private $bundle_folder;
 
     /** 
-     * @ORM\OneToMany(
-     *     targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\ModulesOfLayout",
-     *     mappedBy="module"
-     * )
+     * @ORM\OneToMany(targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\ModulesOfLayout", mappedBy="module")
      */
     private $modules_of_layout;
 
@@ -82,7 +80,7 @@ class Module extends CoreLocalizableEntity
 
     /** 
      * @ORM\ManyToOne(targetEntity="BiberLtd\Bundle\SiteManagementBundle\Entity\Site")
-     * @ORM\JoinColumn(name="site", referencedColumnName="id", onDelete="CASCADE")
+     * @ORM\JoinColumn(name="site", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
     private $site;
     /******************************************************************

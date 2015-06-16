@@ -1,11 +1,12 @@
 <?php
+
 /**
  * @name        PageRevision
  * @package		BiberLtd\ContentManagementBundle
  *
  * @author		Can Berkol
- * @version     1.0.0
- * @date        24.04.2015
+ * @version     1.0.1
+ * @date        16.06.2015
  *
  * @copyright   Biber Ltd. (http://www.biberltd.com)
  * @license     GPL v3.0
@@ -75,6 +76,11 @@ class PageRevision extends CoreEntity
 	 * @ORM\Column(type="datetime", nullable=true)
 	 */
 	public $date_removed;
+
+	/**
+	 * @ORM\Column(type="string", length=1, nullable=true, options={"default":"w"})
+	 */
+	private $status;
 
 	/**
 	 * @ORM\Id
@@ -404,9 +410,51 @@ class PageRevision extends CoreEntity
 
 		return $this;
 	}
+
+	/**
+	 * @name        getStatus ()
+	 *
+	 * @author      Can Berkol
+	 *
+	 * @since       1.0.1
+	 * @version     1.0.1
+	 *
+	 * @return      mixed
+	 */
+	public function getStatus() {
+		return $this->status;
+	}
+
+	/**
+	 * @name        setStatus ()
+	 *
+	 * @author      Can Berkol
+	 *
+	 * @since       1.0.1
+	 * @version     1.0.1
+	 *
+	 * @param       mixed $status
+	 *
+	 * @return      $this
+	 */
+	public function setStatus($status) {
+		if (!$this->setModified('status', $status)->isModified()) {
+			return $this;
+		}
+		$this->status = $status;
+
+		return $this;
+	}
+
 }
 /**
  * Change Log:
+ * **************************************
+ * v1.0.1                      16.06.2015
+ * Can Berkol
+ * **************************************
+ * FR :: status property added.
+ *
  * **************************************
  * v1.0.0                      24.04.2015
  * TW #3568843

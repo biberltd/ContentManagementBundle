@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @name        LayoutLocalization
  * @package		BiberLtd\Bundle\CoreBundle\ContentManagementBundle

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @name        NavigationItem
  * @package		BiberLtd\Core\ContentManagementBundle
@@ -40,17 +41,17 @@ class NavigationItem extends CoreLocalizableEntity
     private $url;
 
     /**
-     * @ORM\Column(type="string", length=1, nullable=false)
+     * @ORM\Column(type="string", length=1, nullable=false, options={"default":"b"})
      */
     private $target;
 
     /**
-     * @ORM\Column(type="integer", length=10, nullable=false)
+     * @ORM\Column(type="integer", length=10, nullable=false, options={"default":1})
      */
     private $sort_order;
 
     /**
-     * @ORM\Column(type="string", length=1, nullable=false)
+     * @ORM\Column(type="string", length=1, nullable=false, options={"default":"n"})
      */
     private $is_child;
 
@@ -60,10 +61,7 @@ class NavigationItem extends CoreLocalizableEntity
     private $icon;
 
     /**
-     * @ORM\OneToMany(
-     *     targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\NavigationItem",
-     *     mappedBy="parent"
-     * )
+     * @ORM\OneToMany(targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\NavigationItem", mappedBy="parent")
      */
     private $navigation_items;
 
@@ -96,10 +94,7 @@ class NavigationItem extends CoreLocalizableEntity
 
 
     /**
-     * @ORM\ManyToOne(
-     *     targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\Navigation",
-     *     inversedBy="navigation_items"
-     * )
+     * @ORM\ManyToOne(targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\Navigation", inversedBy="items")
      * @ORM\JoinColumn(name="navigation", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
     private $navigation;

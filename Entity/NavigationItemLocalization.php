@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @name        NavigationItemLocalization
  * @package		BiberLtd\Bundle\CoreBundle\ContentManagementBundle

@@ -1,4 +1,5 @@
 <?php
+
 namespace BiberLtd\Bundle\ContentManagementBundle\Entity;
 /**
  * @name        Page
@@ -40,7 +41,7 @@ class Page extends CoreLocalizableEntity
     private $code;
 
     /**
-     * @ORM\Column(type="string", length=1, nullable=false)
+     * @ORM\Column(type="string", length=1, nullable=false, options={"default":"e"})
      */
     private $status;
 
@@ -50,26 +51,17 @@ class Page extends CoreLocalizableEntity
     private $bundle_name;
 
     /**
-     * @ORM\OneToMany(
-     *     targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\ModulesOfLayout",
-     *     mappedBy="page"
-     * )
+     * @ORM\OneToMany(targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\ModulesOfLayout", mappedBy="page")
      */
     private $modules_of_layout;
 
     /**
-     * @ORM\OneToMany(
-     *     targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\NavigationItem",
-     *     mappedBy="page"
-     * )
+     * @ORM\OneToMany(targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\NavigationItem", mappedBy="page")
      */
     private $navigation_items;
 
     /**
-     * @ORM\OneToMany(
-     *     targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\PageLocalization",
-     *     mappedBy="page"
-     * )
+     * @ORM\OneToMany(targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\PageLocalization", mappedBy="page")
      */
     protected $localizations;
 

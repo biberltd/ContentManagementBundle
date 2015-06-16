@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
-<skipper version="3.1.2.1193" mvc="Symfony2" orm="Doctrine2">
-  <module name="ContentManagementBundle" import-format="Doctrine2Php" import-path="../Entity" uuid="8c6e8bbc-980a-4f9f-a4ab-152e8e74b3fd">
-    <entity name="ModulesOfLayout" description="Associates modules with layouts." uuid="ccfcaf8f-feee-4582-a201-a7b81aded041">
+<skipper version="3.2.1.1226" mvc="Symfony2" orm="Doctrine2">
+  <module name="\ContentManagementBundle" local-name="ContentManagementBundle" namespace="\BiberLtd\Bundle\ContentManagementBundle\Entity" local-namespace="BiberLtd\Bundle\ContentManagementBundle\Entity" export-format="Doctrine2Php" export-path="../Entity" uuid="8c6e8bbc-980a-4f9f-a4ab-152e8e74b3fd">
+    <entity name="\BiberLtd\Bundle\ContentManagementBundle\Entity\ModulesOfLayout" local-name="ModulesOfLayout" namespace="\BiberLtd\Bundle\ContentManagementBundle\Entity" description="Associates modules with layouts." uuid="ccfcaf8f-feee-4582-a201-a7b81aded041">
       <field name="id" description="System given id." type="integer" size="10" required="true" unique="true" primary="true" auto-increment="true" uuid="602a4363-d200-43e5-b3b8-2a787bdc7f67"/>
       <field name="layout" description="Associated layout." type="integer" size="10" required="true" uuid="a16b27e2-4c11-4b13-9d91-0378f39cd49f"/>
       <field name="module" description="Associated module." type="integer" size="10" required="true" uuid="21916d77-47f8-49f4-a509-3040774271bf"/>
@@ -31,25 +31,25 @@
         <attribute name="export-file-name">ModulesOfLayout.php</attribute>
       </orm-attributes>
     </entity>
-    <association from="ModulesOfLayout" to="Layout" caption="idxFLayoutOfModule" owner-alias="modules_of_layout" inverse-alias="layout" many-owner="true" many-inverse="false" parent-required="true" uuid="47dde64b-5283-4007-83d0-3de289361247">
+    <association from="\BiberLtd\Bundle\ContentManagementBundle\Entity\ModulesOfLayout" to="\BiberLtd\Bundle\ContentManagementBundle\Entity\Layout" caption="idxFLayoutOfModule" owner-alias="modules_of_layout" inverse-alias="layout" many-owner="true" many-inverse="false" parent-required="true" uuid="47dde64b-5283-4007-83d0-3de289361247">
       <association-field from="layout" to="id"/>
       <orm-attributes>
         <attribute name="on-delete">CASCADE</attribute>
       </orm-attributes>
     </association>
-    <association from="ModulesOfLayout" to="Page" caption="idxFPageOfModule" owner-alias="modules_of_layout" inverse-alias="page" many-owner="true" many-inverse="false" parent-required="true" uuid="35b5ce6e-6adb-4f1b-83d6-107f9d5bbfe8">
+    <association from="\BiberLtd\Bundle\ContentManagementBundle\Entity\ModulesOfLayout" to="\BiberLtd\Bundle\ContentManagementBundle\Entity\Page" caption="idxFPageOfModule" owner-alias="modules_of_layout" inverse-alias="page" many-owner="true" many-inverse="false" parent-required="true" uuid="35b5ce6e-6adb-4f1b-83d6-107f9d5bbfe8">
       <association-field from="page" to="id"/>
       <orm-attributes>
         <attribute name="on-delete">CASCADE</attribute>
       </orm-attributes>
     </association>
-    <association from="ModulesOfLayout" to="Module" caption="idxFModuleOfLayout" owner-alias="modules_of_layout" inverse-alias="module" many-owner="true" many-inverse="false" parent-required="true" uuid="acbd35a7-9062-4041-8ebf-315e40a57a3a">
+    <association from="\BiberLtd\Bundle\ContentManagementBundle\Entity\ModulesOfLayout" to="\BiberLtd\Bundle\ContentManagementBundle\Entity\Module" caption="idxFModuleOfLayout" owner-alias="modules_of_layout" inverse-alias="module" many-owner="true" many-inverse="false" parent-required="true" uuid="acbd35a7-9062-4041-8ebf-315e40a57a3a">
       <association-field from="module" to="id"/>
       <orm-attributes>
         <attribute name="on-delete">CASCADE</attribute>
       </orm-attributes>
     </association>
-    <entity name="Navigation" description="Stores navigation definitions." uuid="f4a94f85-38f8-44d1-8ab0-988266d87859">
+    <entity name="\BiberLtd\Bundle\ContentManagementBundle\Entity\Navigation" local-name="Navigation" namespace="\BiberLtd\Bundle\ContentManagementBundle\Entity" description="Stores navigation definitions." uuid="f4a94f85-38f8-44d1-8ab0-988266d87859">
       <field name="id" description="System given id." type="integer" size="10" required="true" unique="true" primary="true" auto-increment="true" uuid="133bf599-de70-4f85-83df-a47e7bed505b"/>
       <field name="code" description="System code. Cannot be modified." type="string" size="45" required="true" uuid="5bbe52dc-328a-4433-aca0-c18740bc2198"/>
       <field name="date_added" description="Date when the navigation is added." type="datetime" required="true" uuid="46ed6f6a-3b8c-42c4-a847-9d0afae7ecdc"/>
@@ -81,13 +81,13 @@
         <attribute name="table">navigation</attribute>
       </orm-attributes>
     </entity>
-    <association from="Navigation" to="Site" caption="idxFSiteOfNavigation" inverse-alias="site" many-owner="true" many-inverse="false" uuid="149e41ca-41cd-4166-a4d3-a7c7018aa1a1">
+    <association from="\BiberLtd\Bundle\ContentManagementBundle\Entity\Navigation" to="\BiberLtd\Bundle\SiteManagementBundle\Entity\Site" caption="idxFSiteOfNavigation" inverse-alias="site" many-owner="true" many-inverse="false" uuid="149e41ca-41cd-4166-a4d3-a7c7018aa1a1">
       <association-field from="site" to="id"/>
       <orm-attributes>
         <attribute name="on-delete">CASCADE</attribute>
       </orm-attributes>
     </association>
-    <entity name="NavigationLocalization" description="Holds localized values of navigation definitions." uuid="18d2375d-c0b8-4fb0-92a4-25d0d48bcbb9">
+    <entity name="\BiberLtd\Bundle\ContentManagementBundle\Entity\NavigationLocalization" local-name="NavigationLocalization" namespace="\BiberLtd\Bundle\ContentManagementBundle\Entity" description="Holds localized values of navigation definitions." uuid="18d2375d-c0b8-4fb0-92a4-25d0d48bcbb9">
       <field name="navigation" description="Localized navigation." type="integer" size="10" required="true" primary="true" uuid="855d8724-0dda-44f9-84ef-25e562ab7f71"/>
       <field name="language" description="Localization language." type="integer" size="5" required="true" primary="true" uuid="ed055ff1-e17c-44ed-9709-5a18bbf76f75"/>
       <field name="name" description="Localized name of navigation." type="string" size="45" required="true" uuid="5d1bc64a-c149-420b-91aa-9e13c2bfd356"/>
@@ -112,19 +112,19 @@
         <attribute name="export-file-name">NavigationLocalization.php</attribute>
       </orm-attributes>
     </entity>
-    <association from="NavigationLocalization" to="Language" caption="idxFNavigationLocalizationLanguage" inverse-alias="language" many-owner="true" many-inverse="false" parent-required="true" uuid="2cda077b-3425-40b8-bcaf-085bfeed5885">
+    <association from="\BiberLtd\Bundle\ContentManagementBundle\Entity\NavigationLocalization" to="\BiberLtd\Bundle\MultiLanguageSupportBundle\Entity\Language" caption="idxFNavigationLocalizationLanguage" inverse-alias="language" many-owner="true" many-inverse="false" parent-required="true" uuid="2cda077b-3425-40b8-bcaf-085bfeed5885">
       <association-field from="language" to="id"/>
       <orm-attributes>
         <attribute name="on-delete">CASCADE</attribute>
       </orm-attributes>
     </association>
-    <association from="NavigationLocalization" to="Navigation" caption="idxFLocalizedNavigation" owner-alias="localizations" inverse-alias="navigation" many-owner="true" many-inverse="false" parent-required="true" uuid="64fe9ccc-c2b7-43f0-a4d5-1e2aaa5b3a22">
+    <association from="\BiberLtd\Bundle\ContentManagementBundle\Entity\NavigationLocalization" to="\BiberLtd\Bundle\ContentManagementBundle\Entity\Navigation" caption="idxFLocalizedNavigation" owner-alias="localizations" inverse-alias="navigation" many-owner="true" many-inverse="false" parent-required="true" uuid="64fe9ccc-c2b7-43f0-a4d5-1e2aaa5b3a22">
       <association-field from="navigation" to="id"/>
       <orm-attributes>
         <attribute name="on-delete">CASCADE</attribute>
       </orm-attributes>
     </association>
-    <entity name="NavigationItem" description="Holds definitions of navigaiton items." uuid="f6426096-db5d-4316-9fa9-ea4db7dc2d9a">
+    <entity name="\BiberLtd\Bundle\ContentManagementBundle\Entity\NavigationItem" local-name="NavigationItem" namespace="\BiberLtd\Bundle\ContentManagementBundle\Entity" description="Holds definitions of navigaiton items." uuid="f6426096-db5d-4316-9fa9-ea4db7dc2d9a">
       <field name="id" description="System given id." type="integer" size="10" required="true" unique="true" primary="true" auto-increment="true" uuid="73f8aa59-859d-4cb6-b02c-0a1e49d446ed"/>
       <field name="url" description="URL of navigation item" type="text" required="true" uuid="27e23d2a-34dc-42c8-a9ba-2fe8f45ca9e1"/>
       <field name="target" description="b:blank; s:self" type="string" size="1" default="b" required="true" uuid="027abc90-a3de-4304-bc8e-41f8447a5865"/>
@@ -147,25 +147,25 @@
         <attribute name="export-file-name">NavigationItem.php</attribute>
       </orm-attributes>
     </entity>
-    <association from="NavigationItem" to="Page" caption="idxUPageOfNavigationItem" owner-alias="navigation_items" inverse-alias="page" many-owner="true" many-inverse="false" uuid="24b7bd30-7d2a-4baf-bf7a-c2310f27dd42">
+    <association from="\BiberLtd\Bundle\ContentManagementBundle\Entity\NavigationItem" to="\BiberLtd\Bundle\ContentManagementBundle\Entity\Page" caption="idxUPageOfNavigationItem" owner-alias="navigation_items" inverse-alias="page" many-owner="true" many-inverse="false" uuid="24b7bd30-7d2a-4baf-bf7a-c2310f27dd42">
       <association-field from="page" to="id"/>
       <orm-attributes>
         <attribute name="on-delete">RESTRICT</attribute>
       </orm-attributes>
     </association>
-    <association from="NavigationItem" to="NavigationItem" caption="idxFParentNavigationItem" owner-alias="navigation_items" inverse-alias="parent" many-owner="true" many-inverse="false" uuid="1cea9dc4-b145-4e35-a992-d12840d89124">
+    <association from="\BiberLtd\Bundle\ContentManagementBundle\Entity\NavigationItem" to="\BiberLtd\Bundle\ContentManagementBundle\Entity\NavigationItem" caption="idxFParentNavigationItem" owner-alias="navigation_items" inverse-alias="parent" many-owner="true" many-inverse="false" uuid="1cea9dc4-b145-4e35-a992-d12840d89124">
       <association-field from="parent" to="id"/>
       <orm-attributes>
         <attribute name="on-delete">CASCADE</attribute>
       </orm-attributes>
     </association>
-    <association from="NavigationItem" to="Navigation" caption="idxFNavigationOfNavigationItem" owner-alias="items" inverse-alias="navigation" many-owner="true" many-inverse="false" parent-required="true" uuid="b9959be9-c646-4900-b154-c187fe55dc21">
+    <association from="\BiberLtd\Bundle\ContentManagementBundle\Entity\NavigationItem" to="\BiberLtd\Bundle\ContentManagementBundle\Entity\Navigation" caption="idxFNavigationOfNavigationItem" owner-alias="items" inverse-alias="navigation" many-owner="true" many-inverse="false" parent-required="true" uuid="b9959be9-c646-4900-b154-c187fe55dc21">
       <association-field from="navigation" to="id"/>
       <orm-attributes>
         <attribute name="on-delete">CASCADE</attribute>
       </orm-attributes>
     </association>
-    <entity name="NavigationItemLocalization" description="Holds localized values of navigation item entries." uuid="038eb4b3-a479-4827-af6c-fb5eefc60295">
+    <entity name="\BiberLtd\Bundle\ContentManagementBundle\Entity\NavigationItemLocalization" local-name="NavigationItemLocalization" namespace="\BiberLtd\Bundle\ContentManagementBundle\Entity" description="Holds localized values of navigation item entries." uuid="038eb4b3-a479-4827-af6c-fb5eefc60295">
       <field name="navigation_item" description="Localized navigation item." type="integer" size="10" required="true" primary="true" uuid="f4def8e6-7464-4984-8d95-8a8fffb6df26"/>
       <field name="language" description="Localized language." type="integer" size="5" required="true" primary="true" uuid="edfbffdc-a903-4f81-87e5-b379662dee3c"/>
       <field name="title" description="Localized title of navigation item." type="string" size="45" required="true" uuid="59e917a8-ecb8-4679-a1e9-e3c497b4c211"/>
@@ -190,19 +190,19 @@
         <attribute name="export-file-name">NavigationItemLocalization.php</attribute>
       </orm-attributes>
     </entity>
-    <association from="NavigationItemLocalization" to="Language" caption="idxFNavigationItemLocalizationLanguage" inverse-alias="language" many-owner="true" many-inverse="false" parent-required="true" uuid="b54d630f-3659-4d09-808c-2d2af5deec3f">
+    <association from="\BiberLtd\Bundle\ContentManagementBundle\Entity\NavigationItemLocalization" to="\BiberLtd\Bundle\MultiLanguageSupportBundle\Entity\Language" caption="idxFNavigationItemLocalizationLanguage" inverse-alias="language" many-owner="true" many-inverse="false" parent-required="true" uuid="b54d630f-3659-4d09-808c-2d2af5deec3f">
       <association-field from="language" to="id"/>
       <orm-attributes>
         <attribute name="on-delete">CASCADE</attribute>
       </orm-attributes>
     </association>
-    <association from="NavigationItemLocalization" to="NavigationItem" caption="idxFLocalizedNavigationItem" owner-alias="localizations" inverse-alias="navigation_item" many-owner="true" many-inverse="false" parent-required="true" uuid="29f2fb47-b345-4fbc-a5a0-2b2ba6fb2cd9">
+    <association from="\BiberLtd\Bundle\ContentManagementBundle\Entity\NavigationItemLocalization" to="\BiberLtd\Bundle\ContentManagementBundle\Entity\NavigationItem" caption="idxFLocalizedNavigationItem" owner-alias="localizations" inverse-alias="navigation_item" many-owner="true" many-inverse="false" parent-required="true" uuid="29f2fb47-b345-4fbc-a5a0-2b2ba6fb2cd9">
       <association-field from="navigation_item" to="id"/>
       <orm-attributes>
         <attribute name="on-delete">CASCADE</attribute>
       </orm-attributes>
     </association>
-    <entity name="FilesOfPage" description="Associates files with pages." uuid="324ca93b-931a-4969-bd0f-4d6ddadd65e2">
+    <entity name="\BiberLtd\Bundle\ContentManagementBundle\Entity\FilesOfPage" local-name="FilesOfPage" namespace="\BiberLtd\Bundle\ContentManagementBundle\Entity" description="Associates files with pages." uuid="324ca93b-931a-4969-bd0f-4d6ddadd65e2">
       <field name="file" description="Associated file." type="integer" size="15" required="true" primary="true" uuid="0a13170e-2fc7-4c91-a8d5-94c5edd1ed2f"/>
       <field name="page" description="Associated file." type="integer" size="15" required="true" primary="true" uuid="dd163436-614f-4ae4-864d-d34b68e4afe8"/>
       <field name="date_added" description="Date when file is added to page." type="datetime" required="true" uuid="49b5c1a9-91e6-4dcf-92e5-d40c1c14636f"/>
@@ -234,25 +234,25 @@
         <attribute name="export-file-name">FilesOfPage.php</attribute>
       </orm-attributes>
     </entity>
-    <association from="FilesOfPage" to="File" caption="idxFFileOfPage" inverse-alias="file" many-owner="true" many-inverse="false" parent-required="true" uuid="a91fdfe5-9e1c-4b9e-80a5-403371506e50">
+    <association from="\BiberLtd\Bundle\ContentManagementBundle\Entity\FilesOfPage" to="\BiberLtd\Bundle\FileManagementBundle\Entity\File" caption="idxFFileOfPage" inverse-alias="file" many-owner="true" many-inverse="false" parent-required="true" uuid="a91fdfe5-9e1c-4b9e-80a5-403371506e50">
       <association-field from="file" to="id"/>
       <orm-attributes>
         <attribute name="on-delete">CASCADE</attribute>
       </orm-attributes>
     </association>
-    <association from="FilesOfPage" to="Language" caption="idxFLanguageOfFile" inverse-alias="language" many-owner="true" many-inverse="false" uuid="7e27a82a-b71f-4c76-ae74-9a834e1204d7">
+    <association from="\BiberLtd\Bundle\ContentManagementBundle\Entity\FilesOfPage" to="\BiberLtd\Bundle\MultiLanguageSupportBundle\Entity\Language" caption="idxFLanguageOfFile" inverse-alias="language" many-owner="true" many-inverse="false" uuid="7e27a82a-b71f-4c76-ae74-9a834e1204d7">
       <association-field from="language" to="id"/>
       <orm-attributes>
         <attribute name="on-delete">CASCADE</attribute>
       </orm-attributes>
     </association>
-    <association from="FilesOfPage" to="Page" caption="idxFPageOfFile" inverse-alias="page" many-owner="true" many-inverse="false" parent-required="true" uuid="da53f451-b428-4314-81b2-77a33fff73bd">
+    <association from="\BiberLtd\Bundle\ContentManagementBundle\Entity\FilesOfPage" to="\BiberLtd\Bundle\ContentManagementBundle\Entity\Page" caption="idxFPageOfFile" inverse-alias="page" many-owner="true" many-inverse="false" parent-required="true" uuid="da53f451-b428-4314-81b2-77a33fff73bd">
       <association-field from="page" to="id"/>
       <orm-attributes>
         <attribute name="on-delete">CASCADE</attribute>
       </orm-attributes>
     </association>
-    <entity name="Page" description="Stores a list of page definitions." uuid="624b7417-9633-4967-8134-1143a3c59cee">
+    <entity name="\BiberLtd\Bundle\ContentManagementBundle\Entity\Page" local-name="Page" namespace="\BiberLtd\Bundle\ContentManagementBundle\Entity" description="Stores a list of page definitions." uuid="624b7417-9633-4967-8134-1143a3c59cee">
       <field name="id" description="System given id." type="integer" size="15" required="true" unique="true" primary="true" auto-increment="true" uuid="38393131-3639-4e6b-926d-e18781b3ed08"/>
       <field name="code" description="Unique code that is used by the system." type="string" size="45" required="true" uuid="5dd62b0a-9655-4d41-9a92-113d44730e28"/>
       <field name="status" description="x: not editable, e:editable by user, s:editable by support technician" type="string" size="1" default="e" required="true" uuid="91241c19-49cd-4374-abd6-9393cc8f061d"/>
@@ -275,16 +275,16 @@
         <attribute name="export-file-name">Page.php</attribute>
       </orm-attributes>
     </entity>
-    <association from="Page" to="Site" caption="idxFSiteOfPage" inverse-alias="site" many-owner="true" many-inverse="false" parent-required="true" uuid="e00589ce-8698-4b44-ae67-e35e123f6cfd">
+    <association from="\BiberLtd\Bundle\ContentManagementBundle\Entity\Page" to="\BiberLtd\Bundle\SiteManagementBundle\Entity\Site" caption="idxFSiteOfPage" inverse-alias="site" many-owner="true" many-inverse="false" parent-required="true" uuid="e00589ce-8698-4b44-ae67-e35e123f6cfd">
       <association-field from="site" to="id"/>
     </association>
-    <association from="Page" to="Layout" caption="idxFLayoutOfPage" owner-alias="pages" inverse-alias="layout" many-owner="true" many-inverse="false" parent-required="true" uuid="96ef4de6-ccd3-4418-8713-bfdb6f375848">
+    <association from="\BiberLtd\Bundle\ContentManagementBundle\Entity\Page" to="\BiberLtd\Bundle\ContentManagementBundle\Entity\Layout" caption="idxFLayoutOfPage" owner-alias="pages" inverse-alias="layout" many-owner="true" many-inverse="false" parent-required="true" uuid="96ef4de6-ccd3-4418-8713-bfdb6f375848">
       <association-field from="layout" to="id"/>
       <orm-attributes>
         <attribute name="on-delete">CASCADE</attribute>
       </orm-attributes>
     </association>
-    <entity name="Layout" description="Stores layout definitions." uuid="921ff6b8-95d9-4cc7-aaba-c0fe7796d960">
+    <entity name="\BiberLtd\Bundle\ContentManagementBundle\Entity\Layout" local-name="Layout" namespace="\BiberLtd\Bundle\ContentManagementBundle\Entity" description="Stores layout definitions." uuid="921ff6b8-95d9-4cc7-aaba-c0fe7796d960">
       <field name="id" description="System given id." type="integer" size="10" required="true" unique="true" primary="true" auto-increment="true" uuid="a85c98bd-4328-4c99-9ff5-2157694514da"/>
       <field name="code" description="Code of layout. Cannot be modified." type="string" size="45" required="true" unique="true" uuid="97732722-42b2-48f4-a4f7-54a77ffefc98"/>
       <field name="html" description="HTML content; base64 encoded." type="text" uuid="1b90bf52-f3c6-4c19-8376-902239543b3b"/>
@@ -306,13 +306,13 @@
         </attribute>
       </orm-attributes>
     </entity>
-    <association from="Layout" to="Site" caption="idxFSiteOfLayout" inverse-alias="site" many-owner="true" many-inverse="false" uuid="f97aa60c-8856-4645-bd75-d633be75a09d">
+    <association from="\BiberLtd\Bundle\ContentManagementBundle\Entity\Layout" to="\BiberLtd\Bundle\SiteManagementBundle\Entity\Site" caption="idxFSiteOfLayout" inverse-alias="site" many-owner="true" many-inverse="false" uuid="f97aa60c-8856-4645-bd75-d633be75a09d">
       <association-field from="site" to="id"/>
     </association>
-    <association from="Layout" to="Theme" caption="idxFThemeOfLayout" owner-alias="layouts" inverse-alias="theme" many-owner="true" many-inverse="false" parent-required="true" uuid="22eb08bd-07af-4369-9199-984154907f3d">
+    <association from="\BiberLtd\Bundle\ContentManagementBundle\Entity\Layout" to="\BiberLtd\Bundle\ContentManagementBundle\Entity\Theme" caption="idxFThemeOfLayout" owner-alias="layouts" inverse-alias="theme" many-owner="true" many-inverse="false" parent-required="true" uuid="22eb08bd-07af-4369-9199-984154907f3d">
       <association-field from="theme" to="id"/>
     </association>
-    <entity name="Theme" description="Stores a list of theme definitions." uuid="b38846a2-ace4-4213-a336-ffe331a6461e">
+    <entity name="\BiberLtd\Bundle\ContentManagementBundle\Entity\Theme" local-name="Theme" namespace="\BiberLtd\Bundle\ContentManagementBundle\Entity" description="Stores a list of theme definitions." uuid="b38846a2-ace4-4213-a336-ffe331a6461e">
       <field name="id" description="System given id." type="integer" size="10" required="true" unique="true" primary="true" auto-increment="true" uuid="dd677233-9d8a-41b3-9ea2-affe07c3d929"/>
       <field name="folder" description="Folder name." type="string" size="45" required="true" uuid="ca9c1549-fea4-47cd-8e16-c4c2dfeec49c"/>
       <field name="type" description="f:front end, c:control panel" type="string" size="1" default="f" required="true" uuid="df33f28b-5850-4db1-bd42-87f7b7c82022"/>
@@ -347,13 +347,13 @@
         <attribute name="export-file-name">Theme.php</attribute>
       </orm-attributes>
     </entity>
-    <association from="Theme" to="Site" caption="idxFSiteOfTheme" inverse-alias="site" many-owner="true" many-inverse="false" uuid="4dfcb668-bedc-4f4a-a0fb-363b256d2396">
+    <association from="\BiberLtd\Bundle\ContentManagementBundle\Entity\Theme" to="\BiberLtd\Bundle\SiteManagementBundle\Entity\Site" caption="idxFSiteOfTheme" inverse-alias="site" many-owner="true" many-inverse="false" uuid="4dfcb668-bedc-4f4a-a0fb-363b256d2396">
       <association-field from="site" to="id"/>
       <orm-attributes>
         <attribute name="on-delete">CASCADE</attribute>
       </orm-attributes>
     </association>
-    <entity name="PageLocalization" description="Holds localized values for each page entry." uuid="1fd3f551-8b28-4f98-9e54-1c23dc8abf8f">
+    <entity name="\BiberLtd\Bundle\ContentManagementBundle\Entity\PageLocalization" local-name="PageLocalization" namespace="\BiberLtd\Bundle\ContentManagementBundle\Entity" description="Holds localized values for each page entry." uuid="1fd3f551-8b28-4f98-9e54-1c23dc8abf8f">
       <field name="page" description="Localized page." type="integer" size="15" required="true" primary="true" uuid="fa156bcc-6e50-4b47-a5ec-a5401e13e0b4"/>
       <field name="language" description="Localization language." type="integer" size="5" required="true" primary="true" uuid="bddc6416-54a8-42f9-8ee9-1d41e7b27576"/>
       <field name="title" description="Localized page title." type="string" size="155" required="true" uuid="d83e728a-0160-4e4b-b106-2da95f9a36a0"/>
@@ -381,19 +381,19 @@
         <attribute name="export-file-name">PageLocalization.php</attribute>
       </orm-attributes>
     </entity>
-    <association from="PageLocalization" to="Language" caption="idxFPageLocalizationLanguage" inverse-alias="language" many-owner="true" many-inverse="false" parent-required="true" uuid="4e627535-43de-4ee5-bd16-bfda6f75d243">
+    <association from="\BiberLtd\Bundle\ContentManagementBundle\Entity\PageLocalization" to="\BiberLtd\Bundle\MultiLanguageSupportBundle\Entity\Language" caption="idxFPageLocalizationLanguage" inverse-alias="language" many-owner="true" many-inverse="false" parent-required="true" uuid="4e627535-43de-4ee5-bd16-bfda6f75d243">
       <association-field from="language" to="id"/>
       <orm-attributes>
         <attribute name="on-delete">CASCADE</attribute>
       </orm-attributes>
     </association>
-    <association from="PageLocalization" to="Page" caption="idxFLocalizedPage" owner-alias="localizations" inverse-alias="page" many-owner="true" many-inverse="false" parent-required="true" uuid="96d6e630-c148-493f-9534-9efe3e9a2887">
+    <association from="\BiberLtd\Bundle\ContentManagementBundle\Entity\PageLocalization" to="\BiberLtd\Bundle\ContentManagementBundle\Entity\Page" caption="idxFLocalizedPage" owner-alias="localizations" inverse-alias="page" many-owner="true" many-inverse="false" parent-required="true" uuid="96d6e630-c148-493f-9534-9efe3e9a2887">
       <association-field from="page" to="id"/>
       <orm-attributes>
         <attribute name="on-delete">CASCADE</attribute>
       </orm-attributes>
     </association>
-    <entity name="LayoutLocalization" description="Holds localized values for each layout." uuid="e9eaf564-22cd-4569-85ed-abed6f3c62e3">
+    <entity name="\BiberLtd\Bundle\ContentManagementBundle\Entity\LayoutLocalization" local-name="LayoutLocalization" namespace="\BiberLtd\Bundle\ContentManagementBundle\Entity" description="Holds localized values for each layout." uuid="e9eaf564-22cd-4569-85ed-abed6f3c62e3">
       <field name="layout" description="Localized layout." type="integer" size="10" required="true" primary="true" uuid="c83afe8d-0438-4561-8b8b-2451106064b1"/>
       <field name="language" description="Localization language." type="integer" size="5" required="true" primary="true" uuid="9fd66157-d6a1-4eed-8de4-9847d7b03e03"/>
       <field name="name" description="Localized name of layout." type="string" size="45" required="true" uuid="ccbea2c6-1677-4fe4-8f70-2842286188a1"/>
@@ -417,19 +417,19 @@
         <attribute name="export-file-name">LayoutLocalization.php</attribute>
       </orm-attributes>
     </entity>
-    <association from="LayoutLocalization" to="Language" caption="idxFLayoutLocalizationLanguage" inverse-alias="language" many-owner="true" many-inverse="false" parent-required="true" uuid="9ca2edc5-f53f-43cc-a65f-cc382e5009b3">
+    <association from="\BiberLtd\Bundle\ContentManagementBundle\Entity\LayoutLocalization" to="\BiberLtd\Bundle\MultiLanguageSupportBundle\Entity\Language" caption="idxFLayoutLocalizationLanguage" inverse-alias="language" many-owner="true" many-inverse="false" parent-required="true" uuid="9ca2edc5-f53f-43cc-a65f-cc382e5009b3">
       <association-field from="language" to="id"/>
       <orm-attributes>
         <attribute name="on-delete">CASCADE</attribute>
       </orm-attributes>
     </association>
-    <association from="LayoutLocalization" to="Layout" caption="idxFLocalizedLayout" owner-alias="localizations" inverse-alias="layout" many-owner="true" many-inverse="false" parent-required="true" uuid="64fa1adc-ac53-4ba2-bd0a-e6cb0b69aa7d">
+    <association from="\BiberLtd\Bundle\ContentManagementBundle\Entity\LayoutLocalization" to="\BiberLtd\Bundle\ContentManagementBundle\Entity\Layout" caption="idxFLocalizedLayout" owner-alias="localizations" inverse-alias="layout" many-owner="true" many-inverse="false" parent-required="true" uuid="64fa1adc-ac53-4ba2-bd0a-e6cb0b69aa7d">
       <association-field from="layout" to="id"/>
       <orm-attributes>
         <attribute name="on-delete">CASCADE</attribute>
       </orm-attributes>
     </association>
-    <entity name="ThemeLocalization" description="Localized values of theme entries." uuid="372d8d15-5aff-495b-b67b-8951d511cfee">
+    <entity name="\BiberLtd\Bundle\ContentManagementBundle\Entity\ThemeLocalization" local-name="ThemeLocalization" namespace="\BiberLtd\Bundle\ContentManagementBundle\Entity" description="Localized values of theme entries." uuid="372d8d15-5aff-495b-b67b-8951d511cfee">
       <field name="theme" description="Theme to be localized." type="integer" size="10" required="true" primary="true" uuid="2a6c6503-c69d-4926-9935-a7214422ba54"/>
       <field name="language" description="Localization language." type="integer" size="5" required="true" primary="true" uuid="be19b1eb-7ac0-424c-a117-45934fbdb8ae"/>
       <field name="name" description="Localized name of theme." type="string" size="45" required="true" uuid="2a227a70-b015-45d8-b31e-9df7669026a9"/>
@@ -447,19 +447,19 @@
         <attribute name="export-file-name">ThemeLocalization.php</attribute>
       </orm-attributes>
     </entity>
-    <association from="ThemeLocalization" to="Language" caption="idxFThemeLocalizationLanguage" inverse-alias="language" many-owner="true" many-inverse="false" parent-required="true" uuid="8dcda5f0-28eb-4698-b79d-a9a0ad175508">
+    <association from="\BiberLtd\Bundle\ContentManagementBundle\Entity\ThemeLocalization" to="\BiberLtd\Bundle\MultiLanguageSupportBundle\Entity\Language" caption="idxFThemeLocalizationLanguage" inverse-alias="language" many-owner="true" many-inverse="false" parent-required="true" uuid="8dcda5f0-28eb-4698-b79d-a9a0ad175508">
       <association-field from="language" to="id"/>
       <orm-attributes>
         <attribute name="on-delete">CASCADE</attribute>
       </orm-attributes>
     </association>
-    <association from="ThemeLocalization" to="Theme" caption="idxFLocalizedTheme" owner-alias="localizations" inverse-alias="theme" many-owner="true" many-inverse="false" parent-required="true" uuid="812bbe96-8b81-4ee6-a177-b8e054d3dda7">
+    <association from="\BiberLtd\Bundle\ContentManagementBundle\Entity\ThemeLocalization" to="\BiberLtd\Bundle\ContentManagementBundle\Entity\Theme" caption="idxFLocalizedTheme" owner-alias="localizations" inverse-alias="theme" many-owner="true" many-inverse="false" parent-required="true" uuid="812bbe96-8b81-4ee6-a177-b8e054d3dda7">
       <association-field from="theme" to="id"/>
       <orm-attributes>
         <attribute name="on-delete">CASCADE</attribute>
       </orm-attributes>
     </association>
-    <entity name="Module" description="Stores a list of module definitions." uuid="8c660e90-eddd-4e5c-9c5c-7b2b8e21784f">
+    <entity name="\BiberLtd\Bundle\ContentManagementBundle\Entity\Module" local-name="Module" namespace="\BiberLtd\Bundle\ContentManagementBundle\Entity" description="Stores a list of module definitions." uuid="8c660e90-eddd-4e5c-9c5c-7b2b8e21784f">
       <field name="id" description="System given id." type="integer" required="true" unique="true" primary="true" auto-increment="true" uuid="5d3d208f-43d8-47c9-a8e1-9383a8b8bf98"/>
       <field name="code" description="System access code. cannot be modified." type="string" size="45" required="true" unique="true" uuid="71f1b82a-932b-46e3-96db-70aa2df8aabd"/>
       <field name="html" description="HTML code including template variables." type="text" uuid="941905c6-ffd0-4527-b49d-647e879c8713"/>
@@ -483,19 +483,19 @@
         <attribute name="export-file-name">Module.php</attribute>
       </orm-attributes>
     </entity>
-    <association from="Module" to="Theme" caption="idxFThemeOfModule" owner-alias="modules" inverse-alias="theme" many-owner="true" many-inverse="false" parent-required="true" uuid="dcaee1ef-70bf-4523-8c98-603811f409df">
+    <association from="\BiberLtd\Bundle\ContentManagementBundle\Entity\Module" to="\BiberLtd\Bundle\ContentManagementBundle\Entity\Theme" caption="idxFThemeOfModule" owner-alias="modules" inverse-alias="theme" many-owner="true" many-inverse="false" parent-required="true" uuid="dcaee1ef-70bf-4523-8c98-603811f409df">
       <association-field from="theme" to="id"/>
       <orm-attributes>
         <attribute name="on-delete">CASCADE</attribute>
       </orm-attributes>
     </association>
-    <association from="Module" to="Site" caption="idxFSiteOfModule" inverse-alias="site" many-owner="true" many-inverse="false" parent-required="true" uuid="3c197a51-0674-4a8b-8466-b8bf6d436b40">
+    <association from="\BiberLtd\Bundle\ContentManagementBundle\Entity\Module" to="\BiberLtd\Bundle\SiteManagementBundle\Entity\Site" caption="idxFSiteOfModule" inverse-alias="site" many-owner="true" many-inverse="false" parent-required="true" uuid="3c197a51-0674-4a8b-8466-b8bf6d436b40">
       <association-field from="site" to="id"/>
       <orm-attributes>
         <attribute name="on-delete">CASCADE</attribute>
       </orm-attributes>
     </association>
-    <entity name="ModuleLocalization" description="Stores localized values for each module entry." uuid="04679cdf-3190-4578-a614-6e50b8886594">
+    <entity name="\BiberLtd\Bundle\ContentManagementBundle\Entity\ModuleLocalization" local-name="ModuleLocalization" namespace="\BiberLtd\Bundle\ContentManagementBundle\Entity" description="Stores localized values for each module entry." uuid="04679cdf-3190-4578-a614-6e50b8886594">
       <field name="module" description="Localized module." type="integer" required="true" primary="true" uuid="707e0cb9-b465-4656-8632-159334df31d3"/>
       <field name="language" description="Localization language." type="integer" size="5" required="true" primary="true" uuid="909aec0f-ec8f-4d36-9c89-d20af2b8d383"/>
       <field name="name" description="Localized name of module." type="string" size="45" required="true" uuid="f645dd17-c4a0-4e0e-8956-bebbc68c3385"/>
@@ -519,16 +519,16 @@
         </attribute>
       </orm-attributes>
     </entity>
-    <association from="ModuleLocalization" to="Language" caption="idxFLanguageOfModuleLocalization" inverse-alias="language" many-owner="true" many-inverse="false" parent-required="true" uuid="5eb19f96-065c-4a21-a664-3e935b15e040">
+    <association from="\BiberLtd\Bundle\ContentManagementBundle\Entity\ModuleLocalization" to="\BiberLtd\Bundle\MultiLanguageSupportBundle\Entity\Language" caption="idxFLanguageOfModuleLocalization" inverse-alias="language" many-owner="true" many-inverse="false" parent-required="true" uuid="5eb19f96-065c-4a21-a664-3e935b15e040">
       <association-field from="language" to="id"/>
       <orm-attributes>
         <attribute name="on-delete">CASCADE</attribute>
       </orm-attributes>
     </association>
-    <association from="ModuleLocalization" to="Module" caption="idxFModuleOfModuleLocalization" owner-alias="localizations" inverse-alias="module" many-owner="true" many-inverse="false" parent-required="true" uuid="a8ae2823-cd98-456b-bb22-e69865dc2979">
+    <association from="\BiberLtd\Bundle\ContentManagementBundle\Entity\ModuleLocalization" to="\BiberLtd\Bundle\ContentManagementBundle\Entity\Module" caption="idxFModuleOfModuleLocalization" owner-alias="localizations" inverse-alias="module" many-owner="true" many-inverse="false" parent-required="true" uuid="a8ae2823-cd98-456b-bb22-e69865dc2979">
       <association-field from="module" to="id"/>
     </association>
-    <entity name="PageRevision" description="Stores page revisions. The most up-to-date version is always stored in page_localization table." uuid="2d784063-fb90-413b-b6c2-91b85a8ee501">
+    <entity name="\BiberLtd\Bundle\ContentManagementBundle\Entity\PageRevision" local-name="PageRevision" namespace="\BiberLtd\Bundle\ContentManagementBundle\Entity" description="Stores page revisions. The most up-to-date version is always stored in page_localization table." uuid="2d784063-fb90-413b-b6c2-91b85a8ee501">
       <field name="title" description="Page title." type="string" size="155" required="true" uuid="1cb42928-0119-4ecb-b8a3-f0d4c7df0808"/>
       <field name="url_key" description="Page url key." type="string" size="255" required="true" uuid="2ada1c62-5ecd-41b8-8540-6c2d1a92c01d"/>
       <field name="content" description="Page content." type="text" uuid="4f295ddd-2360-4423-9d76-f07e8f62322e"/>
@@ -541,6 +541,7 @@
       <field name="date_added" description="Date when the entry is first added." type="datetime" required="true" uuid="2db26ae5-709e-4e36-8ecb-b0f44849b63f"/>
       <field name="date_updated" description="Date when the entry is last updated." type="datetime" required="true" uuid="2db5c23b-2a5d-4ca0-aa5c-7baa9bb8734f"/>
       <field name="date_removed" description="Date when the entry is marked as removed." type="datetime" uuid="ccbdde83-8f6d-4388-b921-38ab4bf0b75d"/>
+      <field name="status" description="a:approved,n:not approved,p:published,w:waiting for approval" type="string" size="1" default="w" uuid="b213c266-e552-4b81-8e28-fc644a03f1ce"/>
       <index name="idxUPageRevision" unique="true">
         <index-field name="revision_number"/>
         <index-field name="page"/>
@@ -556,20 +557,20 @@
         </attribute>
       </orm-attributes>
     </entity>
-    <association from="PageRevision" to="Page" caption="idxFPageOfRevision" inverse-alias="page" many-owner="true" many-inverse="false" parent-required="true" uuid="10a785e5-fbf2-4ae2-b99c-2740c0ad4f14">
+    <association from="\BiberLtd\Bundle\ContentManagementBundle\Entity\PageRevision" to="\BiberLtd\Bundle\ContentManagementBundle\Entity\Page" caption="idxFPageOfRevision" inverse-alias="page" many-owner="true" many-inverse="false" parent-required="true" uuid="10a785e5-fbf2-4ae2-b99c-2740c0ad4f14">
       <association-field from="page" to="id"/>
       <orm-attributes>
         <attribute name="on-delete">CASCADE</attribute>
       </orm-attributes>
     </association>
-    <association from="PageRevision" to="Language" caption="idxFLanguageOfRevision" inverse-alias="language" many-owner="true" many-inverse="false" parent-required="true" uuid="3b9cfb37-d935-49e6-8350-f94c17684d8e">
+    <association from="\BiberLtd\Bundle\ContentManagementBundle\Entity\PageRevision" to="\BiberLtd\Bundle\MultiLanguageSupportBundle\Entity\Language" caption="idxFLanguageOfRevision" inverse-alias="language" many-owner="true" many-inverse="false" parent-required="true" uuid="3b9cfb37-d935-49e6-8350-f94c17684d8e">
       <association-field from="language" to="id"/>
       <orm-attributes>
         <attribute name="on-delete">CASCADE</attribute>
       </orm-attributes>
     </association>
     <orm-attributes>
-      <attribute name="namespace">BiberLtd\Core\Bundles\ContentManagementBundle\Entity</attribute>
+      <attribute name="namespace">BiberLtd\Bundle\ContentManagementBundle\Entity</attribute>
       <attribute name="filename-format">entity-name-only</attribute>
       <attribute name="file-suffix">without-suffix</attribute>
     </orm-attributes>
@@ -578,13 +579,13 @@
     <entity uuid="038eb4b3-a479-4827-af6c-fb5eefc60295" bg-color="4294967295" hdr-color="4292006610" position-x="1100" position-y="599" size-x="0" size-x2="144" size-y="0" size-y2="87"/>
     <entity uuid="04679cdf-3190-4578-a614-6e50b8886594" bg-color="4294967295" hdr-color="4292006610" position-x="500" position-y="499" size-x="0" size-x2="110" size-y="0" size-y2="73"/>
     <entity uuid="18d2375d-c0b8-4fb0-92a4-25d0d48bcbb9" bg-color="4294967295" hdr-color="4292006610" position-x="1100" position-y="149" size-x="0" size-x2="123" size-y="0" size-y2="87"/>
-    <entity uuid="1fd3f551-8b28-4f98-9e54-1c23dc8abf8f" bg-color="4294967295" hdr-color="4292006610" position-x="50" position-y="349" size-x="0" size-x2="149" size-y="0" size-y2="129"/>
-    <entity uuid="2d784063-fb90-413b-b6c2-91b85a8ee501" bg-color="4294967295" hdr-color="4292006610" position-x="73" position-y="565" size-x="0" size-x2="20" size-y="0" size-y2="20"/>
+    <entity uuid="1fd3f551-8b28-4f98-9e54-1c23dc8abf8f" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="50" position-y="349" size-x="0" size-x2="149" size-y="0" size-y2="129"/>
+    <entity uuid="2d784063-fb90-413b-b6c2-91b85a8ee501" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="73" position-y="565" size-x="0" size-x2="20" size-y="0" size-y2="20"/>
     <entity uuid="324ca93b-931a-4969-bd0f-4d6ddadd65e2" bg-color="4294967295" hdr-color="4292006610" position-x="900" position-y="649" size-x="0" size-x2="125" size-y="0" size-y2="101"/>
     <entity uuid="372d8d15-5aff-495b-b67b-8951d511cfee" bg-color="4294967295" hdr-color="4292006610" position-x="800" position-y="199" size-x="0" size-x2="110" size-y="0" size-y2="59"/>
     <entity uuid="624b7417-9633-4967-8134-1143a3c59cee" bg-color="4294967295" hdr-color="4292006610" position-x="250" position-y="99" size-x="0" size-x2="104" size-y="0" size-y2="87"/>
     <entity uuid="8c660e90-eddd-4e5c-9c5c-7b2b8e21784f" bg-color="4294967295" hdr-color="4292006610" position-x="250" position-y="499" size-x="0" size-x2="104" size-y="0" size-y2="87"/>
-    <module uuid="8c6e8bbc-980a-4f9f-a4ab-152e8e74b3fd" bg-color="4291231744" size-x="0" size-x2="1350" size-y="-49" size-y2="933"/>
+    <module uuid="8c6e8bbc-980a-4f9f-a4ab-152e8e74b3fd" bg-color="#C70000" size-x="0" size-x2="1364" size-y="-49" size-y2="933"/>
     <entity uuid="921ff6b8-95d9-4cc7-aaba-c0fe7796d960" bg-color="4294967295" hdr-color="4292006610" position-x="450" position-y="99" size-x="0" size-x2="104" size-y="0" size-y2="87"/>
     <entity uuid="b38846a2-ace4-4213-a336-ffe331a6461e" bg-color="4294967295" hdr-color="4292006610" position-x="600" position-y="249" size-x="0" size-x2="126" size-y="0" size-y2="129"/>
     <entity uuid="ccfcaf8f-feee-4582-a201-a7b81aded041" bg-color="4294967295" hdr-color="4292006610" position-x="350" position-y="649" size-x="0" size-x2="120" size-y="0" size-y2="115"/>

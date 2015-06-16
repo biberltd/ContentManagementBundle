@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @name        ThemeLocalization
  * @package		BiberLtd\Bundle\CoreBundle\ContentManagementBundle
@@ -41,10 +42,7 @@ class ThemeLocalization extends CoreEntity
 
     /** 
      * @ORM\Id
-     * @ORM\ManyToOne(
-     *     targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\Theme",
-     *     inversedBy="localizations"
-     * )
+     * @ORM\ManyToOne(targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\Theme", inversedBy="localizations")
      * @ORM\JoinColumn(name="theme", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
     private $theme;

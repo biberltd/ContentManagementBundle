@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @name        Theme
  * @package		BiberLtd\Bundle\CoreBundle\ContentManagementBundle
@@ -48,7 +49,7 @@ class Theme extends CoreLocalizableEntity
     private $folder;
 
     /** 
-     * @ORM\Column(type="string", length=1, nullable=false)
+     * @ORM\Column(type="string", length=1, nullable=false, options={"default":"f"})
      */
     private $type;
 
@@ -63,12 +64,12 @@ class Theme extends CoreLocalizableEntity
     public $date_updated;
 
     /** 
-     * @ORM\Column(type="integer", nullable=false)
+     * @ORM\Column(type="integer", nullable=false, options={"default":0})
      */
     private $count_modules;
 
     /** 
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="integer", nullable=true, options={"default":0})
      */
     private $count_layouts;
 

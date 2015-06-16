@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @name        ModuleLocalization
  * @package		BiberLtd\Bundle\CoreBundle\ContentManagementBundle
@@ -49,10 +50,7 @@ class ModuleLocalization extends CoreEntity
 
     /** 
      * @ORM\Id
-     * @ORM\ManyToOne(
-     *     targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\Module",
-     *     inversedBy="localizations"
-     * )
+     * @ORM\ManyToOne(targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\Module", inversedBy="localizations")
      * @ORM\JoinColumn(name="module", referencedColumnName="id", nullable=false)
      */
     private $module;

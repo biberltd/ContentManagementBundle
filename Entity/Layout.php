@@ -1,4 +1,5 @@
 <?php
+
 namespace BiberLtd\Bundle\ContentManagementBundle\Entity;
 /**
  * @name        Layout
@@ -47,10 +48,7 @@ class Layout extends CoreLocalizableEntity
     private $html;
 
     /** 
-     * @ORM\OneToMany(
-     *     targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\ModulesOfLayout",
-     *     mappedBy="layout"
-     * )
+     * @ORM\OneToMany(targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\ModulesOfLayout", mappedBy="layout")
      */
     private $modules_of_layout;
 

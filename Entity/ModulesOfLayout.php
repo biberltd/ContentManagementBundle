@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @name        ModulesOfLayout
  * @package		BiberLtd\Bundle\CoreBundle\ContentManagementBundle
