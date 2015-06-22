@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @name        PageLocalization
  * @package		BiberLtd\Bundle\CoreBundle\ContentManagementBundle
@@ -18,14 +19,14 @@ namespace BiberLtd\Bundle\ContentManagementBundle\Entity;
 use BiberLtd\Bundle\CoreBundle\CoreLocalizableEntity;
 use Doctrine\ORM\Mapping AS ORM;
 use BiberLtd\Bundle\CoreBundle\CoreEntity;
-/** 
+/**
  * @ORM\Entity
  * @ORM\Table(
  *     name="page_localization",
  *     options={"charset":"utf8","collate":"utf8_turkish_ci","engine":"innodb"},
  *     uniqueConstraints={
- *         @ORM\UniqueConstraint(name="idx_u_page_localization", columns={"page","language"}),
- *         @ORM\UniqueConstraint(name="idx_u_page_url_key", columns={"page","language","url_key"})
+ *         @ORM\UniqueConstraint(name="idxUPageLocalization", columns={"page","language"}),
+ *         @ORM\UniqueConstraint(name="idxUPageUrlKey", columns={"page","language","url_key"})
  *     }
  * )
  */
@@ -70,11 +71,8 @@ class PageLocalization extends CoreEntity
 
     /** 
      * @ORM\Id
-     * @ORM\ManyToOne(
-     *     targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\Page",
-     *     inversedBy="localizations"
-     * )
-     * @ORM\JoinColumn(name="page", referencedColumnName="id", onDelete="CASCADE")
+     * @ORM\ManyToOne(targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\Page", inversedBy="localizations")
+     * @ORM\JoinColumn(name="page", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
     private $page;
 

@@ -1,8 +1,9 @@
 <?php
+
 namespace BiberLtd\Bundle\ContentManagementBundle\Entity;
 /**
- * @name        layout
- * @package		BiberLtd\Bundle\CoreBundle\AccessManagementBundle
+ * @name        Layout
+ * @package		BiberLtd\Core\AccessManagementBundle
  *
  * @author		Murat Ünal
  * @version     1.0.2
@@ -16,14 +17,14 @@ namespace BiberLtd\Bundle\ContentManagementBundle\Entity;
  */
 use Doctrine\ORM\Mapping AS ORM;
 use BiberLtd\Bundle\CoreBundle\CoreLocalizableEntity;
-/** 
+/**
  * @ORM\Entity
  * @ORM\Table(
  *     name="layout",
  *     options={"charset":"utf8","collate":"utf8_turkish_ci","engine":"innodb"},
  *     uniqueConstraints={
- *         @ORM\UniqueConstraint(name="idx_u_layout_id", columns={"id"}),
- *         @ORM\UniqueConstraint(name="idx_layout_code", columns={"code"})
+ *         @ORM\UniqueConstraint(name="idxULayoutId", columns={"id"}),
+ *         @ORM\UniqueConstraint(name="idxULayoutCode", columns={"code"})
  *     }
  * )
  */
@@ -47,10 +48,7 @@ class Layout extends CoreLocalizableEntity
     private $html;
 
     /** 
-     * @ORM\OneToMany(
-     *     targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\ModulesOfLayout",
-     *     mappedBy="layout"
-     * )
+     * @ORM\OneToMany(targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\ModulesOfLayout", mappedBy="layout")
      */
     private $modules_of_layout;
 
@@ -331,7 +329,7 @@ class Layout extends CoreLocalizableEntity
 /**
  * Change Log:
  * **************************************
- * v1.0.2                     Murat Ünal
+ * v1.0.2                      Murat Ünal
  * 10.10.2013
  * **************************************
  * A getCode()

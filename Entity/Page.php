@@ -1,7 +1,8 @@
 <?php
+
 namespace BiberLtd\Bundle\ContentManagementBundle\Entity;
 /**
- * @name        page
+ * @name        Page
  * @package		BiberLtd\Bundle\CoreBundle\ContentManagementBundle
  *
  * @author		Murat Ünal
@@ -10,9 +11,6 @@ namespace BiberLtd\Bundle\ContentManagementBundle\Entity;
  *
  * @copyright   Biber Ltd. (http://www.biberltd.com)
  * @license     GPL v3.0
- *
- * @description Model / Entity class.
- *
  */
 use Doctrine\ORM\Mapping AS ORM;
 use BiberLtd\Bundle\CoreBundle\CoreLocalizableEntity;
@@ -23,8 +21,8 @@ use BiberLtd\Bundle\CoreBundle\CoreLocalizableEntity;
  *     name="page",
  *     options={"charset":"utf8","collate":"utf8_Turkish_ci","engine":"innodb"},
  *     uniqueConstraints={
- *         @ORM\UniqueConstraint(name="idx_u_page_id", columns={"id"}),
- *         @ORM\UniqueConstraint(name="idx_u_page_code", columns={"code"})
+ *         @ORM\UniqueConstraint(name="idxUPageId", columns={"id"}),
+ *         @ORM\UniqueConstraint(name="idxUPageCode", columns={"code"})
  *     }
  * )
  */
@@ -43,7 +41,7 @@ class Page extends CoreLocalizableEntity
     private $code;
 
     /**
-     * @ORM\Column(type="string", length=1, nullable=false)
+     * @ORM\Column(type="string", length=1, nullable=false, options={"default":"e"})
      */
     private $status;
 
@@ -53,26 +51,17 @@ class Page extends CoreLocalizableEntity
     private $bundle_name;
 
     /**
-     * @ORM\OneToMany(
-     *     targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\ModulesOfLayout",
-     *     mappedBy="page"
-     * )
+     * @ORM\OneToMany(targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\ModulesOfLayout", mappedBy="page")
      */
     private $modules_of_layout;
 
     /**
-     * @ORM\OneToMany(
-     *     targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\NavigationItem",
-     *     mappedBy="page"
-     * )
+     * @ORM\OneToMany(targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\NavigationItem", mappedBy="page")
      */
     private $navigation_items;
 
     /**
-     * @ORM\OneToMany(
-     *     targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\PageLocalization",
-     *     mappedBy="page"
-     * )
+     * @ORM\OneToMany(targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\PageLocalization", mappedBy="page")
      */
     protected $localizations;
 

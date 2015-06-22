@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @name        ModuleLocalization
  * @package		BiberLtd\Bundle\CoreBundle\ContentManagementBundle
@@ -17,14 +18,14 @@
 namespace BiberLtd\Bundle\ContentManagementBundle\Entity;
 use Doctrine\ORM\Mapping AS ORM;
 use BiberLtd\Bundle\CoreBundle\CoreEntity;
-/** 
+/**
  * @ORM\Entity
  * @ORM\Table(
  *     name="module_localization",
  *     options={"charset":"utf8","collate":"utf8_turkish_ci","engine":"innodb"},
  *     uniqueConstraints={
- *         @ORM\UniqueConstraint(name="idx_u_module_localization", columns={"module","language"}),
- *         @ORM\UniqueConstraint(name="idx_module_localization_url_key", columns={"module","language","url_key"})
+ *         @ORM\UniqueConstraint(name="idxUModuleLocalization", columns={"module","language"}),
+ *         @ORM\UniqueConstraint(name="idxUModuleUrlKey", columns={"module","language","url_key"})
  *     }
  * )
  */
@@ -49,10 +50,7 @@ class ModuleLocalization extends CoreEntity
 
     /** 
      * @ORM\Id
-     * @ORM\ManyToOne(
-     *     targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\Module",
-     *     inversedBy="localizations"
-     * )
+     * @ORM\ManyToOne(targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\Module", inversedBy="localizations")
      * @ORM\JoinColumn(name="module", referencedColumnName="id", nullable=false)
      */
     private $module;
@@ -200,7 +198,7 @@ class ModuleLocalization extends CoreEntity
 
     /**
      * @name            getUrlKey ()
-     *                            Returns the value of url_key property.
+     *                  Returns the value of url_key property.
      *
      * @author          Can Berkol
      *

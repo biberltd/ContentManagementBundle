@@ -1,0 +1,98 @@
+<?xml version="1.0"?>
+<skipper version="3.2.1.1226" name="ContentManagementBundle" mvc="Symfony2" orm="Doctrine2" uuid="40b2cb2b-15b5-40a3-b0e7-5ed365f813d5">
+  <external-module storage-path="../../site-management-bundle/ORM/SiteManagement.module.xml"/>
+  <external-module storage-path="../../multilanguage-support-bundle/ORM/MultiLanguageSupport.module.xml"/>
+  <external-module storage-path="../../file-management-bundle/ORM/FileManagement.module.xml"/>
+  <external-module storage-path="../../member-management-bundle/ORM/MemberManagement.module.xml"/>
+  <external-module storage-path="ContentManagement.module.xml"/>
+  <visual-data>
+    <association uuid="0132b5a4-c206-4f06-bcf7-08bf61d249f3" color="#969696"/>
+    <association uuid="02e3ef16-39f8-42b5-891d-96224803b169" color="#969696"/>
+    <entity uuid="038eb4b3-a479-4827-af6c-fb5eefc60295" bg-color="4294967295" hdr-color="4292006610" position-x="1100" position-y="599" size-x="0" size-x2="144" size-y="0" size-y2="87"/>
+    <entity uuid="04679cdf-3190-4578-a614-6e50b8886594" bg-color="4294967295" hdr-color="4292006610" position-x="500" position-y="499" size-x="0" size-x2="110" size-y="0" size-y2="73"/>
+    <entity uuid="062dc364-3d01-474f-8a28-77bb8b1e21fd" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="550" position-y="1" size-x="0" size-x2="130" size-y="0" size-y2="87"/>
+    <entity uuid="07eeeac7-da1a-48f5-96c1-665a12f5d84f" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="450" position-y="401" size-x="0" size-x2="125" size-y="0" size-y2="59"/>
+    <association uuid="10a785e5-fbf2-4ae2-b99c-2740c0ad4f14" color="#969696"/>
+    <association uuid="149e41ca-41cd-4166-a4d3-a7c7018aa1a1" color="#969696"/>
+    <entity uuid="18d2375d-c0b8-4fb0-92a4-25d0d48bcbb9" bg-color="4294967295" hdr-color="4292006610" position-x="1100" position-y="149" size-x="0" size-x2="123" size-y="0" size-y2="87"/>
+    <association uuid="1bc49ece-cade-4d01-b739-aa1d5fe2d1e9" color="#969696"/>
+    <association uuid="1cea9dc4-b145-4e35-a992-d12840d89124" caption1-position-x="0" caption1-position-y="0" center-position-x="0" center-position-y="-20" color="#969696"/>
+    <entity uuid="1fd3f551-8b28-4f98-9e54-1c23dc8abf8f" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="50" position-y="349" size-x="0" size-x2="149" size-y="0" size-y2="129"/>
+    <association uuid="22eb08bd-07af-4369-9199-984154907f3d" color="#969696"/>
+    <association uuid="24b7bd30-7d2a-4baf-bf7a-c2310f27dd42" color="#969696"/>
+    <module uuid="264804cf-5ddd-4089-aaa2-d7c0f129a5ed" bg-color="#FDF5F3" position-x="600" position-y="106" size-x="0" size-x2="700" size-y="56" size-y2="417"/>
+    <association uuid="29f2fb47-b345-4fbc-a5a0-2b2ba6fb2cd9" color="#969696"/>
+    <association uuid="2cda077b-3425-40b8-bcaf-085bfeed5885" color="#969696"/>
+    <entity uuid="2d0a30b3-246d-47fa-b198-331e87d4a439" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="200" position-y="294" size-x="0" size-x2="121" size-y="0" size-y2="59"/>
+    <entity uuid="2d784063-fb90-413b-b6c2-91b85a8ee501" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="73" position-y="565" size-x="0" size-x2="20" size-y="0" size-y2="20"/>
+    <entity uuid="324ca93b-931a-4969-bd0f-4d6ddadd65e2" bg-color="4294967295" hdr-color="4292006610" position-x="900" position-y="649" size-x="0" size-x2="125" size-y="0" size-y2="101"/>
+    <association uuid="35b5ce6e-6adb-4f1b-83d6-107f9d5bbfe8" color="#969696"/>
+    <entity uuid="372d8d15-5aff-495b-b67b-8951d511cfee" bg-color="4294967295" hdr-color="4292006610" position-x="800" position-y="199" size-x="0" size-x2="110" size-y="0" size-y2="59"/>
+    <association uuid="3b9cfb37-d935-49e6-8350-f94c17684d8e" color="#969696"/>
+    <association uuid="3c197a51-0674-4a8b-8466-b8bf6d436b40" color="#969696"/>
+    <project uuid="40b2cb2b-15b5-40a3-b0e7-5ed365f813d5" size-x="0" size-x2="4535" size-y="0" size-y2="984"/>
+    <entity uuid="41bcf7a2-e5e3-42a8-af5a-39de1f0e86ff" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="400" position-y="44" size-x="0" size-x2="130" size-y="0" size-y2="115"/>
+    <entity uuid="45fa10e6-64bd-4726-82aa-61fd301b1b5f" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="42" position-y="50" size-x="0" size-x2="148" size-y="0" size-y2="157"/>
+    <association uuid="47dde64b-5283-4007-83d0-3de289361247" color="#969696"/>
+    <association uuid="4a21a97e-810e-4e2d-a330-69d23cf801c7" color="#969696"/>
+    <association uuid="4dfcb668-bedc-4f4a-a0fb-363b256d2396" color="#969696"/>
+    <association uuid="4e627535-43de-4ee5-bd16-bfda6f75d243" color="#969696"/>
+    <association uuid="5c053399-bdfe-4fd2-b79b-2eebb1c870ef" color="#969696"/>
+    <association uuid="5d9fbbab-e6e7-446b-b35a-5a92b2665907" color="#969696"/>
+    <association uuid="5eb19f96-065c-4a21-a664-3e935b15e040" color="#969696"/>
+    <entity uuid="624b7417-9633-4967-8134-1143a3c59cee" bg-color="4294967295" hdr-color="4292006610" position-x="250" position-y="99" size-x="0" size-x2="104" size-y="0" size-y2="87"/>
+    <association uuid="64fa1adc-ac53-4ba2-bd0a-e6cb0b69aa7d" color="#969696"/>
+    <association uuid="64fe9ccc-c2b7-43f0-a4d5-1e2aaa5b3a22" color="#969696"/>
+    <association uuid="691cd89a-3534-4a4c-bf70-544fa15a4c35" color="#969696"/>
+    <association uuid="71f15a54-6bc9-4510-84b1-2b2817781440" color="#969696"/>
+    <entity uuid="7ce99bbb-4d97-4ee5-8703-dfe82e965514" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="100" position-y="94" size-x="0" size-x2="109" size-y="0" size-y2="115"/>
+    <association uuid="7e27a82a-b71f-4c76-ae74-9a834e1204d7" color="#969696"/>
+    <association uuid="804845fb-f53d-4ae3-923e-e8d8a46ebef1" color="#969696"/>
+    <association uuid="812bbe96-8b81-4ee6-a177-b8e054d3dda7" color="#969696"/>
+    <module uuid="860bb986-ef71-4cef-9da2-f560e58c2569" bg-color="#7E7975" position-x="50" position-y="50" size-x="0" size-x2="450" size-y="0" size-y2="327"/>
+    <entity uuid="8c660e90-eddd-4e5c-9c5c-7b2b8e21784f" bg-color="4294967295" hdr-color="4292006610" position-x="250" position-y="499" size-x="0" size-x2="104" size-y="0" size-y2="87"/>
+    <module uuid="8c6e8bbc-980a-4f9f-a4ab-152e8e74b3fd" bg-color="#C70000" position-x="3121" position-y="1" size-x="0" size-x2="1364" size-y="-49" size-y2="933"/>
+    <association uuid="8dcda5f0-28eb-4698-b79d-a9a0ad175508" color="#969696"/>
+    <entity uuid="9109d3a6-7a5c-4ab9-8ff7-8b5da86662c6" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="50" position-y="401" size-x="0" size-x2="363" size-y="0" size-y2="87"/>
+    <entity uuid="921ff6b8-95d9-4cc7-aaba-c0fe7796d960" bg-color="4294967295" hdr-color="4292006610" position-x="450" position-y="99" size-x="0" size-x2="104" size-y="0" size-y2="87"/>
+    <association uuid="93fd6dcc-590e-4490-ad0f-03a9b480fa94" color="#969696"/>
+    <association uuid="96d6e630-c148-493f-9534-9efe3e9a2887" color="#969696"/>
+    <association uuid="96ef4de6-ccd3-4418-8713-bfdb6f375848" color="#969696"/>
+    <association uuid="98d48d17-f488-4b18-833f-1671af44d614" color="#969696"/>
+    <association uuid="9aa319f9-0057-4338-9baa-01096d251a53" color="#969696"/>
+    <association uuid="9ca2edc5-f53f-43cc-a65f-cc382e5009b3" color="#969696"/>
+    <module uuid="9d574194-22af-4673-a2ee-bb67ec7d212e" bg-color="#C70000" position-x="1426" position-y="51" size-x="26" size-x2="695" size-y="1" size-y2="487"/>
+    <entity uuid="9df7cd56-6a97-410f-b0fe-2fd5538bd528" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="350" position-y="51" size-x="0" size-x2="112" size-y="0" size-y2="87"/>
+    <entity uuid="a12d9552-e3b0-4189-870d-82bf4cd5b6ed" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="500" position-y="151" size-x="0" size-x2="130" size-y="0" size-y2="87"/>
+    <association uuid="a50bcd82-290b-4009-b270-6e47a63148cc" color="#969696"/>
+    <association uuid="a8ae2823-cd98-456b-bb22-e69865dc2979" color="#969696"/>
+    <association uuid="a91fdfe5-9e1c-4b9e-80a5-403371506e50" color="#969696"/>
+    <association uuid="acbd35a7-9062-4041-8ebf-315e40a57a3a" color="#969696"/>
+    <association uuid="ae4257ec-40ad-4a53-95bc-43688e025441" color="#969696"/>
+    <entity uuid="afaa4cd5-a9f4-4fa8-a0f3-c68989c619fc" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="50" position-y="1" size-x="0" size-x2="159" size-y="0" size-y2="269"/>
+    <association uuid="b1bb0d0b-841e-42dd-9eb4-9e33e559358b" color="#969696"/>
+    <association uuid="b210e152-462a-45f8-b840-75b0217b73c5" color="#969696"/>
+    <entity uuid="b38846a2-ace4-4213-a336-ffe331a6461e" bg-color="4294967295" hdr-color="4292006610" position-x="600" position-y="249" size-x="0" size-x2="126" size-y="0" size-y2="129"/>
+    <association uuid="b54d630f-3659-4d09-808c-2d2af5deec3f" color="#969696"/>
+    <association uuid="b9959be9-c646-4900-b154-c187fe55dc21" color="#969696"/>
+    <association uuid="b9e4d241-2e4f-4fbf-a78c-0414234947d6" color="#969696"/>
+    <entity uuid="c04c801c-5047-41eb-9209-dfd6732d5e31" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="445" position-y="30" size-x="0" size-x2="156" size-y="0" size-y2="213"/>
+    <entity uuid="ccfcaf8f-feee-4582-a201-a7b81aded041" bg-color="4294967295" hdr-color="4292006610" position-x="350" position-y="649" size-x="0" size-x2="120" size-y="0" size-y2="115"/>
+    <association uuid="d0a6295c-5f68-40e3-bfb4-da2ca6e40fb6" color="#969696"/>
+    <association uuid="d120204e-3d7c-47ea-bfe6-c33110876e00" color="#969696"/>
+    <module uuid="d40aa0eb-3691-4818-880c-0a9ad1dd9833" bg-color="#C70000" position-x="2221" position-y="99" size-x="0" size-x2="800" size-y="49" size-y2="559"/>
+    <entity uuid="d731b316-305d-4125-8824-3385eb5120ea" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="300" position-y="251" size-x="0" size-x2="130" size-y="0" size-y2="129"/>
+    <association uuid="da53f451-b428-4314-81b2-77a33fff73bd" color="#969696"/>
+    <association uuid="dcaee1ef-70bf-4523-8c98-603811f409df" color="#969696"/>
+    <association uuid="dcbf1caf-6474-4dfe-90be-7b58aa71c5c7" color="#969696"/>
+    <association uuid="e00589ce-8698-4b44-ae67-e35e123f6cfd" color="#969696"/>
+    <entity uuid="e19f9517-5f61-4eeb-ba10-cbc7ba6448e0" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="41" position-y="145" size-x="0" size-x2="20" size-y="0" size-y2="20"/>
+    <association uuid="e615dfba-7f2b-4dac-a61b-519c9538e9f0" color="#969696"/>
+    <association uuid="e759f273-144f-4e29-817a-0fe9f39c4187" color="#969696"/>
+    <entity uuid="e9eaf564-22cd-4569-85ed-abed6f3c62e3" bg-color="4294967295" hdr-color="4292006610" position-x="400" position-y="349" size-x="0" size-x2="110" size-y="0" size-y2="73"/>
+    <entity uuid="edc820a6-e14d-41ad-a986-7cabb15fd53a" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="197" position-y="99" size-x="0" size-x2="130" size-y="0" size-y2="269"/>
+    <entity uuid="f4a94f85-38f8-44d1-8ab0-988266d87859" bg-color="4294967295" hdr-color="4292006610" position-x="950" position-y="249" size-x="0" size-x2="100" size-y="0" size-y2="73"/>
+    <entity uuid="f6426096-db5d-4316-9fa9-ea4db7dc2d9a" bg-color="4294967295" hdr-color="4292006610" position-x="900" position-y="449" size-x="0" size-x2="121" size-y="0" size-y2="129"/>
+    <association uuid="f97aa60c-8856-4645-bd75-d633be75a09d" color="#969696"/>
+  </visual-data>
+</skipper>

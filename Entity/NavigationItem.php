@@ -1,12 +1,13 @@
 <?php
+
 /**
  * @name        NavigationItem
- * @package		BiberLtd\Bundle\CoreBundle\ContentManagementBundle
+ * @package		BiberLtd\Core\ContentManagementBundle
  *
  * @author		Can Berkol
  *
- * @version     1.0.2
- * @date        06.01.2014
+ * @version     1.0.3
+ * @date        24.04.2015
  *
  * @copyright   Biber Ltd. (http://www.biberltd.com)
  * @license     GPL v3.0
@@ -22,7 +23,7 @@ use BiberLtd\Bundle\CoreBundle\CoreLocalizableEntity;
  * @ORM\Table(
  *     name="navigation_item",
  *     options={"charset":"utf8","collate":"utf8_turkish_ci","engine":"innodb"},
- *     uniqueConstraints={@ORM\UniqueConstraint(name="idx_u_navigation_item_id", columns={"id"})}
+ *     uniqueConstraints={@ORM\UniqueConstraint(name="idxUNavigationItemId", columns={"id"})}
  * )
  */
 class NavigationItem extends CoreLocalizableEntity
@@ -40,17 +41,17 @@ class NavigationItem extends CoreLocalizableEntity
     private $url;
 
     /**
-     * @ORM\Column(type="string", length=1, nullable=false)
+     * @ORM\Column(type="string", length=1, nullable=false, options={"default":"b"})
      */
     private $target;
 
     /**
-     * @ORM\Column(type="integer", length=10, nullable=false)
+     * @ORM\Column(type="integer", length=10, nullable=false, options={"default":1})
      */
     private $sort_order;
 
     /**
-     * @ORM\Column(type="string", length=1, nullable=false)
+     * @ORM\Column(type="string", length=1, nullable=false, options={"default":"n"})
      */
     private $is_child;
 
@@ -60,10 +61,7 @@ class NavigationItem extends CoreLocalizableEntity
     private $icon;
 
     /**
-     * @ORM\OneToMany(
-     *     targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\NavigationItem",
-     *     mappedBy="parent"
-     * )
+     * @ORM\OneToMany(targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\NavigationItem", mappedBy="parent")
      */
     private $navigation_items;
 
@@ -96,10 +94,7 @@ class NavigationItem extends CoreLocalizableEntity
 
 
     /**
-     * @ORM\ManyToOne(
-     *     targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\Navigation",
-     *     inversedBy="navigation_items"
-     * )
+     * @ORM\ManyToOne(targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\Navigation", inversedBy="items")
      * @ORM\JoinColumn(name="navigation", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
     private $navigation;
@@ -482,6 +477,13 @@ class NavigationItem extends CoreLocalizableEntity
 }
 /**
  * Change Log:
+ * **************************************
+ * v1.0.3					   24.04.2015
+ * TW #3568871
+ * Can Berkol
+ * **************************************
+ * A getParent()
+ *
  * **************************************
  * v1.0.2                      Can Berkol
  * 06.01.2014

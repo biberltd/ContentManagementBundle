@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @name        ThemeLocalization
  * @package		BiberLtd\Bundle\CoreBundle\ContentManagementBundle
@@ -17,12 +18,12 @@
 namespace BiberLtd\Bundle\ContentManagementBundle\Entity;
 use Doctrine\ORM\Mapping AS ORM;
 use BiberLtd\Bundle\CoreBundle\CoreEntity;
-/** 
+/**
  * @ORM\Entity
  * @ORM\Table(
  *     name="theme_localization",
  *     options={"charset":"utf8","collate":"utf8_turkish_ci","engine":"innodb"},
- *     uniqueConstraints={@ORM\UniqueConstraint(name="idx_u_theme_localization", columns={"theme","language"})}
+ *     uniqueConstraints={@ORM\UniqueConstraint(name="idxUThemeLocalization", columns={"theme","language"})}
  * )
  */
 class ThemeLocalization extends CoreEntity
@@ -41,10 +42,7 @@ class ThemeLocalization extends CoreEntity
 
     /** 
      * @ORM\Id
-     * @ORM\ManyToOne(
-     *     targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\Theme",
-     *     inversedBy="localizations"
-     * )
+     * @ORM\ManyToOne(targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\Theme", inversedBy="localizations")
      * @ORM\JoinColumn(name="theme", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
     private $theme;

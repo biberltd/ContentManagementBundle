@@ -1,66 +1,18 @@
 <?php
-
 /**
  * ContentManagementModel Class
  *
- * This class acts as a database proxy model for ContentManagementBundle functionalities.
- *
  * @vendor      BiberLtd
- * @package        Core\Bundles\ContentManagementBundle
- * @subpackage    Services
+ * @package     BiberLtd\Bundle\ContentManagementBundle
+ * @subpackage  Services
  * @name        ContentManagementBundle
  *
- * @author        Can Berkol
+ * @author      Can Berkol
  *
  * @copyright   Biber Ltd. (www.biberltd.com)
  *
- * @version     1.1.8
- * @date        26.03.2014
- *
- * =============================================================================================================
- * !! INSTRUCTIONS ON IMPORTANT ASPECTS OF MODEL METHODS !!!
- *
- * Each model function must return a $response ARRAY.
- * The array must contain the following keys and corresponding values.
- *
- * $response = array(
- *              'result'    =>   An array that contains the following keys:
- *                               'set'         Actual result set returned from ORM or null
- *                               'total_rows'  0 or number of total rows
- *                               'last_insert_id' The id of the item that is added last (if insert action)
- *              'error'     =>   true if there is an error; false if there is none.
- *              'code'      =>   null or a semantic and short English string that defines the error concanated
- *                               with dots, prefixed with err and the initials of the name of model class.
- *                               EXAMPLE: err.amm.action.not.found success messages have a prefix called scc..
- *
- *                               NOTE: DO NOT FORGET TO ADD AN ENTRY FOR ERROR CODE IN BUNDLE'S
- *                               RESOURCES/TRANSLATIONS FOLDER FOR EACH LANGUAGE.
- * =============================================================================================================
- * TODOs:
- * Do not forget to implement SITE, ORDER, AND PAGINATION RELATED FUNCTIONALITY
- *
- * @todo v1.0.1     add_modules_to_page_layout()
- * @todo v1.0.1     delete_files_of_page()
- * @todo v1.0.1     delete_modules_of_layout()
- * @todo v1.0.2     delete_navigation_items_of_parent()                 => delete_navigation_items()
- * @todo v1.0.1     increment_view_count_of_file_of_page()              => update_files_of_page()
- * @todo v1.0.1     insert_file_of_page()                               => insert_files_of_page()
- * @todo v1.0.1     insert_files_of_page()
- * @todo v1.0.2     list_files_of_pages_viewed_between()                => list_files_of_page()
- * @todo v1.0.2     list_files_of_page_viewed_less_than()               => list_files_of_page()
- * @todo v1.0.2     list_files_of_page_viewed_more_than()               => list_files_of_page()
- * @todo v1.0.2     list_navigation_items_pointing_a_page()             => list_navigation_items()
- * @todo v1.0.1     list_navigations_of_site()                          => list_navigations()
- * @todo v1.0.2     list_themes_added_after()                           => list_themes()
- * @todo v1.0.2     list_themes_added_before()                          => list_themes()
- * @todo v1.0.2     list_themes_added_between()                         => list_themes()
- * @todo v1.0.2     list_themes_added_on()                              => list_themes()
- * @todo v1.0.1     move_navigation_item_to_navigation()                => move_navigation_items_to_navigation()
- * @todo v1.0.1     move_navigation_items_to_navigation()               => update_navigation_items()
- * @todo v1.0.1     remove_files_from_page()
- * @todo v1.0.1     remove_modules_from_page_layout()
- * @todo v1.0.1     update_file_of_page()                               => update_files_of_pages()
- * @todo v1.0.1     update_files_of_page()
+ * @version     1.2.6
+ * @date        12.06.2015
  *
  */
 
@@ -70,6 +22,7 @@ namespace BiberLtd\Bundle\ContentManagementBundle\Services;
 use BiberLtd\Bundle\CoreBundle\CoreModel;
 /** Entities to be used */
 use BiberLtd\Bundle\ContentManagementBundle\Entity as BundleEntity;
+use BiberLtd\Bundle\CoreBundle\Responses\ModelResponse;
 use BiberLtd\Bundle\MultiLanguageSupportBundle\Entity as MLSEntity;
 use BiberLtd\Bundle\FileManagementBundle\Entity as FileBundleEntity;
 /** Helper Models */
@@ -80,52 +33,49 @@ use BiberLtd\Bundle\FileManagementBundle\Services as FileService;
 use BiberLtd\Bundle\CoreBundle\Services as CoreServices;
 use BiberLtd\Bundle\CoreBundle\Exceptions as CoreExceptions;
 
-class ContentManagementModel extends CoreModel
-{
+class ContentManagementModel extends CoreModel{
 
     /**
-     * @name            __construct ()
-     *                  Constructor.
+     * @name            __construct()
      *
      * @author          Can Berkol
      *
      * @since           1.0.0
-     * @version         1.1.7
+     * @version         1.2.1
      *
      * @param           object $kernel
-     * @param           string $db_connection Database connection key as set in app/config.yml
+     * @param           string $dbConnection Database connection key as set in app/config.yml
      * @param           string $orm ORM that is used.
      */
-    public function __construct($kernel, $db_connection = 'default', $orm = 'doctrine')
+    public function __construct($kernel, $dbConnection = 'default', $orm = 'doctrine')
     {
-        parent::__construct($kernel, $db_connection, $orm);
+        parent::__construct($kernel, $dbConnection, $orm);
 
         /**
          * Register entity names for easy reference.
          */
         $this->entity = array(
-            'file' => array('name' => 'FileManagemetBundle:File', 'alias' => 'f'),
-            'files_of_page' => array('name' => 'ContentManagementBundle:FilesOfPage', 'alias' => 'fop'),
-            'layout' => array('name' => 'ContentManagementBundle:Layout', 'alias' => 'l'),
-            'layout_localization' => array('name' => 'ContentManagementBundle:LayoutLocalization', 'alias' => 'lloc'),
-            'module' => array('name' => 'ContentManagementBundle:Module', 'alias' => 'm'),
-            'module_localization' => array('name' => 'ContentManagementBundle:ModuleLocalization', 'alias' => 'mloc'),
-            'modules_of_layout' => array('name' => 'ContentManagementBundle:ModulesOfLayout', 'alias' => 'mol'),
-            'modules_of_layout_localization' => array('name' => 'ContentManagementBundle:ModulesOfLayoutLocalization', 'alias' => 'molloc'),
-            'navigation' => array('name' => 'ContentManagementBundle:Navigation', 'alias' => 'n'),
-            'navigation_item' => array('name' => 'ContentManagementBundle:NavigationItem', 'alias' => 'ni'),
-            'navigation_item_localization' => array('name' => 'ContentManagementBundle:NavigationItemLocalization', 'alias' => 'niloc'),
-            'navigation_localization' => array('name' => 'ContentManagementBundle:NavigationLocalization', 'alias' => 'nloc'),
-            'page' => array('name' => 'ContentManagementBundle:Page', 'alias' => 'p'),
-            'page_localization' => array('name' => 'ContentManagementBundle:PageLocalization', 'alias' => 'ploc'),
-            'theme' => array('name' => 'ContentManagementBundle:Theme', 'alias' => 't'),
-            'theme_localization' => array('name' => 'ContentManagementBundle:ThemeLocalization', 'alias' => 'tloc'),
+            'f' => array('name' => 'FileManagemetBundle:File', 'alias' => 'f'),
+            'fop' => array('name' => 'ContentManagementBundle:FilesOfPage', 'alias' => 'fop'),
+            'l' => array('name' => 'ContentManagementBundle:Layout', 'alias' => 'l'),
+            'll' => array('name' => 'ContentManagementBundle:LayoutLocalization', 'alias' => 'll'),
+            'm' => array('name' => 'ContentManagementBundle:Module', 'alias' => 'm'),
+            'ml' => array('name' => 'ContentManagementBundle:ModuleLocalization', 'alias' => 'ml'),
+            'mol' => array('name' => 'ContentManagementBundle:ModulesOfLayout', 'alias' => 'mol'),
+            'n' => array('name' => 'ContentManagementBundle:Navigation', 'alias' => 'n'),
+            'ni' => array('name' => 'ContentManagementBundle:NavigationItem', 'alias' => 'ni'),
+            'nil' => array('name' => 'ContentManagementBundle:NavigationItemLocalization', 'alias' => 'nil'),
+            'nl' => array('name' => 'ContentManagementBundle:NavigationLocalization', 'alias' => 'ml'),
+            'p' => array('name' => 'ContentManagementBundle:Page', 'alias' => 'p'),
+            'pl' => array('name' => 'ContentManagementBundle:PageLocalization', 'alias' => 'pl'),
+			'pr' => array('name' => 'ContentManagementBundle:PageRevision', 'alias' => 'pr'),
+			't' => array('name' => 'ContentManagementBundle:Theme', 'alias' => 't'),
+            'tl' => array('name' => 'ContentManagementBundle:ThemeLocalization', 'alias' => 'tl'),
         );
     }
 
     /**
-     * @name            __destruct ()
-     *                  Destructor.
+     * @name            __destruct()
      *
      * @author          Can Berkol
      *
@@ -140,4069 +90,2532 @@ class ContentManagementModel extends CoreModel
         }
     }
     /**
-     * @name           addFilesToProduct ()
+     * @name           addFilesToProduct()
      *                 Associates files with a given product by creating new row in files_of_product_table.
      *
      * @since           1.1.7
-     * @version         1.1.7
+     * @version         1.2.1
      * @author          Can Berkol
      *
      * @use             $this->createException()
+
+     * @param           array       	$files
+     * @param           mixed       	$page
      *
-     *
-     * @param           array       $files      Collection consists one of the following: 'entity' or entity 'id'
-     *                                          Contains an array with two keys: file, and sortorder
-     * @param           mixed       $page       'entity' or 'entity' id.
-     *
-     * @return          array           $response
+     * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
      */
-    public function addFilesToPage($files, $page){
-        $this->resetResponse();
-        /**
-         * Validate Parameters
-         */
-        $count = 0;
-        /** remove invalid file entries */
-        foreach ($files as $file) {
-            if (!is_numeric($file['file']) && !$file['file'] instanceof FileBundleEntity\File) {
-                unset($files[$count]);
-            }
-            $count++;
-        }
-        /** issue an error only if there is no valid file entries */
-        if (count($files) < 1) {
-            return $this->createException('InvalidParameter', '$files', 'err.invalid.parameter.files');
-        }
-        unset($count);
-        if (!is_numeric($page) && !$page instanceof BundleEntity\Page) {
-            return $this->createException('InvalidParameter', '$page', 'err.invalid.parameter.page');
-        }
-        /** If no entity is provided as product we need to check if it does exist */
-        if (is_numeric($page)) {
-            $response = $this->getPage($page, 'id');
-            if ($response['error']) {
-                return $this->createException('EntityDoesNotExist', 'Page', 'err.db.page.notexist');
-            }
-            $page = $response['result']['set'];
-        }
-        $fmmodel = new FileService\FileManagementModel($this->kernel, $this->db_connection, $this->orm);
-
-        $fop_collection = array();
-        $count = 0;
-        /** Start persisting files */
-        foreach ($files as $file) {
-            /** If no entity s provided as file we need to check if it does exist */
-            if (is_numeric($file['file'])) {
-                $response = $fmmodel->getFile($file['file'], 'id');
-                if ($response['error']) {
-                    return $this->createException('EntityDoesNotExist', 'File', 'err.db.file.notexist');
-                }
-                $file['file'] = $response['result']['set'];
-            }
-            /** Check if association exists */
-            if ($this->isFileAssociatedWithPage($file['file'], $page, true)) {
-                new CoreExceptions\DuplicateAssociationException($this->kernel, 'File => Product');
-                $this->response['code'] = 'err.db.entry.notexist';
-                /** If file association already exist move silently to next file */
-                break;
-            }
-            /** prepare object */
-            $fop = new BundleEntity\FilesOfPage();
-            $now = new \DateTime('now', new \DateTimezone($this->kernel->getContainer()->getParameter('app_timezone')));
-            $fop->setFile($file['file'])->setPage($page)->setDateAdded($now);
-            if (!is_null($file['sort_order'])) {
-                $fop->setSortOrder($file['sort_order']);
-            } else {
-                $fop->setSortOrder($this->getMaxSortOrderOfPageFile($page, true) + 1);
-            }
-            $fop->setCountView(0);
-            /** persist entry */
-            $this->em->persist($fop);
-            $fop_collection[] = $fop;
-            $count++;
-        }
-        /** flush all into database */
-        if ($count > 0) {
-            $this->em->flush();
-        } else {
-            $this->response['code'] = 'err.db.insert.failed';
-        }
-
-        $this->response = array(
-            'rowCount' => $this->response['rowCount'],
-            'result' => array(
-                'set' => $fop_collection,
-                'total_rows' => $count,
-                'last_insert_id' => -1,
-            ),
-            'error' => false,
-            'code' => 'scc.db.insert.done',
-        );
-        unset($count, $aplCollection);
-        return $this->response;
-    }
+	public function addFilesToPage($files, $page) {
+		$timeStamp = time();
+		$response = $this->getPage($page);
+		if($response->error->exist){
+			return $response;
+		}
+		$page = $response->result->set;
+		if (!is_array($files)) {
+			return $this->createException('InvalidParameterValueException', 'Invalid parameter value. $groups parameter must be an array collection', 'E:S:001');
+		}
+		$toAdd = array();
+		$fModel = $this->kernel->getContainer()->get('filemanagement.model');
+		foreach ($files as $file) {
+			$response = $fModel->getFile($file);
+			if($response->error->exist){
+				break;
+			}
+			$file = $response->result->set;
+			if (!$this->isFileAssociatedWithPage($file, $page, true)) {
+				$toAdd[] = $file;
+			}
+		}
+		$now = new \DateTime('now', new \DateTimezone($this->kernel->getContainer()->getParameter('app_timezone')));
+		$insertedItems = array();
+		foreach ($toAdd as $file) {
+			$entity = new BundleEntity\FilesOfPage();
+			$entity->setFile($file)->setPage($page)->setDateAdded($now);
+			$this->em->persist($entity);
+			$insertedItems[] = $entity;
+		}
+		$countInserts = count($toAdd);
+		if($countInserts > 0){
+			$this->em->flush();
+			return new ModelResponse($insertedItems, $countInserts, 0, null, false, 'S:D:003', 'Selected entries have been successfully inserted into database.', $timeStamp, time());
+		}
+		return new ModelResponse(null, 0, 0, null, true, 'E:D:003', 'One or more entities cannot be inserted into database.', $timeStamp, time());
+	}
     /**
      * @name            deleteLayout ()
-     *                Deletes an existing layout from database.
      *
-     * @since            1.0.1
-     * @version         1.1.0
+     * @since           1.0.1
+     * @version         1.2.1
      * @author          Can Berkol
      *
      * @use             $this->deleteLayouts()
      *
-     * @param           mixed $layout Layout entity, id, code or url key.
-     * @param           string $by
-     *
-     * @return          mixed           $response
+     * @param           mixed 			$layout
+	 *
+     * @return         BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
      */
-    public function deleteLayout($layout, $by = 'entity')
-    {
-        return $this->deleteLayouts(array($layout), $by);
+    public function deleteLayout($layout)    {
+        return $this->deleteLayouts(array($layout));
     }
 
     /**
-     * @name            deleteLayouts ()
-     *                Deletes provided layouts from database.
+     * @name            deleteLayouts()
      *
-     * @since            1.0.1
-     * @version         1.1.0
+     * @since           1.0.1
+     * @version         1.2.1
      * @author          Can Berkol
      *
-     * @use             $this->does_layout_exist()
      * @use             $this->createException
      *
-     * @param           array $collection Collection of Navigation entities, ids, or codes or url keys
-     * @param           string $by Accepts the following options: entity, id, code, url_key
+     * @param           array 			$collection
      *
-     * @return          array           $response
+     * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
      */
-    public function deleteLayouts($collection, $by = 'entity')
-    {
-        $this->resetResponse();
-        $by_opts = array('entity', 'id', 'code', 'url_key');
-        if (!in_array($by, $by_opts)) {
-            return $this->createException('InvalidParameterValueException', 'err.invalid.parameter.by', implode(',', $by_opts));
-        }
-        /** Parameter must be an array */
-        if (!is_array($collection)) {
-            return $this->createException('InvalidParameterException', 'err.invalid.parameter.collection', 'Array');
-        }
-        $entries = array();
-        /** Loop through items and collect values. */
-        $delete_count = 0;
-        foreach ($collection as $item) {
-            $value = '';
-            if (is_object($item)) {
-                if (!$item instanceof BundleEntity\Layout) {
-                    return $this->createException('InvalidParameterException', 'err.invalid.parameter.collection', 'Array');
-                }
-                $this->em->remove($item);
-                $delete_count++;
-            } else if (is_numeric($item) || is_string($item)) {
-                $value = $item;
-            } else {
-                /** If array values are not numeric nor object */
-                return $this->createException('InvalidParameterException', 'err.invalid.parameter.collection', 'Array');
-            }
-            if (!empty($value) && $value != '') {
-                $entries[] = $value;
-            }
-        }
-        /**
-         * Control if there is any entity ids in collection.
-         */
-        if (count($entries) < 1) {
-            return $this->createException('InvalidParameterException', 'err.invalid.parameter.collection', 'Array');
-        }
-        $join_needed = false;
-        /**
-         * Prepare query string.
-         */
-        switch ($by) {
-            case 'entity':
-                /** Flush to delete all persisting objects */
-                $this->em->flush();
-                /**
-                 * Prepare & Return Response
-                 */
-                $this->response = array(
-                    'rowCount' => $this->response['rowCount'],
-                    'result' => array(
-                        'set' => null,
-                        'total_rows' => $delete_count,
-                        'last_insert_id' => null,
-                    ),
-                    'error' => false,
-                    'code' => 'scc.db.delete.done',
-                );
-                return $this->response;
-            case 'id':
-                $values = implode(',', $entries);
-                break;
-            case 'code':
-                $values = implode('\',\'', $entries);
-                $values = '\'' . $values . '\'';
-                break;
-            /** Requires JOIN */
-            case 'url_key':
-                $join_needed = true;
-                $values = implode('\',\'', $entries);
-                $values = '\'' . $values . '\'';
-                break;
-        }
-        if ($join_needed) {
-            $q_str = 'DELETE '
-                . ' FROM ' . $this->entity['layout_localization']['name'] . ' ' . $this->entity['layout_localization']['alias']
-                . ' JOIN ' . $this->entity['layout_localization']['name'] . ' ' . $this->entity['layout_localization']['alias']
-                . ' WHERE ' . $this->entity['layout_localization']['alias'] . '.' . $by . ' IN(:values)';
-        } else {
-            $q_str = 'DELETE '
-                . ' FROM ' . $this->entity['layout']['name'] . ' ' . $this->entity['layout']['alias']
-                . ' WHERE ' . $this->entity['layout']['alias'] . '.' . $by . ' IN(:values)';
-        }
-        /**
-         * Create query object.
-         */
-        $query = $this->em->createQuery($q_str);
-        $query->setParameter('values', $entries);
-        /**
-         * Free memory.
-         */
-        unset($values);
-        /**
-         * 6. Run query
-         */
-        $query->getResult();
-        /**
-         * Prepare & Return Response
-         */
-        $this->response = array(
-            'rowCount' => $this->response['rowCount'],
-            'result' => array(
-                'set' => $entries,
-                'total_rows' => count($entries),
-                'last_insert_id' => null,
-            ),
-            'error' => false,
-            'code' => 'scc.db.delete.done',
-        );
-        return $this->response;
-    }
+	public function deleteLayouts($collection) {
+		$timeStamp = time();
+		if (!is_array($collection)) {
+			return $this->createException('InvalidParameterValueException', 'Invalid parameter value. Parameter must be an array collection', 'E:S:001');
+		}
+		$countDeleted = 0;
+		foreach($collection as $entry){
+			if($entry instanceof BundleEntity\Layout){
+				$this->em->remove($entry);
+				$countDeleted++;
+			}
+			else{
+				$response = $this->getLayout($entry);
+				if(!$response->error->exists){
+					$entry = $response->result->set;
+					$this->em->remove($entry);
+					$countDeleted++;
+				}
+			}
+		}
+		if($countDeleted < 0){
+			return new ModelResponse(null, 0, 0, null, true, 'E:E:001', 'Unable to delete all or some of the selected entries.', $timeStamp, time());
+		}
+		$this->em->flush();
+
+		return new ModelResponse(null, 0, 0, null, false, 'S:D:001', 'Selected entries have been successfully removed from database.', $timeStamp, time());
+	}
 
     /**
-     * @name            deleteModule ()
-     *                Deletes an existing module from database.
+     * @name            deleteModule()
      *
-     * @since            1.0.0
-     * @version         1.1.0
+     * @since           1.0.0
+     * @version         1.2.1
      * @author          Can Berkol
      *
      * @use             $this->deleteModules()
      *
-     * @param           mixed $module Module entity, id, code or url key.
-     * @param           string $by
+     * @param           mixed 			$module
      *
-     * @return          mixed           $response
+     * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
      */
-    public function deleteModule($module, $by = 'entity')
-    {
-        return $this->deleteModules(array($module), $by);
+    public function deleteModule($module)    {
+        return $this->deleteModules(array($module));
     }
 
     /**
-     * @name            deleteModules ()
-     *                Deletes provided modules from database.
+     * @name            deleteModules()
      *
-     * @since            1.0.1
-     * @version         1.1.0
+     * @since           1.0.1
+     * @version         1.2.1
      * @author          Can Berkol
      *
      * @use             $this->doesModuleExist()
      * @use             $this->createException()
      *
-     * @param           array $collection Collection of Module entities, ids, or codes or url keys
-     * @param           string $by Accepts the following options: entity, id, code, url_key
+     * @param           array 			$collection
      *
-     * @return          array           $response
+     * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
      */
-    public function deleteModules($collection, $by = 'entity')
-    {
-        $this->resetResponse();
-        $by_opts = array('entity', 'id', 'code', 'url_key');
-        if (!in_array($by, $by_opts)) {
-            return $this->createException('InvalidParameterValueException', 'err.invalid.parameter.collection', implode(',', $by_opts));
-        }
-        /** Parameter must be an array */
-        if (!is_array($collection)) {
-            return $this->createException('InvalidParameterException', 'err.invalid.parameter.collection', 'Array');
-        }
-        $entries = array();
-        /** Loop through items and collect values. */
-        $delete_count = 0;
-        foreach ($collection as $item) {
-            $value = '';
-            if (is_object($item)) {
-                if (!$item instanceof BundleEntity\Module) {
-                    return $this->createException('InvalidParameterException', 'err.invalid.parameter.collection', 'BundleEntity\Module');
-                }
-                $this->em->remove($item);
-                $delete_count++;
-            } else if (is_numeric($item) || is_string($item)) {
-                $value = $item;
-            } else {
-                /** If array values are not numeric nor object */
-                return $this->createException('InvalidParameterException', 'err.invalid.parameter.collection', 'integer, string, or Module entity');
-            }
-            if (!empty($value) && $value != '') {
-                $entries[] = $value;
-            }
-        }
-        /**
-         * Control if there is any entity ids in collection.
-         */
-        if (count($entries) < 1) {
-            return $this->createException('InvalidParameterException', 'err.invalid.parameter.collection', 'Array');
-        }
-        $join_needed = false;
-        /**
-         * Prepare query string.
-         */
-        switch ($by) {
-            case 'entity':
-                /** Flush to delete all persisting objects */
-                $this->em->flush();
-                /**
-                 * Prepare & Return Response
-                 */
-                $this->response = array(
-                    'rowCount' => $this->response['rowCount'],
-                    'result' => array(
-                        'set' => null,
-                        'total_rows' => $delete_count,
-                        'last_insert_id' => null,
-                    ),
-                    'error' => false,
-                    'code' => 'scc.db.delete.done',
-                );
-                return $this->response;
-            case 'id':
-                $values = implode(',', $entries);
-                break;
-            case 'code':
-                $values = implode('\',\'', $entries);
-                $values = '\'' . $values . '\'';
-                break;
-            /** Requires JOIN */
-            case 'url_key':
-                $join_needed = true;
-                $values = implode('\',\'', $entries);
-                $values = '\'' . $values . '\'';
-                break;
-        }
-        if ($join_needed) {
-            $q_str = 'DELETE '
-                . ' FROM ' . $this->entity['module_localization']['name'] . ' ' . $this->entity['module_localization']['alias']
-                . ' JOIN ' . $this->entity['module_localization']['name'] . ' ' . $this->entity['module_localization']['alias']
-                . ' WHERE ' . $this->entity['module_localization']['alias'] . '.' . $by . ' IN(:values)';
-        } else {
-            $q_str = 'DELETE '
-                . ' FROM ' . $this->entity['module']['name'] . ' ' . $this->entity['module']['alias']
-                . ' WHERE ' . $this->entity['module']['alias'] . '.' . $by . ' IN(:values)';
-        }
-        /**
-         * Create query object.
-         */
-        $query = $this->em->createQuery($q_str);
-        $query->setParameter('values', $entries);
-        /**
-         * Free memory.
-         */
-        unset($values);
-        /**
-         * 6. Run query
-         */
-        $query->getResult();
-        /**
-         * Prepare & Return Response
-         */
-        $this->response = array(
-            'rowCount' => $this->response['rowCount'],
-            'result' => array(
-                'set' => $entries,
-                'total_rows' => count($entries),
-                'last_insert_id' => null,
-            ),
-            'error' => false,
-            'code' => 'scc.db.delete.done',
-        );
-        return $this->response;
-    }
+	public function deleteModules($collection) {
+		$timeStamp = time();
+		if (!is_array($collection)) {
+			return $this->createException('InvalidParameterValueException', 'Invalid parameter value. Parameter must be an array collection', 'E:S:001');
+		}
+		$countDeleted = 0;
+		foreach($collection as $entry){
+			if($entry instanceof BundleEntity\Module){
+				$this->em->remove($entry);
+				$countDeleted++;
+			}
+			else{
+				$response = $this->getModule($entry);
+				if(!$response->error->exists){
+					$entry = $response->result->set;
+					$this->em->remove($entry);
+					$countDeleted++;
+				}
+			}
+		}
+		if($countDeleted < 0){
+			return new ModelResponse(null, 0, 0, null, true, 'E:E:001', 'Unable to delete all or some of the selected entries.', $timeStamp, time());
+		}
+		$this->em->flush();
+
+		return new ModelResponse(null, 0, 0, null, false, 'S:D:001', 'Selected entries have been successfully removed from database.', $timeStamp, time());
+	}
 
     /**
-     * @name            deleteNavigation ()
-     *                Deletes an existing navigation from database.
+     * @name            deleteNavigation()
      *
-     * @since            1.0.1
-     * @version         1.1.0
+     * @since           1.0.1
+     * @version         1.2.1
      * @author          Can Berkol
      *
      * @use             $this->deleteNavigations()
      *
-     * @param           mixed $navigation Navigation entity, id, code or url key.
-     * @param           string $by
+     * @param           mixed 			$navigation
      *
      * @return          mixed           $response
      */
-    public function deleteNavigation($navigation, $by = 'entity')
-    {
-        return $this->deleteNavigations(array($navigation), $by);
+    public function deleteNavigation($navigation){
+        return $this->deleteNavigations(array($navigation));
     }
 
-    /**
-     * @name            deleteNavigations ()
-     *                Deletes provided navigations from database.
-     *
-     * @since            1.0.1
-     * @version         1.1.0
-     * @author          Can Berkol
-     *
-     * @use             $this->doesNavigationExist()
-     * @use             $this->deleteNavigation()
-     *
-     * @param           array $collection Collection of Navigation entities, ids, or codes or url keys
-     * @param           string $by Accepts the following options: entity, id, code, url_key
-     *
-     * @return          array           $response
-     */
-    public function deletNavigations($collection, $by = 'entity')
-    {
-        $this->resetResponse();
-        $by_opts = array('entity', 'id', 'code', 'url_key');
-        if (!in_array($by, $by_opts)) {
-            return $this->createException('InvalidParameterValueException', 'err.invalid.parameter.collection', implode(',', $by_opts));
-        }
-        /** Parameter must be an array */
-        if (!is_array($collection)) {
-            return $this->createException('InvalidParameterException', 'err.invalid.parameter.collection', 'Array');
-        }
-        $entries = array();
-        /** Loop through items and collect values. */
-        $delete_count = 0;
-        foreach ($collection as $item) {
-            $value = '';
-            if (is_object($item)) {
-                if (!$item instanceof BundleEntity\Navigation) {
-                    return $this->createException('InvalidParameterException', 'err.invalid.parameter.collection', 'Array');
-                }
-                $this->em->remove($item);
-                $delete_count++;
-            } else if (is_numeric($item) || is_string($item)) {
-                $value = $item;
-            } else {
-                return $this->createException('InvalidParameterException', 'err.invalid.parameter.collection', 'string, numeric value or BundleEntity\Navigation entity');
-            }
-            if (!empty($value) && $value != '') {
-                $entries[] = $value;
-            }
-        }
-        /**
-         * Control if there is any entity ids in collection.
-         */
-        if (count($entries) < 1) {
-            return $this->createException('InvalidParameterException', 'err.invalid.parameter.collection', 'Array');
-        }
-        $join_needed = false;
-        /**
-         * Prepare query string.
-         */
-        switch ($by) {
-            case 'entity':
-                /** Flush to delete all persisting objects */
-                $this->em->flush();
-                /**
-                 * Prepare & Return Response
-                 */
-                $this->response = array(
-                    'rowCount' => $this->response['rowCount'],
-                    'result' => array(
-                        'set' => null,
-                        'total_rows' => $delete_count,
-                        'last_insert_id' => null,
-                    ),
-                    'error' => false,
-                    'code' => 'scc.db.delete.done',
-                );
-                return $this->response;
-            case 'id':
-                $values = implode(',', $entries);
-                break;
-            case 'code':
-                $values = implode('\',\'', $entries);
-                $values = '\'' . $values . '\'';
-                break;
-            /** Requires JOIN */
-            case 'url_key':
-                $join_needed = true;
-                $values = implode('\',\'', $entries);
-                $values = '\'' . $values . '\'';
-                break;
-        }
-        if ($join_needed) {
-            $q_str = 'DELETE '
-                . ' FROM ' . $this->entity['navigation_localization']['name'] . ' ' . $this->entity['navigation_localization']['alias']
-                . ' JOIN ' . $this->entity['navigation_localization']['name'] . ' ' . $this->entity['navigation_localization']['alias']
-                . ' WHERE ' . $this->entity['navigation_localization']['alias'] . '.' . $by . ' IN(:values)';
-        } else {
-            $q_str = 'DELETE '
-                . ' FROM ' . $this->entity['navigation']['name'] . ' ' . $this->entity['navigation']['alias']
-                . ' WHERE ' . $this->entity['navigation']['alias'] . '.' . $by . ' IN(:values)';
-        }
-        /**
-         * Create query object.
-         */
-        $query = $this->em->createQuery($q_str);
-        $query->setParameter('values', $entries);
-        /**
-         * Free memory.
-         */
-        unset($values);
-        /**
-         * 6. Run query
-         */
-        $query->getResult();
-        /**
-         * Prepare & Return Response
-         */
-        $this->response = array(
-            'rowCount' => $this->response['rowCount'],
-            'result' => array(
-                'set' => $entries,
-                'total_rows' => count($entries),
-                'last_insert_id' => null,
-            ),
-            'error' => false,
-            'code' => 'scc.db.delete.done',
-        );
-        return $this->response;
-    }
+	/**
+	 * @name            deleteNavigations()
+	 *
+	 * @since           1.0.1
+	 * @version         1.2.1
+	 * @author          Can Berkol
+	 *
+	 * @use             $this->doesModuleExist()
+	 * @use             $this->createException()
+	 *
+	 * @param           array 			$collection
+	 *
+	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+	public function deleteNavigations($collection) {
+		$timeStamp = time();
+		if (!is_array($collection)) {
+			return $this->createException('InvalidParameterValueException', 'Invalid parameter value. Parameter must be an array collection', 'E:S:001');
+		}
+		$countDeleted = 0;
+		foreach($collection as $entry){
+			if($entry instanceof BundleEntity\Navigation){
+				$this->em->remove($entry);
+				$countDeleted++;
+			}
+			else{
+				$response = $this->getNavigation($entry);
+				if(!$response->error->exists){
+					$entry = $response->result->set;
+					$this->em->remove($entry);
+					$countDeleted++;
+				}
+			}
+		}
+		if($countDeleted < 0){
+			return new ModelResponse(null, 0, 0, null, true, 'E:E:001', 'Unable to delete all or some of the selected entries.', $timeStamp, time());
+		}
+		$this->em->flush();
+
+		return new ModelResponse(null, 0, 0, null, false, 'S:D:001', 'Selected entries have been successfully removed from database.', $timeStamp, time());
+	}
 
     /**
      * @name            deleteNavigationItem ()
-     *                Deletes an existing navigation item from database.
      *
-     * @since            1.0.1
-     * @version         1.1.0
+     * @since           1.0.1
+     * @version         1.2.1
      * @author          Can Berkol
      *
-     * @use             $this->deletenavigationItems()
+     * @use             $this->deleteNavigationItems()
      *
-     * @param           mixed $item Navigation entity, id, code or url key.
-     * @param           string $by
+     * @param           mixed 			$item
      *
-     * @return          mixed           $response
+     * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
      */
-    public function deleteNavigationItem($item, $by = 'entity')
-    {
-        return $this->deleteNavigationItems(array($item), $by);
+    public function deleteNavigationItem($item) {
+        return $this->deleteNavigationItems(array($item));
     }
 
-    /**
-     * @name            deleteNavigationItems ()
-     *                Deletes provided navigation items from database.
-     *
-     * @since            1.0.1
-     * @version         1.1.0
-     * @author          Can Berkol
-     *
-     * @use             $this->doesNavigationItemExist()
-     * @use             $this->createException()
-     *
-     * @param           array $collection Collection of Navigation entities, ids, or codes or url keys
-     * @param           string $by Accepts the following options: entity, id, code, url_key
-     *
-     * @return          array           $response
-     */
-    public function deleteNavigationItems($collection, $by = 'entity')
-    {
-        $this->resetResponse();
-        $by_opts = array('entity', 'id', 'code', 'url_key');
-        if (!in_array($by, $by_opts)) {
-            return $this->createException('InvalidParameterException', 'err.invalid.parameter.collection', implode(',', $by_opts));
-        }
-        /** Parameter must be an array */
-        if (!is_array($collection)) {
-            return $this->createException('InvalidParameterException', 'err.invalid.parameter.collection', 'Array');
-        }
-        $entries = array();
-        /** Loop through items and collect values. */
-        $delete_count = 0;
-        foreach ($collection as $item) {
-            $value = '';
-            if (is_object($item)) {
-                if (!$item instanceof BundleEntity\NavigationItem) {
-                    return $this->createException('InvalidParameterException', 'err.invalid.parameter.collection', 'Array');
-                }
-                $this->em->remove($item);
-                $delete_count++;
-            } else if (is_numeric($item) || is_string($item)) {
-                $value = $item;
-            } else {
-                /** If array values are not numeric nor object */
-                return $this->createException('InvalidParameterException', 'err.invalid.parameter.collection', 'integer, string BundleEntity\\NavigationItem entity');
-            }
-            if (!empty($value) && $value != '') {
-                $entries[] = $value;
-            }
-        }
-        /**
-         * Control if there is any entity ids in collection.
-         */
-        if (count($entries) < 1) {
-            return $this->createException('InvalidParameterException', 'err.invalid.parameter.collection', 'Array');
-        }
-        $join_needed = false;
-        /**
-         * Prepare query string.
-         */
-        switch ($by) {
-            case 'entity':
-                /** Flush to delete all persisting objects */
-                $this->em->flush();
-                /**
-                 * Prepare & Return Response
-                 */
-                $this->response = array(
-                    'rowCount' => $this->response['rowCount'],
-                    'result' => array(
-                        'set' => null,
-                        'total_rows' => $delete_count,
-                        'last_insert_id' => null,
-                    ),
-                    'error' => false,
-                    'code' => 'scc.db.delete.done',
-                );
-                return $this->response;
-            case 'id':
-                $values = implode(',', $entries);
-                break;
-            case 'code':
-                $values = implode('\',\'', $entries);
-                $values = '\'' . $values . '\'';
-                break;
-            /** Requires JOIN */
-            case 'url_key':
-                $join_needed = true;
-                $values = implode('\',\'', $entries);
-                $values = '\'' . $values . '\'';
-                break;
-        }
-        if ($join_needed) {
-            $q_str = 'DELETE '
-                . ' FROM ' . $this->entity['navigation_item_localization']['name'] . ' ' . $this->entity['navigation_item_localization']['alias']
-                . ' JOIN ' . $this->entity['navigation_item_localization']['name'] . ' ' . $this->entity['navigation_item_localization']['alias']
-                . ' WHERE ' . $this->entity['navigation_item_localization']['alias'] . '.' . $by . ' IN(:values)';
-        } else {
-            $q_str = 'DELETE '
-                . ' FROM ' . $this->entity['navigation_item']['name'] . ' ' . $this->entity['navigation_item']['alias']
-                . ' WHERE ' . $this->entity['navigation_item']['alias'] . '.' . $by . ' IN(' . $values . ')';
-        }
-        /**
-         * Create query object.
-         */
-        $query = $this->em->createQuery($q_str);
-        /**
-         * Free memory.
-         */
-        unset($values);
-        /**
-         * 6. Run query
-         */
-        $query->getResult();
-        /**
-         * Prepare & Return Response
-         */
-        $this->response = array(
-            'rowCount' => $this->response['rowCount'],
-            'result' => array(
-                'set' => $entries,
-                'total_rows' => count($entries),
-                'last_insert_id' => null,
-            ),
-            'error' => false,
-            'code' => 'scc.db.delete.done',
-        );
-        return $this->response;
-    }
+	/**
+	 * @name            deleteNavigationItems()
+	 *
+	 * @since           1.0.1
+	 * @version         1.2.1
+	 * @author          Can Berkol
+	 *
+	 * @use             $this->doesModuleExist()
+	 * @use             $this->createException()
+	 *
+	 * @param           array 			$collection
+	 *
+	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+	public function deleteNavigationItems($collection) {
+		$timeStamp = time();
+		if (!is_array($collection)) {
+			return $this->createException('InvalidParameterValueException', 'Invalid parameter value. Parameter must be an array collection', 'E:S:001');
+		}
+		$countDeleted = 0;
+		foreach($collection as $entry){
+			if($entry instanceof BundleEntity\NavigationItem){
+				$this->em->remove($entry);
+				$countDeleted++;
+			}
+			else{
+				$response = $this->getNavigationItem($entry);
+				if(!$response->error->exists){
+					$entry = $response->result->set;
+					$this->em->remove($entry);
+					$countDeleted++;
+				}
+			}
+		}
+		if($countDeleted < 0){
+			return new ModelResponse(null, 0, 0, null, true, 'E:E:001', 'Unable to delete all or some of the selected entries.', $timeStamp, time());
+		}
+		$this->em->flush();
+
+		return new ModelResponse(null, 0, 0, null, false, 'S:D:001', 'Selected entries have been successfully removed from database.', $timeStamp, time());
+	}
 
     /**
-     * @name            deletePage ()
-     *                Deletes an existing page from database.
+     * @name            deletePage()
      *
-     * @since            1.0.0
-     * @version         1.01.0
+     * @since           1.0.0
+     * @version         1.2.1
      * @author          Can Berkol
      *
      * @use             $this->deletePages()
      *
-     * @param           mixed $page Page entity, id, or code.
-     * @param           string $by
-     * @return          mixed           $response
+     * @param           mixed 			$page
+     * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
      */
-    public function deletePage($page, $by = 'entity')
-    {
-        return $this->deletePages(array($page), $by);
+    public function deletePage($page){
+        return $this->deletePages(array($page));
     }
 
+	/**
+	 * @name            deletePageRevision()
+	 *
+	 * @since           1.1.9
+	 * @version         1.2.1
+	 * @author          Can Berkol
+	 *
+	 * @use             $this->deletePageRevisions()
+	 *
+	 * @param           mixed 			$revision
+	 *
+	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+	public function deletePageRevision($revision){
+		return $this->deletePageRevisions(array($revision));
+	}
+
+	/**
+	 * @name            deletePageRevisions()
+	 *
+	 * @since           1.1.9
+	 * @version         1.2.1
+	 * @author          Can Berkol
+	 *
+	 * @use             $this->createException()
+	 *
+	 * @param           array           $collection             Collection consists one of the following: PageRevision
+	 *
+	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+	public function deletePageRevisions($collection){
+		$timeStamp = time();
+		if (!is_array($collection)) {
+			return $this->createException('InvalidParameterValueException', 'Invalid parameter value. Parameter must be an array collection', 'E:S:001');
+		}
+		$countDeleted = 0;
+		foreach($collection as $entry){
+			if($entry instanceof BundleEntity\PageRevision){
+				$this->em->remove($entry);
+				$countDeleted++;
+			}
+		}
+		if($countDeleted < 0){
+			return new ModelResponse(null, 0, 0, null, true, 'E:E:001', 'Unable to delete all or some of the selected entries.', $timeStamp, time());
+		}
+		$this->em->flush();
+
+		return new ModelResponse(null, 0, 0, null, false, 'S:D:001', 'Selected entries have been successfully removed from database.', $timeStamp, time());
+	}
+
     /**
-     * @name            delete_pages ()
-     *                Deletes provided pages from database.
+     * @name            deletePages()
      *
-     * @since            1.0.0
-     * @version         1.1.0
-     * @author          Can Berkol
+     * @since           1.0.0
+     * @version         1.2.1
      *
-     * @use             $this->doesPageExist()
      * @use             $this->createException()
      *
-     * @param           array $collection Collection of Page entities, numeric page ids, or string page codes.
-     * @param           string $by Accepts the following options: entity, id, code, url_key
+     * @param           array 			$collection
      *
-     * @return          array           $response
+     * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
      */
-    public function deletePages($collection, $by = 'entity')
-    {
-        $this->resetResponse();
-        $by_opts = array('entity', 'id', 'code', 'url_key');
-        if (!in_array($by, $by_opts)) {
-            return $this->createException('InvalidParameterValueException', 'err.invalid.parameter.collection', implode(',', $by_opts));
-        }
-        /** Parameter must be an array */
-        if (!is_array($collection)) {
-            return $this->createException('InvalidParameterException', 'err.invalid.parameter.collection', 'Array');
-        }
-        $entries = array();
-        /** Loop through items and collect values. */
-        $delete_count = 0;
-        foreach ($collection as $item) {
-            $value = '';
-            if (is_object($item)) {
-                if (!$item instanceof BundleEntity\Page) {
-                    return $this->createException('InvalidParameterException', 'err.invalid.parameter.collection', 'BundleEntity\\Page entity');
-                }
-                $this->em->remove($item);
-                $delete_count++;
-            } else if (is_numeric($item) || is_string($item)) {
-                $value = $item;
-            } else {
-                /** If array values are not numeric nor object */
-                return $this->createException('InvalidParameterException', 'err.invalid.parameter.collection', 'string, integer, BundleEntity\\Page');
-            }
-            if (!empty($value) && $value != '') {
-                $entries[] = $value;
-            }
-        }
-        /**
-         * Control if there is any entity ids in collection.
-         */
-        if (count($entries) < 1) {
-            return $this->createException('InvalidParameterException', 'err.invalid.parameter.collection', 'Array');
-        }
-        $join_needed = false;
-        /**
-         * Prepare query string.
-         */
-        switch ($by) {
-            case 'entity':
-                /** Flush to delete all persisting objects */
-                $this->em->flush();
-                /**
-                 * Prepare & Return Response
-                 */
-                $this->response = array(
-                    'rowCount' => $this->response['rowCount'],
-                    'result' => array(
-                        'set' => null,
-                        'total_rows' => $delete_count,
-                        'last_insert_id' => null,
-                    ),
-                    'error' => false,
-                    'code' => 'scc.db.delete.done',
-                );
-                return $this->response;
-            case 'id':
-                $values = implode(',', $entries);
-                break;
-            case 'code':
-                $values = implode('\',\'', $entries);
-                $values = '\'' . $values . '\'';
-                break;
-            /** Requires JOIN */
-            case 'url_key':
-                $join_needed = true;
-                $values = implode('\',\'', $entries);
-                $values = '\'' . $values . '\'';
-                break;
-        }
-        if ($join_needed) {
-            $q_str = 'DELETE '
-                . ' FROM ' . $this->entity['page']['name'] . ' ' . $this->entity['page']['alias']
-                . ' JOIN ' . $this->entity['page_localization']['name'] . ' ' . $this->entity['page_localization']['alias']
-                . ' WHERE ' . $this->entity['page_localization']['alias'] . '.' . $by . ' IN(:values)';
-        } else {
-            $q_str = 'DELETE '
-                . ' FROM ' . $this->entity['page']['name'] . ' ' . $this->entity['page']['alias']
-                . ' WHERE ' . $this->entity['page']['alias'] . '.' . $by . ' IN(' . $values . ')';
-        }
-        /**
-         * Create query object.
-         */
-        $query = $this->em->createQuery($q_str);
-        /**
-         * Free memory.
-         */
-        unset($values);
-        /**
-         * 6. Run query
-         */
-        $query->getResult();
-        /**
-         * Prepare & Return Response
-         */
-        $this->response = array(
-            'rowCount' => $this->response['rowCount'],
-            'result' => array(
-                'set' => $entries,
-                'total_rows' => count($entries),
-                'last_insert_id' => null,
-            ),
-            'error' => false,
-            'code' => 'scc.db.delete.done',
-        );
-        return $this->response;
+    public function deletePages($collection){
+		$timeStamp = time();
+		if (!is_array($collection)) {
+			return $this->createException('InvalidParameterValueException', 'Invalid parameter value. Parameter must be an array collection', 'E:S:001');
+		}
+		$countDeleted = 0;
+		foreach($collection as $entry){
+			if($entry instanceof BundleEntity\Page){
+				$this->em->remove($entry);
+				$countDeleted++;
+			}
+			else{
+				$response = $this->getPage($entry);
+				if(!$response->error->exists){
+					$this->em->remove($response->result->set);
+					$countDeleted++;
+				}
+			}
+		}
+		if($countDeleted < 0){
+			return new ModelResponse(null, 0, 0, null, true, 'E:E:001', 'Unable to delete all or some of the selected entries.', $timeStamp, time());
+		}
+		$this->em->flush();
+
+		return new ModelResponse(null, 0, 0, null, false, 'S:D:001', 'Selected entries have been successfully removed from database.', $timeStamp, time());
     }
 
     /**
      * @name            deleteTheme ()
-     *                Deletes an existing theme from database.
      *
-     * @since            1.0.1
-     * @version         1.1.0
+     * @since           1.0.1
+     * @version         1.2.1
      * @author          Can Berkol
      *
      * @use             $this->deleteThemes()
      *
-     * @param           mixed $theme Theme entity, id, or code.
-     * @param           string $by
-     * @return          mixed           $response
+     * @param           mixed 			$theme
+     * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
      */
-    public function deleteTheme($theme, $by = 'entity')
-    {
-        return $this->deleteThemes(array($theme), $by);
+    public function deleteTheme($theme) {
+        return $this->deleteThemes(array($theme));
     }
 
-    /**
-     * @name            deleteThemes ()
-     *                Deletes provided themes from database.
-     *
-     * @since            1.0.1
-     * @version         1.1.0
-     * @author          Can Berkol
-     *
-     * @use             $this->doesThemeExist()
-     * @use             $this->createException()
-     *
-     * @param           array $collection Collection of Theme entities, ids, or codes or url keys
-     * @param           string $by Accepts the following options: entity, id, code, url_key
-     *
-     * @return          array           $response
-     */
-    public function deleteThemes($collection, $by = 'entity')
-    {
-        $this->resetResponse();
-        $by_opts = array('entity', 'id', 'code', 'url_key');
-        if (!in_array($by, $by_opts)) {
-            return $this->createException('InvalidParameterValueException', 'err.invalid.parameter.collection', implode(',', $by_opts));
-        }
-        /** Parameter must be an array */
-        if (!is_array($collection)) {
-            return $this->createException('InvalidParameterException', 'err.invalid.parameter.collection', 'Array');
-        }
-        $entries = array();
-        /** Loop through items and collect values. */
-        $delete_count = 0;
-        foreach ($collection as $item) {
-            $value = '';
-            if (is_object($item)) {
-                if (!$item instanceof BundleEntity\Theme) {
-                    return $this->createException('InvalidParameterException', 'err.invalid.parameter.collection', 'BundleEntity\\Theme');
-                }
-                $this->em->remove($item);
-                $delete_count++;
-            } else if (is_numeric($item) || is_string($item)) {
-                $value = $item;
-            } else {
-                /** If array values are not numeric nor object */
-                return $this->createException('InvalidParameterException', 'err.invalid.parameter.collection', 'string, integer, BundleEntity\\Theme');
-            }
-            if (!empty($value) && $value != '') {
-                $entries[] = $value;
-            }
-        }
-        /**
-         * Control if there is any entity ids in collection.
-         */
-        if (count($entries) < 1) {
-            return $this->createException('InvalidParameterException', 'err.invalid.parameter.collection', 'Array');;
-        }
-        $join_needed = false;
-        /**
-         * Prepare query string.
-         */
-        switch ($by) {
-            case 'entity':
-                /** Flush to delete all persisting objects */
-                $this->em->flush();
-                /**
-                 * Prepare & Return Response
-                 */
-                $this->response = array(
-                    'rowCount' => $this->response['rowCount'],
-                    'result' => array(
-                        'set' => null,
-                        'total_rows' => $delete_count,
-                        'last_insert_id' => null,
-                    ),
-                    'error' => false,
-                    'code' => 'scc.db.delete.done',
-                );
-                return $this->response;
-            case 'id':
-                $values = implode(',', $entries);
-                break;
-            case 'code':
-                $values = implode('\',\'', $entries);
-                $values = '\'' . $values . '\'';
-                break;
-            /** Requires JOIN */
-            case 'url_key':
-                $join_needed = true;
-                $values = implode('\',\'', $entries);
-                $values = '\'' . $values . '\'';
-                break;
-        }
-        if ($join_needed) {
-            $q_str = 'DELETE '
-                . ' FROM ' . $this->entity['theme_localization']['name'] . ' ' . $this->entity['theme_localization']['alias']
-                . ' JOIN ' . $this->entity['theme_localization']['name'] . ' ' . $this->entity['theme_localization']['alias']
-                . ' WHERE ' . $this->entity['theme_localization']['alias'] . '.' . $by . ' IN(:values)';
-        } else {
-            $q_str = 'DELETE '
-                . ' FROM ' . $this->entity['theme']['name'] . ' ' . $this->entity['theme']['alias']
-                . ' WHERE ' . $this->entity['theme']['alias'] . '.' . $by . ' IN(:values)';
-        }
-        /**
-         * Create query object.
-         */
-        $query = $this->em->createQuery($q_str);
-        $query->setParameter('values', $entries);
-        /**
-         * Free memory.
-         */
-        unset($values);
-        /**
-         * 6. Run query
-         */
-        $query->getResult();
-        /**
-         * Prepare & Return Response
-         */
-        $this->response = array(
-            'rowCount' => $this->response['rowCount'],
-            'result' => array(
-                'set' => $entries,
-                'total_rows' => count($entries),
-                'last_insert_id' => null,
-            ),
-            'error' => false,
-            'code' => 'scc.db.delete.done',
-        );
-        return $this->response;
-    }
+	/**
+	 * @name            deleteThemes()
+	 *
+	 * @since           1.0.0
+	 * @version         1.2.1
+	 *
+	 * @use             $this->createException()
+	 *
+	 * @param           array 			$collection
+	 *
+	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+	public function deleteThemes($collection){
+		$timeStamp = time();
+		if (!is_array($collection)) {
+			return $this->createException('InvalidParameterValueException', 'Invalid parameter value. Parameter must be an array collection', 'E:S:001');
+		}
+		$countDeleted = 0;
+		foreach($collection as $entry){
+			if($entry instanceof BundleEntity\Theme){
+				$this->em->remove($entry);
+				$countDeleted++;
+			}
+			else{
+				$response = $this->getTheme($entry);
+				if(!$response->error->exists){
+					$this->em->remove($response->result->set);
+					$countDeleted++;
+				}
+			}
+		}
+		if($countDeleted < 0){
+			return new ModelResponse(null, 0, 0, null, true, 'E:E:001', 'Unable to delete all or some of the selected entries.', $timeStamp, time());
+		}
+		$this->em->flush();
+
+		return new ModelResponse(null, 0, 0, null, false, 'S:D:001', 'Selected entries have been successfully removed from database.', $timeStamp, time());
+	}
 
     /**
-     * @name            doesLayoutExist ()
-     *                Checks if layout exists in database.
+     * @name            doesLayoutExist()
      *
-     * @since            1.0.1
-     * @version         1.1.0
+     * @since           1.0.1
+     * @version         1.2.1
+	 *
      * @author          Can Berkol
      *
      * @use             $this->getLayout()
      *
-     * @param           mixed $layout Entity, code, id, url key
-     * @param           string $by all, entity, id, code, url_key
-     * @param           bool $bypass If set to true does not return response but only the result.
+     * @param           mixed 			$layout
+     * @param           bool 			$bypass 			If set to true does not return response but only the result.
      *
-     * @return          mixed           $response
+     * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
      */
-    public function doesLayoutExist($layout, $by = 'id', $bypass = false)
-    {
-        $this->resetResponse();
-        $exist = false;
+	public function doesLayoutExist($layout, $bypass = false) {
+		$timeStamp = time();
+		$exist = false;
 
-        $response = $this->getLayout($layout, $by);
+		$response = $this->getLayout($layout);
 
-        if (!$response['error']) {
-            if ($response['result']['total_rows'] > 0) {
-                $exist = true;
-            }
-        }
-        if ($bypass) {
-            return $exist;
-        }
-        /**
-         * Prepare & Return Response
-         */
-        $this->response = array(
-            'rowCount' => $this->response['rowCount'],
-            'result' => array(
-                'set' => $exist,
-                'total_rows' => 1,
-                'last_insert_id' => null,
-            ),
-            'error' => false,
-            'code' => 'scc.db.entry.exist',
-        );
-        return $this->response;
-    }
+		if ($response->error->exists) {
+			if($bypass){
+				return $exist;
+			}
+			$response->result->set = false;
+			return $response;
+		}
+		$exist = true;
+		if ($bypass) {
+			return $exist;
+		}
 
+		return new ModelResponse($exist, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+	}
+
+	/**
+	 * @name            doesModuleExist()
+	 *
+	 * @since           1.0.1
+	 * @version         1.2.1
+	 *
+	 * @author          Can Berkol
+	 *
+	 * @use             $this->getModule()
+	 *
+	 * @param           mixed 			$module
+	 * @param           bool 			$bypass 			If set to true does not return response but only the result.
+	 *
+	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+	public function doesModuleExist($module, $bypass = false) {
+		$timeStamp = time();
+		$exist = false;
+
+		$response = $this->getModule($module);
+
+		if ($response->error->exists) {
+			if($bypass){
+				return $exist;
+			}
+			$response->result->set = false;
+			return $response;
+		}
+		$exist = true;
+		if ($bypass) {
+			return $exist;
+		}
+
+		return new ModelResponse($exist, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+	}
+
+	/**
+	 * @name            doesModuleLayoutEntryExist()
+	 *
+	 * @since           1.0.1
+	 * @version         1.2.1
+	 *
+	 * @author          Can Berkol
+	 *
+	 * @use             $this->getModuleLayoutEntry()
+	 *
+	 * @param           mixed 			$entry
+	 * @param           bool 			$bypass 			If set to true does not return response but only the result.
+	 *
+	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+	public function doesModuleLayoutEntryExist($entry, $bypass = false) {
+		$timeStamp = time();
+		$exist = false;
+
+		$response = $this->getModuleLayoutEntry($entry);
+
+		if ($response->error->exists) {
+			if($bypass){
+				return $exist;
+			}
+			$response->result->set = false;
+			return $response;
+		}
+		$exist = true;
+		if ($bypass) {
+			return $exist;
+		}
+
+		return new ModelResponse($exist, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+	}
+
+	/**
+	 * @name            doesNavigationExist()
+	 *
+	 * @since           1.0.1
+	 * @version         1.2.1
+	 *
+	 * @author          Can Berkol
+	 *
+	 * @use             $this->getNavigation()
+	 *
+	 * @param           mixed 			$navigation
+	 * @param           bool 			$bypass 			If set to true does not return response but only the result.
+	 *
+	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+	public function doesNavigationExist($navigation, $bypass = false) {
+		$timeStamp = time();
+		$exist = false;
+
+		$response = $this->getNavigation($navigation);
+
+		if ($response->error->exists) {
+			if($bypass){
+				return $exist;
+			}
+			$response->result->set = false;
+			return $response;
+		}
+		$exist = true;
+		if ($bypass) {
+			return $exist;
+		}
+
+		return new ModelResponse($exist, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+	}
+
+	/**
+	 * @name            doesNavigationItemExist()
+	 *
+	 * @since           1.0.1
+	 * @version         1.2.1
+	 *
+	 * @author          Can Berkol
+	 *
+	 * @use             $this->getNavigationItem()
+	 *
+	 * @param           mixed 			$item
+	 * @param           bool 			$bypass 			If set to true does not return response but only the result.
+	 *
+	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+	public function doesNavigationItemExist($item, $bypass = false) {
+		$timeStamp = time();
+		$exist = false;
+
+		$response = $this->getNavigationItem($item);
+
+		if ($response->error->exists) {
+			if($bypass){
+				return $exist;
+			}
+			$response->result->set = false;
+			return $response;
+		}
+		$exist = true;
+		if ($bypass) {
+			return $exist;
+		}
+
+		return new ModelResponse($exist, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+	}
+
+	/**
+	 * @name            doesPageExist()
+	 *
+	 * @since           1.0.1
+	 * @version         1.2.1
+	 *
+	 * @author          Can Berkol
+	 *
+	 * @use             $this->getPage()
+	 *
+	 * @param           mixed 			$page
+	 * @param           bool 			$bypass 			If set to true does not return response but only the result.
+	 *
+	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+	public function doesPageExist($page, $bypass = false) {
+		$timeStamp = time();
+		$exist = false;
+
+		$response = $this->getPage($page);
+
+		if ($response->error->exists) {
+			if($bypass){
+				return $exist;
+			}
+			$response->result->set = false;
+			return $response;
+		}
+		$exist = true;
+		if ($bypass) {
+			return $exist;
+		}
+
+		return new ModelResponse($exist, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+	}
+
+	/**
+	 * @name            doesThemeExist()
+	 *
+	 * @since           1.0.1
+	 * @version         1.2.1
+	 *
+	 * @author          Can Berkol
+	 *
+	 * @use             $this->getTheme()
+	 *
+	 * @param           mixed 			$theme
+	 * @param           bool 			$bypass 			If set to true does not return response but only the result.
+	 *
+	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+	public function doesThemeExist($theme, $bypass = false) {
+		$timeStamp = time();
+		$exist = false;
+
+		$response = $this->getTheme($theme);
+
+		if ($response->error->exists) {
+			if($bypass){
+				return $exist;
+			}
+			$response->result->set = false;
+			return $response;
+		}
+		$exist = true;
+		if ($bypass) {
+			return $exist;
+		}
+
+		return new ModelResponse($exist, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+	}
+
+	/**
+	 * @name            getLastRevisionOfPage()
+	 *
+	 * @since           1.1.9
+	 * @version         1.2.1
+	 *
+	 * @author          Can Berkol
+	 *
+	 * @page			mixed			$page
+	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+	public function getLastRevisionOfPage($page){
+		$timeStamp = time();
+		$response = $this->getPage($page);
+		if($response->error->exist){
+			return $response;
+		}
+		$page = $response->result->set;
+
+		$filter[] = array(
+			'glue' => 'and',
+			'condition' => array(
+				array(
+					'glue' => 'and',
+					'condition' => array('column' =>$this->entity['pr']['alias']. '.page', 'comparison' => '=', 'value' => $page->getId()),
+				)
+			)
+		);
+		$response = $this->listPageRevisions($filter, array('date_added' => 'desc'), array('start' => 0, 'count' => 1));
+
+		$response->stats->execution->start = $timeStamp;
+		$response->stats->execution->end = time();
+
+		return $response;
+	}
+
+	/**
+	 * @name 			getLayout()
+	 *
+	 * @since			1.0.0
+	 * @version         1.2.1
+	 * @author          Can Berkol
+	 *
+	 * @param           mixed           $layout
+	 *
+	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+	public function getLayout($layout) {
+		$timeStamp = time();
+		if($layout instanceof BundleEntity\Layout){
+			return new ModelResponse($layout, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+		}
+		$result = null;
+		switch($layout){
+			case is_numeric($layout):
+				$result = $this->em->getRepository($this->entity['l']['name'])->findOneBy(array('id' => $layout));
+				break;
+			case is_string($layout):
+				$result = $this->em->getRepository($this->entity['l']['name'])->findOneBy(array('code' => $layout));
+				if(is_null($result)){
+					$response = $this->getLayoutByUrlKey($module);
+					if(!$response->error->exist){
+						$result = $response->result->set;
+					}
+					unset($response);
+				}
+				break;
+		}
+		if(is_null($result)){
+			return new ModelResponse($result, 0, 0, null, true, 'E:D:002', 'Unable to find request entry in database.', $timeStamp, time());
+		}
+
+		return new ModelResponse($result, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+	}
+	/**
+	 * @name            getLayoutByUrlKey()
+	 *
+	 * @since           1.2.1
+	 * @version         1.2.1
+	 * @author          Can Berkol
+	 *
+	 * @use             $this->listLayouts()
+	 * @use             $this->createException()
+	 *
+	 * @param           mixed 			$urlKey
+	 * @param			mixed			$language
+	 *
+	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+	public function getLayoutByUrlKey($urlKey, $language = null){
+		$timeStamp = time();
+		if(!is_string($urlKey)){
+			return $this->createException('InvalidParameterValueException', '$urlKey must be a string.', 'E:S:007');
+		}
+		$filter[] = array(
+			'glue' => 'and',
+			'condition' => array(
+				array(
+					'glue' => 'and',
+					'condition' => array('column' => $this->entity['l']['alias'].'.url_key', 'comparison' => '=', 'value' => $urlKey),
+				)
+			)
+		);
+		if(!is_null($language)){
+			$mModel = $this->kernel->getContainer()->get('multilanguagesupport.model');
+			$response = $mModel->getLanguage($language);
+			if(!$response->error->exists){
+				$filter[] = array(
+					'glue' => 'and',
+					'condition' => array(
+						array(
+							'glue' => 'and',
+							'condition' => array('column' => $this->entity['l']['alias'].'.language', 'comparison' => '=', 'value' => $response->result->set->getId()),
+						)
+					)
+				);
+			}
+		}
+		$response = $this->listLayouts($filter, null, array('start' => 0, 'count' => 1));
+
+		$response->stats->execution->start = $timeStamp;
+		$response->stats->execution->end = time();
+
+		return $response;
+	}
     /**
-     * @name            doesModuleExist ()
-     *                Checks if module exists in database.
-     *
-     * @since            1.0.1
-     * @version         1.1.0
-     * @author          Can Berkol
-     *
-     * @use             $this->getModule()
-     *
-     * @param           mixed $module Eentity, code, id, url key
-     * @param           string $by all, entity, id, username or email
-     * @param           bool $bypass If set to true does not return response but only the result.
-     *
-     * @return          mixed           $response
-     */
-    public function doesModuleExist($module, $by = 'id', $bypass = false)
-    {
-        $this->resetResponse();
-        $exist = false;
-
-        $response = $this->getModule($module, $by);
-        if (!$response['error']) {
-            if ($response['result']['total_rows'] > 0) {
-                $exist = true;
-            }
-        }
-        if ($bypass) {
-            return $exist;
-        }
-        /**
-         * Prepare & Return Response
-         */
-        $this->response = array(
-            'rowCount' => $this->response['rowCount'],
-            'result' => array(
-                'set' => $exist,
-                'total_rows' => 1,
-                'last_insert_id' => null,
-            ),
-            'error' => false,
-            'code' => 'scc.db.entry.exist',
-        );
-        return $this->response;
-    }
-
-    /**
-     * @name            doesModuleLayoutEntryExist ()
-     *                Checks if module exists in database.
-     *
-     * @since            1.1.5
-     * @version         1.1.5
-     * @author          Can Berkol
-     *
-     * @use             $this->getModule()
-     *
-     * @param           integer $id id number
-     * @param           bool $bypass If set to true does not return response but only the result.
-     *
-     * @return          mixed           $response
-     */
-    public function doesModuleLayoutEntryExist($id, $bypass = false)
-    {
-        $this->resetResponse();
-        $exist = false;
-
-        $response = $this->getModuleLayoutEntry($id);
-        if (!$response['error']) {
-            if ($response['result']['total_rows'] > 0) {
-                $exist = true;
-            }
-        }
-        if ($bypass) {
-            return $exist;
-        }
-        /**
-         * Prepare & Return Response
-         */
-        $this->response = array(
-            'rowCount' => $this->response['rowCount'],
-            'result' => array(
-                'set' => $exist,
-                'total_rows' => 1,
-                'last_insert_id' => null,
-            ),
-            'error' => false,
-            'code' => 'scc.db.entry.exist',
-        );
-        return $this->response;
-    }
-
-    /**
-     * @name            doesNavigationExist ()
-     *                Checks if navigation exists in database.
-     *
-     * @since            1.0.1
-     * @version         1.1.0
-     * @author          Can Berkol
-     *
-     * @use             $this->getNavigation()
-     *
-     * @param           mixed $navigation Entity, code, id, url key
-     * @param           string $by all, entity, id, code, url_key
-     * @param           bool $bypass If set to true does not return response but only the result.
-     *
-     * @return          mixed           $response
-     */
-    public function doesNavigationExist($navigation, $by = 'id', $bypass = false)
-    {
-        $this->resetResponse();
-        $exist = false;
-
-        $response = $this->getNavigation($navigation, $by);
-
-        if (!$response['error']) {
-            if ($response['result']['total_rows'] > 0) {
-                $exist = true;
-            }
-        }
-        if ($bypass) {
-            return $exist;
-        }
-        /**
-         * Prepare & Return Response
-         */
-        $this->response = array(
-            'rowCount' => $this->response['rowCount'],
-            'result' => array(
-                'set' => $exist,
-                'total_rows' => 1,
-                'last_insert_id' => null,
-            ),
-            'error' => false,
-            'code' => 'scc.db.entry.exist',
-        );
-        return $this->response;
-    }
-
-    /**
-     * @name            doesNavigationItemExist ()
-     *                Checks if navigation item exists in database.
-     *
-     * @since            1.0.0
-     * @version         1.1.0
-     * @author          Can Berkol
-     *
-     * @use             $this->getNavigationItem()
-     *
-     * @param           mixed $navigation_item Entity, code, id, url key
-     * @param           string $by all, entity, id, code, url_key
-     * @param           bool $bypass If set to true does not return response but only the result.
-     *
-     * @return          mixed           $response
-     */
-    public function doesNavigationItemExist($navigation_item, $by = 'id', $bypass = false)
-    {
-        $this->resetResponse();
-        $exist = false;
-
-        $response = $this->getNavigationItem($navigation_item, $by);
-        if (!$response['error']) {
-            if ($response['result']['total_rows'] > 0) {
-                $exist = true;
-            }
-        }
-        if ($bypass) {
-            return $exist;
-        }
-        /**
-         * Prepare & Return Response
-         */
-        $this->response = array(
-            'rowCount' => $this->response['rowCount'],
-            'result' => array(
-                'set' => $exist,
-                'total_rows' => 1,
-                'last_insert_id' => null,
-            ),
-            'error' => false,
-            'code' => 'scc.db.entry.exist',
-        );
-        return $this->response;
-    }
-
-    /**
-     * @name            doesPageExist ()
-     *                Checks if page exists in database.
-     *
-     * @since            1.1.5
-     * @version         1.1.5
-     * @author          Can Berkol
-     *
-     * @use             $this->getModule()
-     *
-     * @param           mixed $page Entity, code, id, url key
-     * @param           string $by all, entity, id, username or email
-     * @param           bool $bypass If set to true does not return response but only the result.
-     *
-     * @return          mixed           $response
-     */
-    public function doesPageExist($page, $by = 'id', $bypass = false)
-    {
-        $this->resetResponse();
-        $exist = false;
-
-        $response = $this->getPage($page, $by);
-        if (!$response['error']) {
-            if ($response['result']['total_rows'] > 0) {
-                $exist = true;
-            }
-        }
-        if ($bypass) {
-            return $exist;
-        }
-        /**
-         * Prepare & Return Response
-         */
-        $this->response = array(
-            'rowCount' => $this->response['rowCount'],
-            'result' => array(
-                'set' => $exist,
-                'total_rows' => 1,
-                'last_insert_id' => null,
-            ),
-            'error' => false,
-            'code' => 'scc.db.entry.exist',
-        );
-        return $this->response;
-    }
-
-    /**
-     * @name            doesThemeExist ()
-     *                Checks if theme exists in database.
-     *
-     * @since            1.0.1
-     * @version         1.1.0
-     * @author          Can Berkol
-     *
-     * @use             $this->getTheme()
-     *
-     * @param           mixed $theme Theme entity, id or name.
-     * @param           string $by entity, id, code, url_key
-     * @param           bool $bypass If set to true does not return response but only the result.
-     *
-     * @return          mixed           $response
-     */
-    public function doesThemeExist($theme, $by = 'id', $bypass = false)
-    {
-        $this->resetResponse();
-        $exist = false;
-
-        $response = $this->getTheme($theme, $by);
-        if (!$response['error']) {
-            if ($response['result']['total_rows'] > 0) {
-                $exist = true;
-            }
-        }
-        if ($bypass) {
-            return $exist;
-        }
-        /**
-         * Prepare & Return Response
-         */
-        $this->response = array(
-            'rowCount' => $this->response['rowCount'],
-            'result' => array(
-                'set' => $exist,
-                'total_rows' => 1,
-                'last_insert_id' => null,
-            ),
-            'error' => false,
-            'code' => 'scc.db.entry.exist',
-        );
-        return $this->response;
-    }
-
-    /**
-     * @name            getLayout ()
-     *                Returns details of a layout.
-     *
-     * @since            1.0.1
-     * @version         1.0.1
-     * @author          Can Berkol
-     *
-     * @use             $this->listLayouts()
-     * @use             $this->createException()
-     *
-     * @param           mixed $layout Navigation entity, id, url_key or code
-     * @param           string $by entity, id, url key or username
-     *
-     * @return          mixed           $response
-     */
-    public function getLayout($layout, $by = 'id')
-    {
-        $this->resetResponse();
-        if ($by != 'id' && $by != 'entity' && $by != 'url_key' && $by != 'code') {
-            return $this->createException('InvalidParameterException', 'err.invalid.parameter.by', 'id, url_key, code');
-        }
-        if (!is_object($layout) && !is_numeric($layout) && !is_string($layout)) {
-            return $this->createException('InvalidParameterException', 'err.invalid.parameter.layout', 'BundleEntity\\Layout entity or number or string');
-        }
-        if (is_object($layout)) {
-            if (!$layout instanceof BundleEntity\Layout) {
-                return $this->createException('InvalidParameterException', 'err.invalid.parameter.layout', 'BundleEntity\\Layout');
-            }
-            $layout = $layout->getId();
-            $by = 'id';
-        }
-        $filter = array(
-            $by => $layout
-        );
-        $response = $this->listLayouts($filter, null, array('start' => 0, 'count' => 1));
-        if ($response['error']) {
-            return $response;
-        }
-        $collection = $response['result']['set'];
-        /**
-         * Prepare & Return Response
-         */
-        $this->response = array(
-            'rowCount' => $this->response['rowCount'],
-            'result' => array(
-                'set' => $collection[0],
-                'total_rows' => 1,
-                'last_insert_id' => null,
-            ),
-            'error' => false,
-            'code' => 'scc.db.entity.exist',
-        );
-        return $this->response;
-    }
-
-    /**
-     * @name            getLayoutLocalization ()
-     *                Returns the entity's lcoalization n a specific language.
-     *
-     * @since            1.0.1
-     * @version         1.1.0
-     * @author          Can Berkol
-     *
-     * @use             $this->getLayout()
-     * @use             $this->createException(
-     *
-     * @param           BundleEntity\Layout $layout Layout entity
-     * @param           MLSEntity\Language $language Language entity
-     *
-     * @return          mixed           $response
-     */
-    public function getLayoutLocalization($layout, $language)
-    {
-        $this->resetResponse();
-        if (!$layout instanceof BundleEntity\Layout) {
-            return $this->createException('InvalidParameterException', 'err.invalid.parameter.layout', 'BundleEntity\\Layout');
-        }
-        if (!$language instanceof MLSEntity\Language) {
-            return $this->createException('InvalidParameterException', 'err.invalid.parameter.LANGUAGE', 'MLSEntity\\Language');
-        }
-
-        $q_str = 'SELECT ' . $this->entity['layout_localization']['alias']
-            . ' FROM ' . $this->entity['layout_localization']['name'] . ' ' . $this->entity['layout_localization']['alias']
-            . ' WHERE ' . $this->entity['layout_localization']['alias'] . '.layout = ' . $layout->getId()
-            . ' AND ' . $this->entity['layout_localization']['alias'] . '.language = ' . $language->getId()
-            . ' LIMIT 1 ';
-        $query = $this->createQuery($q_str);
-        $result = $query->getResult();
-        if (!$result) {
-            /**
-             * Prepare & Return Response
-             */
-            $this->response = array(
-                'rowCount' => $this->response['rowCount'],
-                'result' => array(
-                    'set' => null,
-                    'total_rows' => 0,
-                    'last_insert_id' => null,
-                ),
-                'error' => true,
-                'code' => 'err.db.entity.notexist',
-            );
-        } else {
-            /**
-             * Prepare & Return Response
-             */
-            $this->response = array(
-                'rowCount' => $this->response['rowCount'],
-                'result' => array(
-                    'set' => $result,
-                    'total_rows' => 1,
-                    'last_insert_id' => null,
-                ),
-                'error' => false,
-                'code' => 'scc.db.entity.exist',
-            );
-        }
-        return $this->response;
-    }
-    /**
-     * @name            getMaxSortOrderOfPageFile ()
-     *                  Returns the largest sort order value for a given page from files_of_product table.
-     *
+     * @name            getMaxSortOrderOfFilesOfPage ()
+	 *
      * @since           1.1.7
-     * @version         1.1.7
+     * @version         1.2.1
      * @author          Can Berkol
      *
      *
-     * @param           mixed   $product    entity, id, sku
-     * @param           bool    $bypass     if set to true return bool instead of response
+     * @param           mixed   			$page
+     * @param           bool    			$bypass     if set to true return bool instead of response
      *
      * @return          mixed           bool | $response
      */
-    public function getMaxSortOrderOfPageFile($page, $bypass = false)
-    {
-        $this->resetResponse();;
-        if (!is_object($page) && !is_numeric($page)) {
-            return $this->createException('InvalidParameter', 'Page', 'err.invalid.parameter.page');
-        }
-        if (is_object($page)) {
-            if (!$page instanceof BundleEntity\Page) {
-                return $this->createException('InvalidParameter', 'Page', 'err.invalid.parameter.page');
-            }
-        } else {
-            /** if numeric value given check if category exists */
-            switch ($page) {
-                case is_numeric($page):
-                    $response = $this->getPage($page, 'id');
-                    break;
-            }
-            if ($response['error']) {
-                return $this->createException('InvalidParameter', 'Page', 'err.invalid.parameter.page');
-            }
-            $product = $response['result']['set'];
-        }
-        $q_str = 'SELECT MAX(' . $this->entity['files_of_page']['alias'] . '.sort_order) FROM ' . $this->entity['files_of_page']['name'].' '.$this->entity['files_of_page']['alias']
-            . ' WHERE ' . $this->entity['files_of_page']['alias'] . '.page = ' . $page->getId();
+    public function getMaxSortOrderOfFilesOfPage($page, $bypass = false){
+        $timeStamp = time();
+        $response = $this->getPage($page);
+		if($response->error->exist){
+			return $response;
+		}
+        $qStr = 'SELECT MAX('.$this->entity['fop']['alias'].'.sort_order) FROM '.$this->entity['fop']['name'].' '.$this->entity['fop']['alias']
+            		.' WHERE '.$this->entity['fop']['alias'].'.page = '.$page->getId();
 
-        $query = $this->em->createQuery($q_str);
-        $result = $query->getSingleScalarResult();
+        $q = $this->em->createQuery($qStr);
+        $result = $q->getSingleScalarResult();
 
         if ($bypass) {
             return $result;
         }
-        /**
-         * Prepare & Return Response
-         */
-        $this->response = array(
-            'rowCount' => $this->response['rowCount'],
-            'result' => array(
-                'set' => $result,
-                'total_rows' => 1,
-                'last_insert_id' => null,
-            ),
-            'error' => false,
-            'code' => 'scc.db.entry.exist',
-        );
-        return $this->response;
+		return new ModelResponse($result, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
     }
+	/**
+	 * @name 			getModule()
+	 *
+	 * @since			1.0.0
+	 * @version         1.2.1
+	 * @author          Can Berkol
+	 *
+	 * @param           mixed           $module
+	 *
+	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+	public function getModule($module) {
+		$timeStamp = time();
+		if($module instanceof BundleEntity\Module){
+			return new ModelResponse($module, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+		}
+		$result = null;
+		switch($module){
+			case is_numeric($module):
+				$result = $this->em->getRepository($this->entity['m']['name'])->findOneBy(array('id' => $module));
+				break;
+			case is_string(module):
+				$result = $this->em->getRepository($this->entity['m']['name'])->findOneBy(array('code' => $module));
+				if(is_null($result)){
+					$response = $this->getModuleByUrlKey($module);
+					if(!$response->error->exist){
+						$result = $response->result->set;
+					}
+					unset($response);
+				}
+				break;
+		}
+		if(is_null($result)){
+			return new ModelResponse($result, 0, 0, null, true, 'E:D:002', 'Unable to find request entry in database.', $timeStamp, time());
+		}
+
+		return new ModelResponse($result, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+	}
+	/**
+	 * @name            getModuleByUrlKey()
+	 *
+	 * @since           1.2.1
+	 * @version         1.2.1
+	 * @author          Can Berkol
+	 *
+	 * @use             $this->listModules()
+	 * @use             $this->createException()
+	 *
+	 * @param           mixed 			$urlKey
+	 * @param			mixed			$language
+	 *
+	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+	public function getModuleByUrlKey($urlKey, $language = null){
+		$timeStamp = time();
+		if(!is_string($urlKey)){
+			return $this->createException('InvalidParameterValueException', '$urlKey must be a string.', 'E:S:007');
+		}
+		$filter[] = array(
+			'glue' => 'and',
+			'condition' => array(
+				array(
+					'glue' => 'and',
+					'condition' => array('column' => $this->entity['ml']['alias'].'.url_key', 'comparison' => '=', 'value' => $urlKey),
+				)
+			)
+		);
+		if(!is_null($language)){
+			$mModel = $this->kernel->getContainer()->get('multilanguagesupport.model');
+			$response = $mModel->getLanguage($language);
+			if(!$response->error->exists){
+				$filter[] = array(
+					'glue' => 'and',
+					'condition' => array(
+						array(
+							'glue' => 'and',
+							'condition' => array('column' => $this->entity['ml']['alias'].'.language', 'comparison' => '=', 'value' => $response->result->set->getId()),
+						)
+					)
+				);
+			}
+		}
+		$response = $this->listModules($filter, null, array('start' => 0, 'count' => 1));
+
+		$response->stats->execution->start = $timeStamp;
+		$response->stats->execution->end = time();
+
+		return $response;
+	}
+	/**
+	 * @name 			getModuleLayoutEntry()
+	 *
+	 * @since			1.0.0
+	 * @version         1.2.1
+	 * @author          Can Berkol
+	 *
+	 * @param           mixed           $entry
+	 *
+	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+	public function getModuleLayoutEntry($entry) {
+		$timeStamp = time();
+		if($entry instanceof BundleEntity\ModulesOfLayout){
+			return new ModelResponse($entry, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+		}
+		$result = null;
+		switch($entry){
+			case is_numeric($entry):
+				$result = $this->em->getRepository($this->entity['mol']['name'])->findOneBy(array('id' => $entry));
+				break;
+		}
+		if(is_null($result)){
+			return new ModelResponse($result, 0, 0, null, true, 'E:D:002', 'Unable to find request entry in database.', $timeStamp, time());
+		}
+
+		return new ModelResponse($result, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+	}
+
+	/**
+	 * @name 			getNavigation()
+	 *
+	 * @since			1.0.0
+	 * @version         1.2.1
+	 * @author          Can Berkol
+	 *
+	 * @param           mixed           $navigation
+	 *
+	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+	public function getNavigation($navigation) {
+		$timeStamp = time();
+		if($navigation instanceof BundleEntity\Navigation){
+			return new ModelResponse($navigation, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+		}
+		$result = null;
+		switch($navigation){
+			case is_numeric($navigation):
+				$result = $this->em->getRepository($this->entity['n']['name'])->findOneBy(array('id' => $navigation));
+				break;
+			case is_string($navigation):
+				$result = $this->em->getRepository($this->entity['n']['name'])->findOneBy(array('code' => $navigation));
+				break;
+		}
+		if(is_null($result)){
+			return new ModelResponse($result, 0, 0, null, true, 'E:D:002', 'Unable to find request entry in database.', $timeStamp, time());
+		}
+
+		return new ModelResponse($result, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+	}
+
+	/**
+	 * @name 			getNavigationItem()
+	 *
+	 * @since			1.0.0
+	 * @version         1.2.1
+	 * @author          Can Berkol
+	 *
+	 * @param           mixed           $item
+	 *
+	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+	public function getNavigationItem($item) {
+		$timeStamp = time();
+		if($item instanceof BundleEntity\NavigationItem){
+			return new ModelResponse($item, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+		}
+		$result = null;
+		switch($item){
+			case is_numeric($item):
+				$result = $this->em->getRepository($this->entity['ni']['name'])->findOneBy(array('id' => $item));
+				break;
+			case is_string($item):
+				$response = $this->getNavigationItemByUrlKey($item);
+				if(!$response->error->exist){
+					$result = $response->result->set;
+				}
+				unset($response);
+				break;
+		}
+		if(is_null($result)){
+			return new ModelResponse($result, 0, 0, null, true, 'E:D:002', 'Unable to find request entry in database.', $timeStamp, time());
+		}
+
+		return new ModelResponse($result, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+	}
+	/**
+	 * @name            getNavigationItemByUrlKey()
+	 *
+	 * @since           1.2.1
+	 * @version         1.2.1
+	 * @author          Can Berkol
+	 *
+	 * @use             $this->listNavigationItems()
+	 * @use             $this->createException()
+	 *
+	 * @param           mixed 			$urlKey
+	 * @param			mixed			$language
+	 *
+	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+	public function getNavigationItemByUrlKey($urlKey, $language = null){
+		$timeStamp = time();
+		if(!is_string($urlKey)){
+			return $this->createException('InvalidParameterValueException', '$urlKey must be a string.', 'E:S:007');
+		}
+		$filter[] = array(
+			'glue' => 'and',
+			'condition' => array(
+				array(
+					'glue' => 'and',
+					'condition' => array('column' => $this->entity['nil']['alias'].'.url_key', 'comparison' => '=', 'value' => $urlKey),
+				)
+			)
+		);
+		if(!is_null($language)){
+			$mModel = $this->kernel->getContainer()->get('multilanguagesupport.model');
+			$response = $mModel->getLanguage($language);
+			if(!$response->error->exists){
+				$filter[] = array(
+					'glue' => 'and',
+					'condition' => array(
+						array(
+							'glue' => 'and',
+							'condition' => array('column' => $this->entity['nil']['alias'].'.language', 'comparison' => '=', 'value' => $response->result->set->getId()),
+						)
+					)
+				);
+			}
+		}
+		$response = $this->listNavigationItems($filter, null, array('start' => 0, 'count' => 1));
+
+		$response->stats->execution->start = $timeStamp;
+		$response->stats->execution->end = time();
+
+		return $response;
+	}
+	/**
+	 * @name 			getPage()
+	 *
+	 * @since			1.0.0
+	 * @version         1.2.1
+	 * @author          Can Berkol
+	 *
+	 * @param           mixed           $page
+	 *
+	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+	public function getPage($page) {
+		$timeStamp = time();
+		if($page instanceof BundleEntity\Page){
+			return new ModelResponse($page, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+		}
+		$result = null;
+		switch($page){
+			case is_numeric($page):
+				$result = $this->em->getRepository($this->entity['p']['name'])->findOneBy(array('id' => $page));
+				break;
+			case is_string($page):
+				$result = $this->em->getRepository($this->entity['p']['name'])->findOneBy(array('code' => $page));
+				if(is_null($result)){
+					$response = $this->getPageByUrlKey($page);
+					if(!$response->error->exist){
+						$result = $response->result->set;
+					}
+					unset($response);
+				}
+				break;
+		}
+		if(is_null($result)){
+			return new ModelResponse($result, 0, 0, null, true, 'E:D:002', 'Unable to find request entry in database.', $timeStamp, time());
+		}
+
+		return new ModelResponse($result, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+	}
     /**
-     * @name            getModule ()
-     *                Returns details of a module.
+     * @name            getPageByUrlKey ()
      *
-     * @since            1.0.1
-     * @version         1.1.0
+     * @since           1.2.1
+     * @version         1.2.1
      * @author          Can Berkol
      *
+     * @use             $this->listPages()
      * @use             $this->createException()
      *
-     * @param           mixed $module Module id, url_key or code
-     * @param           string $by entity, id, code, or url key.
+     * @param           mixed 			$urlKey
+	 * @param			mixed			$language
      *
-     * @return          mixed           $response
+     * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
      */
-    public function getModule($module, $by = 'id')
-    {
-        $this->resetResponse();
-        if ($by != 'id' && $by != 'code' && $by != 'entity' && $by != 'url_key') {
-            return $this->createException('InvalidParameterException', 'err.invalid.parameter.by', 'id, code, entity, url_key');
-        }
-        if (!is_object($module) && !is_numeric($module) && !is_string($module)) {
-            return $this->createException('InvalidParameterException', 'err.invalid.parameter.module', 'BundleEntity\\Module, integer, string');
-        }
-        if (is_object($module)) {
-            if (!$module instanceof BundleEntity\Module) {
-                return $this->createException('InvalidParameterException', 'err.invalid.parameter.module', 'BundleEntity\\Module');
-                return $this->response;
-            }
-            $module = $module->getId();
-            $by = 'id';
-        }
-        $filter = array(
-            $by => $module
-        );
-        $response = $this->listModules($filter, null, array('start' => 0, 'count' => 1));
-        if ($response['error']) {
-            return $response;
-        }
-        $collection = $response['result']['set'];
-        /**
-         * Prepare & Return Response
-         */
-        $this->response = array(
-            'rowCount' => $this->response['rowCount'],
-            'result' => array(
-                'set' => $collection[0],
-                'total_rows' => 1,
-                'last_insert_id' => null,
-            ),
-            'error' => false,
-            'code' => 'scc.db.entry.exist',
-        );
-        return $this->response;
-    }
-
-    /**
-     * @name            getModuleLayoutEntry ()
-     *                Returns details of a module-layout association entry. Contains localized values.
-     *
-     * @since            1.1.5
-     * @version         1.1.5
-     * @author          Can Berkol
-     *
-     * @use             $this->createException()
-     *
-     * @param           integer $id modules_of_layout entry id.
-     *
-     * @return          mixed           $response
-     */
-    public function getModuleLayoutEntry($id)
-    {
-        $this->resetResponse();
-        if (!is_numeric($id)) {
-            return $this->createException('InvalidParameterException', 'err.invalid.parameter.id', 'integer');
-        }
-
-        $entity = $this->em->getRepository($this->entity['modules_of_layout']['name'])->findOneBy(array('id' => $id));
-
-        if (!$entity) {
-            return $this->createException('EntityDoesNotExistException', 'err.invalid.entity.notfound', $id);
-        }
-        /**
-         * Prepare & Return Response
-         */
-        $this->response = array(
-            'rowCount' => 1,
-            'result' => array(
-                'set' => $entity,
-                'total_rows' => 1,
-                'last_insert_id' => null,
-            ),
-            'error' => false,
-            'code' => 'scc.db.entry.exist',
-        );
-        return $this->response;
-    }
-
-    /**
-     * @name            getModuleLocalization ()
-     *                Returns the entity's localization n a specific language.
-     *
-     * @since            1.0.1
-     * @version         1.1.0
-     * @author          Can Berkol
-     *
-     * @use             $this->createException(
-     *
-     * @param           BundleEntity\Layout $module Module entity
-     * @param           MLSEntity\Language $language Language entity
-     *
-     * @return          mixed           $response
-     */
-    public function getModuleLocalization($module, $language)
-    {
-        $this->resetResponse();
-        if (!$module instanceof BundleEntity\Module) {
-            return $this->createException('InvalidParameterException', 'err.invalid.parameter.module', 'BundleEntity\\Module');
-        }
-        if (!$language instanceof MLSEntity\Language) {
-            return $this->createException('InvalidParameterException', 'err.invalid.parameter.language', 'MLSEntity\\Language');
-        }
-
-        $q_str = 'SELECT ' . $this->entity['module_localization']['alias']
-            . ' FROM ' . $this->entity['module_localization']['name'] . ' ' . $this->entity['module_localization']['alias']
-            . ' WHERE ' . $this->entity['module_localization']['alias'] . '.layout = ' . $module->getId()
-            . ' AND ' . $this->entity['module_localization']['alias'] . '.language = ' . $language->getId()
-            . ' LIMIT 1 ';
-        $query = $this->createQuery($q_str);
-        $result = $query->getResult();
-        if (!$result) {
-            /**
-             * Prepare & Return Response
-             */
-            $this->response = array(
-                'rowCount' => $this->response['rowCount'],
-                'result' => array(
-                    'set' => null,
-                    'total_rows' => 0,
-                    'last_insert_id' => null,
-                ),
-                'error' => true,
-                'code' => 'err.db.entity.notexist',
-            );
-        } else {
-            /**
-             * Prepare & Return Response
-             */
-            $this->response = array(
-                'rowCount' => $this->response['rowCount'],
-                'result' => array(
-                    'set' => $result,
-                    'total_rows' => 1,
-                    'last_insert_id' => null,
-                ),
-                'error' => false,
-                'code' => 'scc.db.entity.exist',
-            );
-        }
-        return $this->response;
-    }
-
-    /**
-     * @name            getNavigation ()
-     *                Returns details of a navigation.
-     *
-     * @since            1.0.0
-     * @version         1.1.0
-     * @author          Can Berkol
-     *
-     * @use             $this->listNavigations()
-     * @use             $this->createException()
-     *
-     * @param           mixed $navigation Navigation entity, id, url_key or code
-     * @param           string $by entity, id, url key or username
-     *
-     * @return          mixed           $response
-     */
-    public function getNavigation($navigation, $by = 'id')
-    {
-        $this->resetResponse();
-        if ($by != 'id' && $by != 'code' && $by != 'entity' && $by != 'url_key') {
-            return $this->createException('InvalidParameterValueException', 'err.invalid.parameter.by', 'id, code, entity, url_key');
-        }
-        if (!is_object($navigation) && !is_numeric($navigation) && !is_string($navigation)) {
-            return $this->createException('InvalidParameterException', 'err.invalid.parameter.navigation', 'BundleEntity\\Navigation, id, code, url_key');
-        }
-        if (is_object($navigation)) {
-            if (!$navigation instanceof BundleEntity\Navigation) {
-                return $this->createException('InvalidParameterException', 'err.invalid.parameter.navigation', 'BundleEntity\\Navigation');
-            }
-            $navigation = $navigation->getId();
-            $by = 'id';
-        }
-        $filter = array();
+    public function getPageByUrlKey($urlKey, $language = null){
+        $timeStamp = time();
+		if(!is_string($urlKey)){
+			return $this->createException('InvalidParameterValueException', '$urlKey must be a string.', 'E:S:007');
+		}
         $filter[] = array(
             'glue' => 'and',
             'condition' => array(
                 array(
                     'glue' => 'and',
-                    'condition' => array('column' =>$this->entity['navigation']['alias']. '.'.$by, 'comparison' => '=', 'value' => $navigation),
+                    'condition' => array('column' => $this->entity['pl']['alias'].'.url_key', 'comparison' => '=', 'value' => $urlKey),
                 )
             )
         );
-        $response = $this->listNavigations($filter, null, array('start' => 0, 'count' => 1));
-        if ($response['error']) {
-            return $response;
-        }
-        $collection = $response['result']['set'];
-        /**
-         * Prepare & Return Response
-         */
-        $this->response = array(
-            'rowCount' => $this->response['rowCount'],
-            'result' => array(
-                'set' => $collection[0],
-                'total_rows' => 1,
-                'last_insert_id' => null,
-            ),
-            'error' => false,
-            'code' => 'scc.db.entry.exist',
-        );
-        return $this->response;
-    }
-
-    /**
-     * @name            getNavigationLocalization ()
-     *                Returns the entity's localization in a specific language.
-     *
-     * @since            1.0.1
-     * @version         1.1.0
-     * @author          Can Berkol
-     *
-     * @use             $this->createException()
-     *
-     * @param           BundleEntity\Navigation $navigation Navigation entity
-     * @param           MLSEntity\Language $language Language entity
-     *
-     * @return          mixed           $response
-     */
-    public function getNavigationLocalization($navigation, $language)
-    {
-        $this->resetResponse();
-        if (!$navigation instanceof BundleEntity\Navigation) {
-            return $this->createException('InvalidParameterException', 'err.invalid.parameter.navigation', 'BundleEntity\\Navigation');
-        }
-        if (!$language instanceof MLSEntity\Language) {
-            return $this->createException('InvalidParameterException', 'err.invalid.parameter.language', 'MLSEntity\\Language');
-        }
-
-        $q_str = 'SELECT ' . $this->entity['navigation_localization']['alias']
-            . ' FROM ' . $this->entity['navigation_localization']['name'] . ' ' . $this->entity['navigation_localization']['alias']
-            . ' WHERE ' . $this->entity['navigation_localization']['alias'] . '.layout = ' . $navigation->getId()
-            . ' AND ' . $this->entity['navigation_localization']['alias'] . '.language = ' . $language->getId()
-            . ' LIMIT 1 ';
-        $query = $this->createQuery($q_str);
-        $result = $query->getResult();
-        if (!$result) {
-            /**
-             * Prepare & Return Response
-             */
-            $this->response = array(
-                'rowCount' => $this->response['rowCount'],
-                'result' => array(
-                    'set' => null,
-                    'total_rows' => 0,
-                    'last_insert_id' => null,
-                ),
-                'error' => true,
-                'code' => 'err.db.entity.notexist',
-            );
-        } else {
-            /**
-             * Prepare & Return Response
-             */
-            $this->response = array(
-                'rowCount' => $this->response['rowCount'],
-                'result' => array(
-                    'set' => $result,
-                    'total_rows' => 1,
-                    'last_insert_id' => null,
-                ),
-                'error' => false,
-                'code' => 'scc.db.entity.exist',
-            );
-        }
-        return $this->response;
-    }
-
-    /**
-     * @name            getNavigationItem ()
-     *                Returns details of a navigation.
-     *
-     * @since            1.0.0
-     * @version         1.1.0
-     * @author          Can Berkol
-     *
-     * @use             $this->listNavigationItems()
-     * @use             $this->createException()
-     *
-     * @param           mixed $navigation_item Navigation entity, id, url_key or code
-     * @param           string $by entity, id, url key or username
-     *
-     * @return          mixed           $response
-     */
-    public function getNavigationItem($navigation_item, $by = 'id')
-    {
-        $this->resetResponse();
-        if ($by != 'id' && $by != 'entity' && $by != 'url_key') {
-            return $this->createException('InvalidParameteralueException', 'err.invalid.parameter.by', 'id, entity, url_key');
-        }
-        if (!is_object($navigation_item) && !is_numeric($navigation_item) && !is_string($navigation_item)) {
-            return $this->createException('InvalidParameterException', 'err.invalid.parameter.naviagtion_item', 'BundleEntitty\NavigationItem, integer, string');
-        }
-        if (is_object($navigation_item)) {
-            if (!$navigation_item instanceof BundleEntity\NavigationItem) {
-                new CoreExceptions\InvalidEntityException($this->kernel, 'NavigationItem');
-                $this->response['code'] = 'invalid.parameter.navigation_item';
-                return $this->response;
-            }
-            $navigation_item = $navigation_item->getId();
-            $by = 'id';
-        }
-
-        switch($by){
-            case 'url_key':
-                $column = $this->entity['navigation_item_localization']['alias'].'.'.$by;
-                break;
-            default:
-                $column = $this->entity['navigation_item']['alias'].'.'.$by;
-                break;
-        }
-
-        $filter = array();
-        $filter[] = array(
-            'glue' => 'and',
-            'condition' => array(
-                array(
-                    'glue' => 'and',
-                    'condition' => array('column' =>$column, 'comparison' => '=', 'value' => $navigation_item),
-                )
-            )
-        );
-        $response = $this->listNavigationItems($filter);
-        if ($response['error']) {
-            return $response;
-        }
-        $collection = $response['result']['set'];
-        /**
-         * Prepare & Return Response
-         */
-        $this->response = array(
-            'rowCount' => isset($this->response['rowCount']) ? $this->response['rowCount'] : 0,
-            'result' => array(
-                'set' => $collection[0],
-                'total_rows' => 1,
-                'last_insert_id' => null,
-            ),
-            'error' => false,
-            'code' => 'scc.db.entry.exist',
-        );
-        return $this->response;
-    }
-
-    /**
-     * @name            getNavigationItemLocalization ()
-     *                Returns the entity's localization in a specific language.
-     *
-     * @since            1.0.1
-     * @version         1.1.0
-     * @author          Can Berkol
-     *
-     * @use             $this->createException()
-     *
-     * @param           BundleEntity\NavigationItem $item NavigationItem entity
-     * @param           MLSEntity\Language $language Language entity
-     *
-     * @return          mixed           $response
-     */
-    public function getNavigationItemLocalization($item, $language)
-    {
-        $this->resetResponse();
-        if (!$item instanceof BundleEntity\NavigationItem) {
-            return $this->createException('InvalidParameterException', 'err.invalid.parameter.navigation_item', 'BundleEntity\\NavigationItem');
-        }
-        if (!$language instanceof MLSEntity\Language) {
-            return $this->createException('InvalidParameterException', 'err.invalid.parameter.language', 'MLSEntity\\Language');
-        }
-
-        $q_str = 'SELECT ' . $this->entity['navigation_item_localization']['alias']
-            . ' FROM ' . $this->entity['navigation_item_localization']['name'] . ' ' . $this->entity['navigation_item_localization']['alias']
-            . ' WHERE ' . $this->entity['navigation_item_localization']['alias'] . '.layout = ' . $item->getId()
-            . ' AND ' . $this->entity['navigation_item_localization']['alias'] . '.language = ' . $language->getId()
-            . ' LIMIT 1 ';
-        $query = $this->createQuery($q_str);
-        $result = $query->getResult();
-        if (!$result) {
-            /**
-             * Prepare & Return Response
-             */
-            $this->response = array(
-                'rowCount' => $this->response['rowCount'],
-                'result' => array(
-                    'set' => null,
-                    'total_rows' => 0,
-                    'last_insert_id' => null,
-                ),
-                'error' => true,
-                'code' => 'err.db.entity.notexist',
-            );
-        } else {
-            /**
-             * Prepare & Return Response
-             */
-            $this->response = array(
-                'rowCount' => $this->response['rowCount'],
-                'result' => array(
-                    'set' => $result,
-                    'total_rows' => 1,
-                    'last_insert_id' => null,
-                ),
-                'error' => false,
-                'code' => 'scc.db.entity.exist',
-            );
-        }
-        return $this->response;
-    }
-
-    /**
-     * @name            getPage ()
-     *                Returns details of a page.
-     *
-     * @since            1.0.0
-     * @version         1.1.2
-     * @author          Can Berkol
-     *
-     * @use             $this->listPage()
-     * @use             $this->createException()
-     *
-     * @param           mixed $page Page id or code
-     * @param           string $by entity, id, url key or username
-     *
-     * @return          mixed           $response
-     */
-    public function getPage($page, $by = 'id')
-    {
-        $this->resetResponse();
-
-        $by_opts = array('id', 'code', 'url_key');
-        if (!in_array($by, $by_opts)) {
-            return $this->createException('InvalidParameterValueException', implode(',', $by_opts), 'err.invalid.parameter.by');
-        }
-        if (!is_object($page) && !is_numeric($page) && !is_string($page)) {
-            return $this->createException('InvalidParameterException', 'Page', 'err.invalid.parameter.page');
-        }
-        if (is_object($page)) {
-            if (!$page instanceof BundleEntity\Page) {
-                return $this->createException('InvalidParameterException', 'Page', 'err.invalid.parameter.page');
-            }
-            /**
-             * Prepare & Return Response
-             */
-            $this->response = array(
-                'rowCount' => $this->response['rowCount'],
-                'result' => array(
-                    'set' => $page,
-                    'total_rows' => 1,
-                    'last_insert_id' => null,
-                ),
-                'error' => false,
-                'code' => 'scc.db.entry.exist',
-            );
-            return $this->response;
-        }
-
-        switch ($by) {
-            case 'id':
-            case 'code':
-                $column = $this->entity['page']['alias'] . '.' . $by;
-                break;
-            case 'url_key':
-                $column = $this->entity['page_localization']['alias'] . '.' . $by;
-        }
-        $filter[] = array(
-            'glue' => 'and',
-            'condition' => array(
-                array(
-                    'glue' => 'and',
-                    'condition' => array('column' => $column, 'comparison' => '=', 'value' => $page),
-                )
-            )
-        );
+		if(!is_null($language)){
+			$mModel = $this->kernel->getContainer()->get('multilanguagesupport.model');
+			$response = $mModel->getLanguage($language);
+			if(!$response->error->exists){
+				$filter[] = array(
+					'glue' => 'and',
+					'condition' => array(
+						array(
+							'glue' => 'and',
+							'condition' => array('column' => $this->entity['pl']['alias'].'.language', 'comparison' => '=', 'value' => $response->result->set->getId()),
+						)
+					)
+				);
+			}
+		}
         $response = $this->listPages($filter, null, array('start' => 0, 'count' => 1));
-        if ($response['error']) {
-            return $response;
-        }
-        $collection = $response['result']['set'];
-        /**
-         * Prepare & Return Response
-         */
-        $this->response = array(
-            'rowCount' => $this->response['rowCount'],
-            'result' => array(
-                'set' => $collection[0],
-                'total_rows' => 1,
-                'last_insert_id' => null,
-            ),
-            'error' => false,
-            'code' => 'scc.db.entry.exist',
-        );
 
-        return $this->response;
+		$response->stats->execution->start = $timeStamp;
+		$response->stats->execution->end = time();
+
+		return $response;
     }
 
+	/**
+	 * @name            getPageRevision()
+	 *
+	 * @since           1.1.9
+	 * @version         1.2.4
+	 *
+	 * @author          Can Berkol
+	 *
+	 * @use             $this->createException()
+	 * @use             $this->listPageRevisions()
+	 *
+	 * @param           mixed           $page
+	 * @param			mixed			$language
+	 * @param			integer			$revisionNumber
+	 *
+	 * @return          mixed           $response
+	 */
+	public function getPageRevision($page, $language, $revisionNumber){
+		$timeStamp = time();
+
+		$response = $this->getPage($page);
+		if($response->error->exist){
+			return $response;
+		}
+		$page = $response->result->set;
+
+		$mlsModel = $this->kernel->getContainer()->get('multilanguagesupport.model');
+		$response = $mlsModel->getLanguage($language);
+		if($response->error->exist){
+			return $response;
+		}
+		$language = $response->result->set;
+
+		$qStr = 'SELECT '.$this->entity['pr']['alias']
+				.' FROM '.$this->entity['pr']['name'].' '.$this->entity['pr']['alias']
+				.' WHERE '.$this->entity['pr']['alias'].'.page = '.$page->getId()
+				.' AND '.$this->entity['pr']['alias'].'.language = '.$language->getId()
+				.' AND '.$this->entity['pr']['alias'].'.revision_number = '.$revisionNumber;
+
+		$q = $this->em->createQuery($qStr);
+
+		$result = $q->getResult();
+
+		if(is_null($result)){
+			return new ModelResponse($result, 0, 0, null, true, 'E:D:002', 'Unable to find request entry in database.', $timeStamp, time());
+		}
+
+		return new ModelResponse($result, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+	}
+	/**
+	 * @name 			getTheme()
+	 *
+	 * @since			1.2.1
+	 * @version         1.2.1
+	 * @author          Can Berkol
+	 *
+	 * @param           mixed           $theme
+	 *
+	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+	public function getTheme($theme) {
+		$timeStamp = time();
+		if($theme instanceof BundleEntity\Theme){
+			return new ModelResponse($theme, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+		}
+		$result = null;
+		switch($theme){
+			case is_numeric($theme):
+				$result = $this->em->getRepository($this->entity['t']['name'])->findOneBy(array('id' => $theme));
+				break;
+		}
+		if(is_null($result)){
+			return new ModelResponse($result, 0, 0, null, true, 'E:D:002', 'Unable to find request entry in database.', $timeStamp, time());
+		}
+
+		return new ModelResponse($result, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+	}
+
     /**
-     * @name            getPageLocalization ()
-     *                  Returns the entity's localization in a specific language.
+     * @name            insertNavigation()
      *
      * @since           1.0.1
-     * @version         1.1.0
-     * @author          Can Berkol
-     *
-     * @use             $this->createException()
-     *
-     * @param           object          $page
-     * @param           object          $language
-     *
-     * @return          mixed           $response
-     */
-    public function getPageLocalization($page, $language)
-    {
-        $this->resetResponse();
-        if (!$page instanceof BundleEntity\Page) {
-            return $this->createException('InvalidParameterException', 'err.invalid.parameter.page', 'BundleEntity\\Page');
-        }
-        if (!$language instanceof MLSEntity\Language) {
-            return $this->createException('InvalidParameterException', 'err.invalid.parameter.language', 'MLSEntity\\Language');
-        }
-
-        $q_str = 'SELECT ' . $this->entity['page_localization']['alias']
-            . ' FROM ' . $this->entity['page_localization']['name'] . ' ' . $this->entity['page_localization']['alias']
-            . ' WHERE ' . $this->entity['page_localization']['alias'] . '.layout = ' . $page->getId()
-            . ' AND ' . $this->entity['page_localization']['alias'] . '.language = ' . $language->getId()
-            . ' LIMIT 1 ';
-        $query = $this->createQuery($q_str);
-        $result = $query->getResult();
-        if (!$result) {
-            /**
-             * Prepare & Return Response
-             */
-            $this->response = array(
-                'rowCount' => $this->response['rowCount'],
-                'result' => array(
-                    'set' => null,
-                    'total_rows' => 0,
-                    'last_insert_id' => null,
-                ),
-                'error' => true,
-                'code' => 'err.db.entity.notexist',
-            );
-        } else {
-            /**
-             * Prepare & Return Response
-             */
-            $this->response = array(
-                'rowCount' => $this->response['rowCount'],
-                'result' => array(
-                    'set' => $result,
-                    'total_rows' => 1,
-                    'last_insert_id' => null,
-                ),
-                'error' => false,
-                'code' => 'scc.db.entity.exist',
-            );
-        }
-        return $this->response;
-    }
-
-    /**
-     * @name            insertNavigation ()
-     *                Inserts one navigation definition into database.
-     *
-     * @since            1.0.1
-     * @version         1.1.6
+     * @version         1.2.1
      * @author          Can Berkol
      *
      * @use             $this->insertNavigation()
      *
-     * @param           mixed $collection Navigation Entity or a collection of post input that stores entity details.
-     *
-     * @return          array           $response
+     * @param           array 			$navigation
+	 *
+     * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
      */
-    public function insertNavigation($collection)
-    {
-        return $this->insertNavigations(array($collection));
+    public function insertNavigation($navigation)    {
+        return $this->insertNavigations(array($navigation));
     }
 
     /**
-     * @name            insertNavigationLocalization ()
-     *                Inserts one or more navigation localizations into database.
+     * @name            insertNavigationLocalizations ()
      *
-     * @since            1.1.6
-     * @version         1.1.6
+     * @since           1.1.6
+     * @version         1.2.6
      * @author          Can Berkol
      *
      * @use             $this->createException()
      *
-     * @param           array $collection Collection of entities or post data.
+     * @param           array 			$collection
      *
-     * @return          array           $response
+     * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
      */
-    public function insertNavigationLocalizations($collection)
-    {
-        $this->resetResponse();
-        /** Parameter must be an array */
-        if (!is_array($collection)) {
-            return $this->createException('InvalidParameter', 'Array', 'err.invalid.parameter.collection');
-        }
-        $countInserts = 0;
-        $insertedItems = array();
-        foreach ($collection as $item) {
-            if ($item instanceof BundleEntity\NavigationLocalization) {
-                $entity = $item;
-                $this->em->persist($entity);
-                $insertedItems[] = $entity;
-                $countInserts++;
-            } else {
-                foreach ($item['localizations'] as $language => $data) {
-                    $entity = new BundleEntity\NavigationLocalization;
-                    $entity->setNavigation($item['entity']);
-                    $mlsModel = $this->kernel->getContainer()->get('multilanguagesupport.model');
-                    $response = $mlsModel->getLanguage($language, 'iso_code');
-                    if (!$response['error']) {
-                        $entity->setLanguage($response['result']['set']);
-                    } else {
-                        break 1;
-                    }
-                    foreach ($data as $column => $value) {
-                        $set = 'set' . $this->translateColumnName($column);
-                        $entity->$set($value);
-                    }
-                    $this->em->persist($entity);
-                }
-                $insertedItems[] = $entity;
-                $countInserts++;
-            }
-        }
-        if ($countInserts > 0) {
-            $this->em->flush();
-        }
-        $this->response = array(
-            'rowCount' => $this->response['rowCount'],
-            'result' => array(
-                'set' => $insertedItems,
-                'total_rows' => $countInserts,
-                'last_insert_id' => -1,
-            ),
-            'error' => false,
-            'code' => 'scc.db.insert.done',
-        );
-        return $this->response;
-    }
+	public function insertNavigationLocalizations($collection) {
+		$timeStamp = time();
+		if (!is_array($collection)) {
+			return $this->createException('InvalidParameterValueException', 'Invalid parameter value. Parameter must be an array collection', 'E:S:001');
+		}
+		$countInserts = 0;
+		$insertedItems = array();
+		foreach($collection as $data){
+			if($data instanceof BundleEntity\NavigationLocalization){
+				$entity = $data;
+				$this->em->persist($entity);
+				$insertedItems[] = $entity;
+				$countInserts++;
+			}
+			else{
+				$nav = $data['entity'];
+				foreach($data['localizations'] as $locale => $translation){
+					$entity = new BundleEntity\NavigationLocalization();
+					$lModel = $this->kernel->getContainer()->get('multilanguagesupport.model');
+					$response = $lModel->getLanguage($locale);
+					if($response->error->exist){
+						return $response;
+					}
+					$entity->setLanguage($response->result->set);
+					unset($response);
+					$entity->setNavigation($nav);
+					foreach($translation as $column => $value){
+						$set = 'set'.$this->translateColumnName($column);
+						switch($column){
+							default:
+								if(is_object($value) || is_array($value)){
+									$value = json_encode($value);
+								}
+								$entity->$set($value);
+								break;
+						}
+					}
+					$this->em->persist($entity);
+					$insertedItems[] = $entity;
+					$countInserts++;
+				}
+			}
+		}
+		if($countInserts > 0){
+			$this->em->flush();
+			return new ModelResponse($insertedItems, $countInserts, 0, null, false, 'S:D:003', 'Selected entries have been successfully inserted into database.', $timeStamp, time());
+		}
+		return new ModelResponse(null, 0, 0, null, true, 'E:D:003', 'One or more entities cannot be inserted into database.', $timeStamp, time());
+	}
 
     /**
-     * @name            insertNavigations ()
-     *                Inserts one or more navigation definitions into database.
+     * @name            insertNavigations()
      *
-     * @since            1.0.1
-     * @version         1.1.6
+     * @since           1.0.1
+     * @version         1.2.1
      * @author          Can Berkol
      *
      * @use             $this->createException()
      *
-     * @param           array $collection Collection of Navigation entities or array of member detail array.
+     * @param           array 			$collection
      *
-     * @return          array           $response
+     * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
      */
-    public function insertNavigations($collection)
-    {
-        $this->resetResponse();
-        /** Parameter must be an array */
-        if (!is_array($collection)) {
-            return $this->createException('InvalidParameter', 'Array', 'err.invalid.parameter.collection');
-        }
-        $countInserts = 0;
-        $countLocalizations = 0;
-        $insertedItems = array();
-        foreach ($collection as $data) {
-            if ($data instanceof BundleEntity\Navigation) {
-                $entity = $data;
-                $this->em->persist($entity);
-                $insertedItems[] = $entity;
-                $countInserts++;
-            } else if (is_object($data)) {
-                $localizations = array();
-                $entity = new BundleEntity\Navigation;
-                if (!property_exists($data, 'date_added')) {
-                    $data->date_added = new \DateTime('now', new \DateTimeZone($this->kernel->getContainer()->getParameter('app_timezone')));
-                }
-                if (!property_exists($data, 'site')) {
-                    $data->site = 1;
-                }
-                foreach ($data as $column => $value) {
-                    $localeSet = false;
-                    $set = 'set' . $this->translateColumnName($column);
-                    switch ($column) {
-                        case 'local':
-                            $localizations[$countInserts]['localizations'] = $value;
-                            $localeSet = true;
-                            $countLocalizations++;
-                            break;
-                        case 'site':
-                            $sModel = $this->kernel->getContainer()->get('sitemanagement.model');
-                            $response = $sModel->getSite($value, 'id');
-                            if (!$response['error']) {
-                                $entity->$set($response['result']['set']);
-                            } else {
-                                new CoreExceptions\SiteDoesNotExistException($this->kernel, $value);
-                            }
-                            unset($response, $sModel);
-                            break;
-                        default:
-                            $entity->$set($value);
-                            break;
-                    }
-                    if ($localeSet) {
-                        $localizations[$countInserts]['entity'] = $entity;
-                    }
-                }
-                $this->em->persist($entity);
-                $insertedItems[] = $entity;
+	public function insertNavigations($collection)	{
+		$timeStamp = time();
+		/** Parameter must be an array */
+		if (!is_array($collection)) {
+			return $this->createException('InvalidParameterValueException', 'Invalid parameter value. Parameter must be an array collection', 'E:S:001');
+		}
+		$countInserts = 0;
+		$countLocalizations = 0;
+		$insertedItems = array();
+		$localizations = array();
+		foreach ($collection as $data) {
+			if ($data instanceof BundleEntity\Navigation) {
+				$entity = $data;
+				$this->em->persist($entity);
+				$insertedItems[] = $entity;
+				$countInserts++;
+			}
+			else if (is_object($data)) {
+				$entity = new BundleEntity\Navigation();
+				$now = new \DateTime('now', new \DateTimeZone($this->kernel->getContainer()->getParameter('app_timezone')));
+				if(!property_exists($data, 'date_added')){
+					$data->date_added = $now;
+				}
+				if(!property_exists($data, 'date_updated')){
+					$data->date_updated = $now;
+				}
+				if(!property_exists($data, 'site')){
+					$data->site = 1;
+				}
+				foreach ($data as $column => $value) {
+					$localeSet = false;
+					$set = 'set' . $this->translateColumnName($column);
+					switch ($column) {
+						case 'local':
+							$localizations[$countInserts]['localizations'] = $value;
+							$localeSet = true;
+							$countLocalizations++;
+							break;
+						case 'site':
+							$sModel = $this->kernel->getContainer()->get('sitemanagement.model');
+							$response = $sModel->getSite($value);
+							if (!$response->error->exist) {
+								$entity->$set($response->result->set);
+							} else {
+								return $this->createException('EntityDoesNotExist', 'The site with the id / key / domain "'.$value.'" does not exist in database.', 'E:D:002');
+							}
+							unset($response, $sModel);
+							break;
+						default:
+							$entity->$set($value);
+							break;
+					}
+					if ($localeSet) {
+						$localizations[$countInserts]['entity'] = $entity;
+					}
+				}
+				$this->em->persist($entity);
+				$insertedItems[] = $entity;
 
-                $countInserts++;
-            } else {
-                new CoreExceptions\InvalidDataException($this->kernel);
-            }
-        }
-        if ($countInserts > 0) {
-            $this->em->flush();
-        }
-        /** Now handle localizations */
-        if ($countInserts > 0 && $countLocalizations > 0) {
-            $this->insertNavigationLocalizations($localizations);
-        }
-        /**
-         * Prepare & Return Response
-         */
-        $this->response = array(
-            'rowCount' => $this->response['rowCount'],
-            'result' => array(
-                'set' => $insertedItems,
-                'total_rows' => $countInserts,
-                'last_insert_id' => $entity->getId(),
-            ),
-            'error' => false,
-            'code' => 'scc.db.insert.done',
-        );
-        return $this->response;
-    }
+				$countInserts++;
+			}
+		}
+		if ($countInserts > 0) {
+			$this->em->flush();
+		}
+		/** Now handle localizations */
+		if ($countInserts > 0 && $countLocalizations > 0) {
+			$response = $this->insertNavigationLocalizations($localizations);
+		}
+		if($countInserts > 0){
+			$this->em->flush();
+			return new ModelResponse($insertedItems, $countInserts, 0, null, false, 'S:D:003', 'Selected entries have been successfully inserted into database.', $timeStamp, time());
+		}
+		return new ModelResponse(null, 0, 0, null, true, 'E:D:003', 'One or more entities cannot be inserted into database.', $timeStamp, time());
+	}
 
     /**
      * @name            insertNavigationItem ()
-     *                Inserts one navigation into into database.
      *
-     * @since            1.0.1
-     * @version         1.1.6
+     * @since           1.0.1
+     * @version         1.2.1
+	 *
      * @author          Can Berkol
      *
      * @use             $this->insertNavigationItems()
      *
-     * @param           mixed $navigation_item NavigationItem Entity or a collection of post input that stores entity details.
-     *
-     * @return          array           $response
+     * @param           mixed			$item
+	 *
+     * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
      */
-    public function insertNavigationItem($navigation_item)
-    {
-        return $this->insertNavigationItems(array($navigation_item));
+    public function insertNavigationItem($item){
+        return $this->insertNavigationItems(array($item));
     }
 
-    /**
-     * @name            insertNavigationItemLocalizations ()
-     *                Inserts one or more navigation localizations into database.
-     *
-     * @since            1.1.6
-     * @version         1.1.6
-     * @author          Can Berkol
-     *
-     * @use             $this->createException()
-     *
-     * @param           array $collection Collection of entities or post data.
-     *
-     * @return          array           $response
-     */
-    public function insertNavigationItemLocalizations($collection)
-    {
+	/**
+	 * @name            insertNavigationItemLocalizations ()
+	 *
+	 * @since           1.1.6
+	 * @version         1.2.6
+	 * @author          Can Berkol
+	 *
+	 * @use             $this->createException()
+	 *
+	 * @param           array 			$collection
+	 *
+	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+	public function insertNavigationItemLocalizations($collection) {
+		$timeStamp = time();
+		if (!is_array($collection)) {
+			return $this->createException('InvalidParameterValueException', 'Invalid parameter value. Parameter must be an array collection', 'E:S:001');
+		}
+		$countInserts = 0;
+		$insertedItems = array();
+		foreach($collection as $data){
+			if($data instanceof BundleEntity\NavigationItemLocalization){
+				$entity = $data;
+				$this->em->persist($entity);
+				$insertedItems[] = $entity;
+				$countInserts++;
+			}
+			else{
+				$navItem = $data['entity'];
+				foreach($data['localizations'] as $locale => $translation){
+					$entity = new BundleEntity\NavigationItemLocalization();
+					$lModel = $this->kernel->getContainer()->get('multilanguagesupport.model');
+					$response = $lModel->getLanguage($locale);
+					if($response->error->exist){
+						return $response;
+					}
+					$entity->setLanguage($response->result->set);
+					unset($response);
+					$entity->setNavigationItem($navItem);
+					foreach($translation as $column => $value){
+						$set = 'set'.$this->translateColumnName($column);
+						switch($column){
+							default:
+								if(is_object($value) || is_array($value)){
+									$value = json_encode($value);
+								}
+								$entity->$set($value);
+								break;
+						}
+					}
+					$this->em->persist($entity);
+					$insertedItems[] = $entity;
+					$countInserts++;
+				}
+			}
+		}
+		if($countInserts > 0){
+			$this->em->flush();
+			return new ModelResponse($insertedItems, $countInserts, 0, null, false, 'S:D:003', 'Selected entries have been successfully inserted into database.', $timeStamp, time());
+		}
+		return new ModelResponse(null, 0, 0, null, true, 'E:D:003', 'One or more entities cannot be inserted into database.', $timeStamp, time());
+	}
 
-        $this->resetResponse();
-        /** Parameter must be an array */
-        if (!is_array($collection)) {
-            return $this->createException('InvalidParameter', 'Array', 'err.invalid.parameter.collection');
-        }
-        $countInserts = 0;
-        $insertedItems = array();
-        foreach ($collection as $item) {
-            if ($item instanceof BundleEntity\NavigationItemLocalization) {
-                $entity = $item;
-                $this->em->persist($entity);
-                $insertedItems[] = $entity;
-                $countInserts++;
-            } else {
-                foreach ($item['localizations'] as $language => $data) {
-                    $entity = new BundleEntity\NavigationItemLocalization;
-                    $entity->setNavigationItem($item['entity']);
-                    $mlsModel = $this->kernel->getContainer()->get('multilanguagesupport.model');
-                    $response = $mlsModel->getLanguage($language, 'iso_code');
+	/**
+	 * @name            insertNavigationItems ()
+	 *
+	 * @since           1.0.1
+	 * @version         1.2.1
+	 * @author          Can Berkol
+	 *
+	 * @use             $this->createException()
+	 *
+	 * @param           array 			$collection
+	 *
+	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+	public function insertNavigationItems($collection)	{
+		$timeStamp = time();
+		/** Parameter must be an array */
+		if (!is_array($collection)) {
+			return $this->createException('InvalidParameterValueException', 'Invalid parameter value. Parameter must be an array collection', 'E:S:001');
+		}
+		$countInserts = 0;
+		$countLocalizations = 0;
+		$insertedItems = array();
+		$localizations = array();
+		foreach ($collection as $data) {
+			if ($data instanceof BundleEntity\NavigationItem) {
+				$entity = $data;
+				$this->em->persist($entity);
+				$insertedItems[] = $entity;
+				$countInserts++;
+			}
+			else if (is_object($data)) {
+				$entity = new BundleEntity\NavigationItem();
+				$now = new \DateTime('now', new \DateTimeZone($this->kernel->getContainer()->getParameter('app_timezone')));
+				if(!property_exists($data, 'date_added')){
+					$data->date_added = $now;
+				}
+				if(!property_exists($data, 'date_updated')){
+					$data->date_updated = $now;
+				}
+				if(!property_exists($data, 'site')){
+					$data->site = 1;
+				}
+				foreach ($data as $column => $value) {
+					$localeSet = false;
+					$set = 'set' . $this->translateColumnName($column);
+					switch ($column) {
+						case 'local':
+							$localizations[$countInserts]['localizations'] = $value;
+							$localeSet = true;
+							$countLocalizations++;
+							break;
+						case 'page':
+							$response = $this->getPage($value);
+							if (!$response->error->exist) {
+								$entity->$set($response->result->set);
+							}
+							unset($response);
+							break;
+						case 'navigation':
+							$response = $this->getNavigation($value);
+							if (!$response->error->exist) {
+								$entity->$set($response->result->set);
+							}
+							unset($response);
+							break;
+						case 'parent':
+							$response = $this->getNavigationItem($value);
+							if (!$response->error->exist) {
+								$entity->$set($response->result->set);
+							}
+							unset($response);
+							break;
+						default:
+							$entity->$set($value);
+							break;
+					}
+					if ($localeSet) {
+						$localizations[$countInserts]['entity'] = $entity;
+					}
+				}
+				$this->em->persist($entity);
+				$insertedItems[] = $entity;
 
-                    if (!$response['error']) {
-                        $aLang = $response['result']['set'];
-                        $entity->setLanguage($aLang);
-                        unset($response);
-                    } else {
-                        break 1;
-                    }
-                    foreach ($data as $column => $value) {
-                        $set = 'set' . $this->translateColumnName($column);
-                        $entity->$set($value);
-                    }
-                    $this->em->persist($entity);
-                }
-                $insertedItems[] = $entity;
-                $countInserts++;
-            }
-        }
-        if ($countInserts > 0) {
-            $this->em->flush();
-        }
-        $this->response = array(
-            'rowCount' => $this->response['rowCount'],
-            'result' => array(
-                'set' => $insertedItems,
-                'total_rows' => $countInserts,
-                'last_insert_id' => -1,
-            ),
-            'error' => false,
-            'code' => 'scc.db.insert.done',
-        );
-        return $this->response;
-    }
+				$countInserts++;
+			}
+		}
+		if ($countInserts > 0) {
+			$this->em->flush();
+		}
+		/** Now handle localizations */
+		if ($countInserts > 0 && $countLocalizations > 0) {
+			$response = $this->insertNavigationLocalizations($localizations);
+		}
+		if($countInserts > 0){
+			$this->em->flush();
+			return new ModelResponse($insertedItems, $countInserts, 0, null, false, 'S:D:003', 'Selected entries have been successfully inserted into database.', $timeStamp, time());
+		}
+		return new ModelResponse(null, 0, 0, null, true, 'E:D:003', 'One or more entities cannot be inserted into database.', $timeStamp, time());
+	}
 
-    /**
-     * @name            insertNavigationItems ()
-     *                Inserts one or more navigations into database.
-     *
-     * @since            1.0.1
-     * @version         1.1.6
-     * @author          Can Berkol
-     *
-     * @use             $this->createException()
-     *
-     * @param           array $collection Collection of Navigation entities or array of member detail array.
-     *
-     * @return          array           $response
-     */
-    public function insertNavigationItems($collection)
-    {
-        $this->resetResponse();
-        /** Parameter must be an array */
-        if (!is_array($collection)) {
-            return $this->createException('InvalidParameter', 'Array', 'err.invalid.parameter.collection');
-        }
-        $countInserts = 0;
-        $countLocalizations = 0;
-        $insertedItems = array();
-        foreach ($collection as $data) {
-            if ($data instanceof BundleEntity\NavigationItem) {
-                $entity = $data;
-                $this->em->persist($entity);
-                $insertedItems[] = $entity;
-                $countInserts++;
-            } else if (is_object($data)) {
-                $localizations = array();
-                $entity = new BundleEntity\NavigationItem;
-                foreach ($data as $column => $value) {
-                    $localeSet = false;
-                    $set = 'set' . $this->translateColumnName($column);
-                    switch ($column) {
-                        case 'local':
-                            $localizations[$countInserts]['localizations'] = $value;
-                            $localeSet = true;
-                            $countLocalizations++;
-                            break;
-                        case 'navigation':
-                            $response = $this->getNavigation($value, 'id');
-                            if (!$response['error']) {
-                                $entity->$set($response['result']['set']);
-                            } else {
-                                new CoreExceptions\EntityDoesNotExistException($this->kernel, $value);
-                            }
-                            unset($response, $sModel);
-                            break;
-                        case 'page':
-                            $response = $this->getPage($value, 'id');
-                            if (!$response['error']) {
-                                $entity->$set($response['result']['set']);
-                            } else {
-                                new CoreExceptions\EntityDoesNotExistException($this->kernel, $value);
-                            }
-                            unset($response, $sModel);
-                            break;
-                        case 'parent':
-                            $response = $this->getNavigation($value, 'id');
-                            if (!$response['error']) {
-                                $entity->$set($response['result']['set']);
-                            } else {
-                                new CoreExceptions\EntityDoesNotExistException($this->kernel, $value);
-                            }
-                            unset($response, $sModel);
-                            break;
-                        default:
-                            $entity->$set($value);
-                            break;
-                    }
-                    if ($localeSet) {
-                        $localizations[$countInserts]['entity'] = $entity;
-                    }
-                }
-                $this->em->persist($entity);
-                $insertedItems[] = $entity;
+	/**
+	 * @name            insertPage ()
+	 *
+	 * @since           1.0.1
+	 * @version         1.2.1
+	 *
+	 * @author          Can Berkol
+	 *
+	 * @use             $this->insertPages()
+	 *
+	 * @param           mixed			$page
+	 *
+	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+	public function insertPage($page){
+		return $this->insertPages(array($page));
+	}
 
-                $countInserts++;
-            } else {
-                new CoreExceptions\InvalidDataException($this->kernel);
-            }
-        }
-        if ($countInserts > 0) {
-            $this->em->flush();
-        }
-        /** Now handle localizations */
-        if ($countInserts > 0 && $countLocalizations > 0) {
-            $this->insertNavigationItemLocalizations($localizations);
-        }
-        /**
-         * Prepare & Return Response
-         */
-        $this->response = array(
-            'rowCount' => $this->response['rowCount'],
-            'result' => array(
-                'set' => $insertedItems,
-                'total_rows' => $countInserts,
-                'last_insert_id' => $entity->getId(),
-            ),
-            'error' => false,
-            'code' => 'scc.db.insert.done',
-        );
-        return $this->response;
-    }
+	/**
+	 * @name            insertPageLocalizations()
+	 *
+	 * @since           1.1.6
+	 * @version         1.2.6
+	 * @author          Can Berkol
+	 *
+	 * @use             $this->createException()
+	 *
+	 * @param           array 			$collection
+	 *
+	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+	public function insertPageLocalizations($collection) {
+		$timeStamp = time();
+		if (!is_array($collection)) {
+			return $this->createException('InvalidParameterValueException', 'Invalid parameter value. Parameter must be an array collection', 'E:S:001');
+		}
+		$countInserts = 0;
+		$insertedItems = array();
+		foreach($collection as $data){
+			if($data instanceof BundleEntity\PageLocalization){
+				$entity = $data;
+				$this->em->persist($entity);
+				$insertedItems[] = $entity;
+				$countInserts++;
+			}
+			else{
+				$page = $data['entity'];
+				foreach($data['localizations'] as $locale => $translation){
+					$entity = new BundleEntity\PageLocalization();
+					$lModel = $this->kernel->getContainer()->get('multilanguagesupport.model');
+					$response = $lModel->getLanguage($locale);
+					if($response->error->exist){
+						return $response;
+					}
+					$entity->setLanguage($response->result->set);
+					unset($response);
+					$entity->setPage($page);
+					foreach($translation as $column => $value){
+						$set = 'set'.$this->translateColumnName($column);
+						switch($column){
+							default:
+								if(is_object($value) || is_array($value)){
+									$value = json_encode($value);
+								}
+								$entity->$set($value);
+								break;
+						}
+					}
+					$this->em->persist($entity);
+					$insertedItems[] = $entity;
+					$countInserts++;
+				}
+			}
+		}
+		if($countInserts > 0){
+			$this->em->flush();
+			return new ModelResponse($insertedItems, $countInserts, 0, null, false, 'S:D:003', 'Selected entries have been successfully inserted into database.', $timeStamp, time());
+		}
+		return new ModelResponse(null, 0, 0, null, true, 'E:D:003', 'One or more entities cannot be inserted into database.', $timeStamp, time());
+	}
 
-    /**
-     * @name            insertPage ()
-     *                Inserts one page into database.
-     *
-     * @since            1.0.0
-     * @version         1.1.6
-     * @author          Can Berkol
-     *
-     * @use             $this->insertPages()
-     *
-     * @param           mixed $page Page Entity or a collection of post input that stores entity details.
-     *
-     * @return          array           $response
-     */
-    public function insertPage($page)
-    {
-        return $this->insertPages(array($page));
-    }
+	/**
+	 * @name            insertPageRevision()
+	 *
+	 * @since           1.1.9
+	 * @version         1.1.9
+	 * @author          Can Berkol
+	 *
+	 * @use             $this->insertPageRevisions()
+	 *
+	 * @param           mixed			$revision
+	 *
+	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+	public function insertPageRevision($revision) {
+		return $this->insertPageRevisions(array($revision));
+	}
 
-    /**
-     * @name            insertPageLocalizations ()
-     *                Inserts one or more navigation localizations into database.
-     *
-     * @since            1.1.6
-     * @version         1.1.6
-     * @author          Can Berkol
-     *
-     * @use             $this->createException()
-     *
-     * @param           array $collection Collection of entities or post data.
-     *
-     * @return          array           $response
-     */
-    public function insertPageLocalizations($collection)
-    {
-        $this->resetResponse();
-        /** Parameter must be an array */
-        if (!is_array($collection)) {
-            return $this->createException('InvalidParameter', 'Array', 'err.invalid.parameter.collection');
-        }
-        $countInserts = 0;
-        $insertedItems = array();
-        foreach ($collection as $item) {
-            if ($item instanceof BundleEntity\PageLocalization) {
-                $entity = $item;
-                $this->em->persist($entity);
-                $insertedItems[] = $entity;
-                $countInserts++;
-            } else {
-                foreach ($item['localizations'] as $language => $data) {
-                    $entity = new BundleEntity\PageLocalization;
-                    $entity->setPage($item['entity']);
-                    $mlsModel = $this->kernel->getContainer()->get('multilanguagesupport.model');
-                    $response = $mlsModel->getLanguage($language, 'iso_code');
-                    if (!$response['error']) {
-                        $entity->setLanguage($response['result']['set']);
-                    } else {
-                        break 1;
-                    }
-                    foreach ($data as $column => $value) {
-                        $set = 'set' . $this->translateColumnName($column);
-                        $entity->$set($value);
-                    }
-                    $this->em->persist($entity);
-                }
-                $insertedItems[] = $entity;
-                $countInserts++;
-            }
-        }
-        if ($countInserts > 0) {
-            $this->em->flush();
-        }
-        $this->response = array(
-            'rowCount' => $this->response['rowCount'],
-            'result' => array(
-                'set' => $insertedItems,
-                'total_rows' => $countInserts,
-                'last_insert_id' => -1,
-            ),
-            'error' => false,
-            'code' => 'scc.db.insert.done',
-        );
-        return $this->response;
-    }
+	/**
+	 * @name            insertPageRevisions()
+	 *
+	 * @since           1.1.9
+	 * @version         1.1.9
+	 * @author          Can Berkol
+	 *
+	 * @use             $this->createException()
+	 *
+	 * @param           array 			$collection
+	 *
+	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+	public function insertPageRevisions($collection) {
+		$timeStamp = time();
+		/** Parameter must be an array */
+		if (!is_array($collection)) {
+			return $this->createException('InvalidParameterValueException', 'Invalid parameter value. Parameter must be an array collection', 'E:S:001');
+		}
+		$countInserts = 0;
+		$insertedItems = array();
+		foreach ($collection as $data) {
+			if ($data instanceof BundleEntity\PageRevision) {
+				$entity = $data;
+				$this->em->persist($entity);
+				$insertedItems[] = $entity;
+				$countInserts++;
+			}
+			else if (is_object($data)) {
+				$entity = new BundleEntity\PageRevision();
+				foreach ($data as $column => $value) {
+					$set = 'set' . $this->translateColumnName($column);
+					switch ($column) {
+						case 'language':
+							$lModel = $this->kernel->getContainer()->get('multilanguagesupport.model');
+							$response = $lModel->getLanguage($value);
+							if (!$response->error->exists) {
+								$entity->$set($response->result->set);
+							}
+							unset($response, $lModel);
+							break;
+						case 'page':
+							$response = $this->getPage($value);
+							if (!$response->error->exist) {
+								$entity->$set($response->result->Set);
+							}
+							unset($response);
+							break;
+						default:
+							$entity->$set($value);
+							break;
+					}
+				}
+				$this->em->persist($entity);
+				$insertedItems[] = $entity;
 
-    /**
-     * @name            insertPages ()
-     *                Inserts one or more pages into database.
-     *
-     * @since            1.0.0
-     * @version         1.1.6
-     * @author          Can Berkol
-     *
-     * @use             $this->createException()
-     *
-     * @param           array $collection Collection of Page entities or array of member detail array.
-     *
-     * @return          array           $response
-     */
-    public function insertPages($collection)
-    {
-        $this->resetResponse();
-        /** Parameter must be an array */
-        if (!is_array($collection)) {
-            return $this->createException('InvalidParameter', 'Array', 'err.invalid.parameter.collection');
-        }
-        $countInserts = 0;
-        $countLocalizations = 0;
-        $insertedItems = array();
-        foreach ($collection as $data) {
-            if ($data instanceof BundleEntity\Page) {
-                $entity = $data;
-                $this->em->persist($entity);
-                $insertedItems[] = $entity;
-                $countInserts++;
-            } else if (is_object($data)) {
-                $localizations = array();
-                $entity = new BundleEntity\Page;
-                if (!property_exists($data, 'site')) {
-                    $data->site = 1;
-                }
-                foreach ($data as $column => $value) {
-                    $localeSet = false;
-                    $set = 'set' . $this->translateColumnName($column);
-                    switch ($column) {
-                        case 'layout':
-                            $response = $this->getLayout($value, 'id');
-                            if (!$response['error']) {
-                                $entity->$set($response['result']['set']);
-                            } else {
-                                new CoreExceptions\EntityDoesNotExistExceoption($this->kernel, $value);
-                            }
-                            unset($response, $sModel);
-                            break;
-                        case 'local':
-                            $localizations[$countInserts]['localizations'] = $value;
-                            $localeSet = true;
-                            $countLocalizations++;
-                            break;
-                        case 'site':
-                            $sModel = $this->kernel->getContainer()->get('sitemanagement.model');
-                            $response = $sModel->getSite($value, 'id');
-                            if (!$response['error']) {
-                                $entity->$set($response['result']['set']);
-                            } else {
-                                new CoreExceptions\SiteDoesNotExistException($this->kernel, $value);
-                            }
-                            unset($response, $sModel);
-                            break;
-                        default:
-                            $entity->$set($value);
-                            break;
-                    }
-                    if ($localeSet) {
-                        $localizations[$countInserts]['entity'] = $entity;
-                    }
-                }
-                $this->em->persist($entity);
-                $insertedItems[] = $entity;
+				$countInserts++;
+			} else {
+				new CoreExceptions\InvalidDataException($this->kernel);
+			}
+		}
+		if($countInserts > 0){
+			$this->em->flush();
+			return new ModelResponse($insertedItems, $countInserts, 0, null, false, 'S:D:003', 'Selected entries have been successfully inserted into database.', $timeStamp, time());
+		}
+		return new ModelResponse(null, 0, 0, null, true, 'E:D:003', 'One or more entities cannot be inserted into database.', $timeStamp, time());
+	}
 
-                $countInserts++;
-            } else {
-                new CoreExceptions\InvalidDataException($this->kernel);
-            }
-        }
-        if ($countInserts > 0) {
-            $this->em->flush();
-        }
-        /** Now handle localizations */
-        if ($countInserts > 0 && $countLocalizations > 0) {
-            $this->insertPageLocalizations($localizations);
-        }
-        /**
-         * Prepare & Return Response
-         */
-        $this->response = array(
-            'rowCount' => $this->response['rowCount'],
-            'result' => array(
-                'set' => $insertedItems,
-                'total_rows' => $countInserts,
-                'last_insert_id' => $entity->getId(),
-            ),
-            'error' => false,
-            'code' => 'scc.db.insert.done',
-        );
-        return $this->response;
-    }
+	/**
+	 * @name            insertPages()
+	 *
+	 * @since           1.0.1
+	 * @version         1.2.1
+	 * @author          Can Berkol
+	 *
+	 * @use             $this->createException()
+	 *
+	 * @param           array 			$collection
+	 *
+	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+	public function insertPages($collection)	{
+		$timeStamp = time();
+		/** Parameter must be an array */
+		if (!is_array($collection)) {
+			return $this->createException('InvalidParameterValueException', 'Invalid parameter value. Parameter must be an array collection', 'E:S:001');
+		}
+		$countInserts = 0;
+		$countLocalizations = 0;
+		$insertedItems = array();
+		$localizations = array();
+		foreach ($collection as $data) {
+			if ($data instanceof BundleEntity\Page) {
+				$entity = $data;
+				$this->em->persist($entity);
+				$insertedItems[] = $entity;
+				$countInserts++;
+			}
+			else if (is_object($data)) {
+				$entity = new BundleEntity\Page();
+				$now = new \DateTime('now', new \DateTimeZone($this->kernel->getContainer()->getParameter('app_timezone')));
+				if(!property_exists($data, 'site')){
+					$data->site = 1;
+				}
+				foreach ($data as $column => $value) {
+					$localeSet = false;
+					$set = 'set' . $this->translateColumnName($column);
+					switch ($column) {
+						case 'local':
+							$localizations[$countInserts]['localizations'] = $value;
+							$localeSet = true;
+							$countLocalizations++;
+							break;
+						case 'layout':
+							$response = $this->getLayout($value);
+							if (!$response->error->exist) {
+								$entity->$set($response->result->set);
+							}
+							unset($response);
+							break;
+						case 'site':
+							$sModel = $this->kernel->getContainer()->get('sitemanagement.model');
+							$response = $sModel->getSite($value);
+							if (!$response->error->exist) {
+								$entity->$set($response->result->set);
+							}
+							else {
+								return $this->createException('EntityDoesNotExist', 'The site with the id / key / domain "'.$value.'" does not exist in database.', 'E:D:002');
+							}
+							unset($response, $sModel);
+							break;
+						default:
+							$entity->$set($value);
+							break;
+					}
+					if ($localeSet) {
+						$localizations[$countInserts]['entity'] = $entity;
+					}
+				}
+				$this->em->persist($entity);
+				$insertedItems[] = $entity;
+
+				$countInserts++;
+			}
+		}
+		if ($countInserts > 0) {
+			$this->em->flush();
+		}
+		/** Now handle localizations */
+		if ($countInserts > 0 && $countLocalizations > 0) {
+			$response = $this->insertPageLocalizations($localizations);
+		}
+		if($countInserts > 0){
+			$this->em->flush();
+			return new ModelResponse($insertedItems, $countInserts, 0, null, false, 'S:D:003', 'Selected entries have been successfully inserted into database.', $timeStamp, time());
+		}
+		return new ModelResponse(null, 0, 0, null, true, 'E:D:003', 'One or more entities cannot be inserted into database.', $timeStamp, time());
+	}
+
     /**
      * @name            isFileAssociatedWithPage()
-     *                  Checks if the file is already associated with the product.
      *
      * @since           1.1.7
-     * @version         1.1.7
+     * @version         1.2.1
      * @author          Can Berkol
      *
      * @use             $this->createException()
      *
-     * @param           mixed       $file       'entity' or 'entity' id
-     * @param           mixed       $page       'entity' or 'entity' id.
+     * @param           mixed       $file
+     * @param           mixed       $page
      * @param           bool        $bypass     true or false
      *
-     * @return          mixed                   bool or $response
+     * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
      */
     public function isFileAssociatedWithPage($file, $page, $bypass = false){
-        $this->resetResponse();
-        /**
-         * Validate Parameters
-         */
-        if (!is_numeric($file) && !$file instanceof FileBundleEntity\File) {
-            return $this->createException('InvalidParameter', 'File', 'err.invalid.parameter.file');
-        }
+        $timeStamp = time();
+        $fModel = new FileService\FileManagementModel($this->kernel, $this->dbConnection, $this->orm);
 
-        if (!is_numeric($page) && !$page instanceof BundleEntity\Page) {
-            return $this->createException('InvalidParameter', 'Page', 'err.invalid.parameter.page');
-        }
-        $fmmodel = new FileService\FileManagementModel($this->kernel, $this->db_connection, $this->orm);
-        /** If no entity is provided as file we need to check if it does exist */
-        if (is_numeric($file)) {
-            $response = $fmmodel->getFile($file, 'id');
-            if ($response['error']) {
-                return $this->createException('EntityDoesNotExist', 'File', 'err.db.file.notexist');
-            }
-            $file = $response['result']['set'];
-        }
-        /** If no entity is provided as product we need to check if it does exist */
-        if (is_numeric($page)) {
-            $response = $this->getPage($page, 'id');
-            if ($response['error']) {
-                return $this->createException('EntityDoesNotExist', 'Product', 'err.db.product.notexist');
-            }
-            $product = $response['result']['set'];
-        }
+		$response = $fModel->getFile($file);
+		if($response->error->exist){
+			return $response;
+		}
+		$file = $response->result->set;
+
+        $response = $this->getPage($page);
+
+		if($response->error->exist){
+			return $response;
+		}
+		$page = $response->result->set;
+
         $found = false;
 
-        $q_str = 'SELECT COUNT(' . $this->entity['files_of_page']['alias'] . ')'
-            . ' FROM ' . $this->entity['files_of_page']['name'] . ' ' . $this->entity['files_of_page']['alias']
-            . ' WHERE ' . $this->entity['files_of_page']['alias'] . '.file = ' . $file->getId()
-            . ' AND ' . $this->entity['files_of_page']['alias'] . '.page = ' . $page->getId();
-        $query = $this->em->createQuery($q_str);
+        $qStr = 'SELECT COUNT(' . $this->entity['fop']['alias'] . ')'
+            . ' FROM ' . $this->entity['fop']['name'] . ' ' . $this->entity['fop']['alias']
+            . ' WHERE ' . $this->entity['fop']['alias'] . '.file = ' . $file->getId()
+            . ' AND ' . $this->entity['fop']['alias'] . '.page = ' . $page->getId();
+        $query = $this->em->createQuery($qStr);
 
         $result = $query->getSingleScalarResult();
 
         /** flush all into database */
         if ($result > 0) {
             $found = true;
-            $code = 'scc.db.entry.exist';
-        } else {
-            $code = 'scc.db.entry.noexist';
         }
-
         if ($bypass) {
             return $found;
         }
-        $this->response = array(
-            'rowCount' => $this->response['rowCount'],
-            'result' => array(
-                'set' => $found,
-                'total_rows' => $result,
-                'last_insert_id' => null,
-            ),
-            'error' => false,
-            'code' => $code,
-        );
-        return $this->response;
-    }
-    /**
-     * @name            listControlPanelThemes ()
-     *                Lists all control panel themes.
-     *
-     * @since            1.0.1
-     * @version         1.1.0
-     * @author          Can Berkol
-     *
-     * @use             $this->listThemes()
-     *
-     * @param           integer $site
-     * @param           array $sort_order
-     * @param           array $limit
-     *
-     * @return          array           $response
-     */
-    public function listControlPanelThemes($sort_order, $limit)
-    {
-        $this->resetResponse();
-        $filter = array(
-            'type' => 'c',
-        );
-        $response = $this->listThemes($filter, $sort_order, $limit);
-        if ($response['error']) {
-            return $response;
-        }
-        $collection = $response['result']['set'];
-        /**
-         * Prepare & Return Response
-         */
-        $this->response = array(
-            'rowCount' => $this->response['rowCount'],
-            'result' => array(
-                'set' => $collection[0],
-                'total_rows' => 1,
-                'last_insert_id' => null,
-            ),
-            'error' => false,
-            'code' => 'scc.db.entry.exist',
-        );
-        return $this->response;
-    }
 
-    /**
-     * @name            listEditablePages ()
-     *                Lists all editable pages | in other words pages with the status "e" and "s".
-     *
-     * @since            1.0.1
-     * @version         1.1.0
-     * @author          Can Berkol
-     *
-     * @use             $this->listPages()
-     *
-     * @param           array $sort_order
-     * @param           array $limit
-     * @param           integer $site
-     *
-     * @return          mixed           $response
-     */
-    public function listEditablePages($sort_order, $limit, $site = 1)
-    {
-        $this->resetResponse();
-        if (isset($site)) {
-            $filter['site'] = $site;
-        }
-        $filter = array(
-            'status' => array('in' => array('e', 's')),
-        );
-        $response = $this->listPages($filter, $sort_order, $limit);
-        if ($response['error']) {
-            return $response;
-        }
-        $collection = $response['result']['set'];
-        /**
-         * Prepare & Return Response
-         */
-        $this->response = array(
-            'rowCount' => $this->response['rowCount'],
-            'result' => array(
-                'set' => $collection[0],
-                'total_rows' => 1,
-                'last_insert_id' => null,
-            ),
-            'error' => false,
-            'code' => 'scc.db.entry.exist',
-        );
-        return $this->response;
+		return new ModelResponse($found, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
     }
 
     /**
      * @name            listFilesOfPage ()
-     *                Lists file - page associations and related data.
      *
-     * @since            1.0.1
-     * @version         1.1.0
+     * @since           1.0.1
+     * @version         1.2.1
      * @author          Can Berkol
      *
      * @use             $this->createException()
      *
-     * @param           array $filter Multi-dimensional array
+     * @param           array 				$filter
+     * @param           array				$sortOrder
+	 * @param           array 				$limit
      *
-     *                                  Example:
-     *                                  $filter = array(
-     *                                      'address_type'  => array('in' => array("2,5),
-     *                                                               'not_in' => array(4)
-     *                                                              ),
-     *                                      'member'        => array('in' => array(Member1, Member2)),
-     *                                      'tax_id'        => 21312412,
-     *                                  );
-     *
-     *                                  Each array element defines an AND condition.
-     *                                  Each array element contains another array with keys
-     *                                  in and not_in to include and to exclude data.
-     *                                  Each nested array element that is containted in condition states
-     *                                  an OR condition.
-     *
-     * @param           array $sortorder Array
-     *                                      'column'            => 'asc|desc'
-     * @param           array $limit
-     *                                      start
-     *                                      count
-     *
-     * @param           mixed $site id or Site Entity.
-     *
-     * @return          array           $response
+     * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
      */
-    public function listFilesOfPage($filter = null, $sortorder = null, $limit = null, $site = 1)
-    {
-        $this->resetResponse();
-        if (isset($site)) {
-            $filter['site'] = $site;
-        }
-        if (!is_array($sortorder) && !is_null($sortorder)) {
-            return $this->createException('InvalidParameterException', 'err.invalid.parameter.sortorder', '');
-            return $this->response;
-        }
-        /**
-         * Check if it is needed to join two or more tables.
-         */
-        /**         * ************************************************** */
-        $order_str = '';
-        $where_str = '';
-        $group_str = '';
-        /**
-         * Start creating the query.
-         */
-        $query_str = 'SELECT ' . $this->entity['files_of_page']['alias']
-            . ' FROM ' . $this->entity['files_of_page']['name'] . ' ' . $this->entity['files_of_page']['alias'];
+    public function listFilesOfPage($page, $filter = null, $sortOrder = null, $limit = null){
+        $timeStamp = time();
+		if(!is_array($sortOrder) && !is_null($sortOrder)){
+			return $this->createException('InvalidSortOrderException', '$sortOrder must be an array with key => value pairs where value can only be "asc" or "desc".', 'E:S:002');
+		}
+
+		$response = $this->getPage($page);
+		if($response->error->exist){
+			return $response;
+		}
+		$page = $response->result->set;
+        $oStr = $wStr = $gStr = '';
+
+        $qStr = 'SELECT '.$this->entity['fop']['alias']
+            		.' FROM '.$this->entity['fop']['name'].' '.$this->entity['fop']['alias'];
         /**
          * Prepare ORDER BY part of query.
          */
-        if ($sortorder != null) {
-            foreach ($sortorder as $column => $direction) {
+        if ($sortOrder != null) {
+            foreach ($sortOrder as $column => $direction) {
                 switch ($column) {
                     default:
-                        $order_str .= ' ' . $this->entity['files_of_page']['alias'] . '.' . $column . ' ' . $direction . ', ';
+                        $oStr .= ' '.$this->entity['fop']['alias'].'.'.$column.' '.$direction.', ';
                         break;
                 }
             }
-            $order_str = rtrim($order_str, ', ');
-            $order_str = ' ORDER BY ' . $order_str . ' ';
+			$oStr = rtrim($oStr, ', ');
+			$oStr = ' ORDER BY ' . $oStr . ' ';
         }
-        if ($filter != null) {
-            $and = '(';
-            foreach ($filter as $column => $value) {
-                /** decide which alias to use */
-                switch ($column) {
-                    default:
-                        $alias = $this->entity['files_of_page']['alias'];
-                        break;
-                }
-                /** If value is array we need to run through all values with a loop */
-                if (is_array($value)) {
-                    $or = '(';
-                    foreach ($value as $key => $sub_value) {
-                        if (!is_array($sub_value)) {
-                            new CoreExceptions\InvalidFilterException($this->kernel, '');
-                            break;
-                        }
-                        $tmp_sub_value = array();
-                        foreach ($sub_value as $item) {
-                            if (is_object($item)) {
-                                $tmp_sub_value[] = $item->getId();
-                            } else {
-                                $tmp_sub_value[] = $item;
-                            }
-                        }
-                        if (count($tmp_sub_value) > 0) {
-                            $sub_value = $tmp_sub_value;
-                        }
-                        $or .= ' ' . $alias . '.' . $column;
-                        switch ($key) {
-                            case 'starts':
-                                $or .= ' LIKE \'' . $sub_value[0] . '%\' ';
-                                break;
-                            case 'ends':
-                                $or .= ' LIKE \'%' . $sub_value[0] . '\' ';
-                                break;
-                            case 'contains':
-                                $or .= ' LIKE \'%' . $sub_value[0] . '%\' ';
-                                break;
-                            case 'in':
-                            case 'include':
-                                $in = implode(',', $sub_value);
-                                $or .= ' IN(' . $in . ') ';
-                                break;
-                            case 'not_in':
-                            case 'exclude':
-                                $not_in = implode(',', $sub_value);
-                                $or .= ' NOT IN(' . $not_in . ') ';
-                                break;
-                        }
-                        $or .= ') OR ';
-                    }
-                    $or = rtrim($or, ' OR');
-                    $and .= $or;
-                } else {
-                    if (is_object($value)) {
-                        $value = $value->getId();
-                    }
-                    if (is_numeric($value)) {
+		$filter[] = array(
+			'glue' => 'and',
+			'condition' => array(
+				array(
+					'glue' => 'and',
+					'condition' => array('column' => $this->entity['fop']['alias'].'.id', 'comparison' => '=', 'value' => $page->getId()),
+				)
+			)
+		);
+		if(!is_null($filter)){
+			$fStr = $this->prepareWhere($filter);
+			$wStr .= ' WHERE '.$fStr;
+		}
 
-                        $and .= ' ' . $alias . '.' . $column . ' = ' . $value;
-                    } else {
-                        $and .= ' ' . $alias . '.' . $column . ' = \'' . $value . '\'';
-                    }
-                }
-                $and .= ' AND ';
-            }
-            $and = rtrim($and, ' AND') . ')';
-            $where_str .= ' WHERE ' . $and;
-        }
+        $qStr .= $wStr.$gStr.$oStr;
+        $q = $this->em->createQuery($qStr);
+		$q = $this->addLimit($q, $limit);
 
-        $query_str .= $where_str . $group_str . $order_str;
-        $query = $this->em->createQuery($query_str);
+        $result = $q->getResult();
 
-        if ($limit != null) {
-            if (isset($limit['start']) && isset($limit['count'])) {
-                /** If limit is set */
-                $query->setFirstResult($limit['start']);
-                $query->setMaxResults($limit['count']);
-            } else {
-                new CoreExceptions\InvalidLimitException($this->kernel, '');
-            }
-        }
-        /**
-         * Prepare & Return Response
-         */
-        $result = $query->getResult();
-
-        $total_rows = count($result);
-        if ($total_rows < 1) {
-            $this->response['code'] = 'err.db.entry.notexist';
-            return $this->response;
-        }
-        $this->response = array(
-            'rowCount' => $this->response['rowCount'],
-            'result' => array(
-                'set' => $result,
-                'total_rows' => $total_rows,
-                'last_insert_id' => null,
-            ),
-            'error' => false,
-            'code' => 'scc.db.entry.exist',
-        );
-        return $this->response;
-    }
+		$totalRows = count($result);
+		if ($totalRows < 1) {
+			return new ModelResponse(null, 0, 0, null, true, 'E:D:002', 'No entries found in database that matches to your criterion.', $timeStamp, time());
+		}
+		return new ModelResponse($result, $totalRows, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+	}
 
     /**
-     * @name            listFrontendThemes ()
-     *                Lists all control panel themes.
+     * @name            listItemsOfNavigation()
      *
-     * @since            1.0.1
-     * @version         1.1.0
-     * @author          Can Berkol
-     *
-     * @use             $this->listThemes()
-     *
-     * @param           array $sort_order
-     * @param           array $limit
-     *
-     * @return          array           $response
-     */
-    public function listFrontendThemes($sort_order, $limit)
-    {
-        $this->resetResponse();
-        $filter = array(
-            'type' => 'f',
-        );
-        $response = $this->listThemes($filter, $sort_order, $limit);
-        if ($response['error']) {
-            return $response;
-        }
-        $collection = $response['result']['set'];
-        /**
-         * Prepare & Return Response
-         */
-        $this->response = array(
-            'rowCount' => $this->response['rowCount'],
-            'result' => array(
-                'set' => $collection[0],
-                'total_rows' => 1,
-                'last_insert_id' => null,
-            ),
-            'error' => false,
-            'code' => 'scc.db.entry.exist',
-        );
-        return $this->response;
-    }
-
-    /**
-     * @name            listItemsOfNavigation ()
-     *                Lists all items of a navigation.
-     *
-     * @since            1.0.1
-     * @version         1.1.4
+     * @since           1.0.1
+     * @version         1.2.1
+	 *
      * @author          Can Berkol
      *
      * @use             $this->listNavigationItemsOfNavigation()
      *
-     * @param           mixed $navigation
-     * @param           mixed $level Top = Parent, bottom = last children, all = all
-     * @param           array $sort_order
-     * @param           array $limit
+     * @param           mixed 		$navigation
+     * @param           mixed 		$level
+     * @param           array 		$sortOrder
+     * @param           array 		$limit
      *
-     * @return          array           $response
+     * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
      */
-    public function listItemsOfNavigation($navigation, $level = 'top', $sort_order = null, $limit = null)
-    {
-        return $this->listNavigationItemsOfNavigation($navigation, $level, $sort_order, $limit);
+    public function listItemsOfNavigation($navigation, $level = null, $sortOrder = null, $limit = null){
+        return $this->listNavigationItemsOfNavigation($navigation, $level, $sortOrder, $limit);
     }
 
     /**
      * @name            listLayouts ()
-     *                List layouts from database based on a variety of conditions.
      *
-     * @since            1.0.1
-     * @version         1.1.0
+     * @since           1.0.1
+     * @version         1.2.1
      * @author          Can Berkol
      *
      * @use             $this->createException()
      *
-     * @param           array $filter Multi-dimensional array
+     * @param           array 		$filter
+     * @param           array 		$sortOrder
+     * @param           array 		$limit
      *
-     *                                  Example:
-     *                                  $filter = array(
-     *                                      'address_type'  => array('in' => array(2,5),
-     *                                                               'not_in' => array(4)
-     *                                                              ),
-     *                                      'member'        => array('in' => array(Member1, Member2)),
-     *                                      'tax_id'        => 21312412,
-     *                                  );
-     *
-     *                                  Each array element defines an AND condition.
-     *                                  Each array element contains another array with keys
-     *                                  in and not_in to include and to exclude data.
-     *                                  Each nested array element that is containted in condition states
-     *                                  an OR condition.
-     *
-     * @param           array $sortorder Array
-     *                                      'column'            => 'asc|desc'
-     * @param           array $limit
-     *                                      start
-     *                                      count
-     *
-     * @param           mixed $site id or Site Entity.
-     *
-     * @return          array           $response
+     * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
      */
-    public function listLayouts($filter = null, $sortorder = null, $limit = null, $site = 1)
-    {
-        if (isset($site)) {
-            $filter['site'] = $site;
-        }
-        $this->resetResponse();
-        if (!is_array($sortorder) && !is_null($sortorder)) {
-            new CoreExceptions\InvalidSortOrderException($this->kernel, '');
-            $this->response['code'] = 'err.invalid.parameter.sortorder';
-            return $this->response;
-        }
-        /**
-         * Check if it is needed to join two or more tables.
-         */
-        $join_needed = false;
-        if (isset($filter['url_key']) || isset($filter['url_key'])) {
-            $join_needed = true;
-        }
-        /**
-         * Add filter checks to below to set join_needed to true.
-         */
-        /**         * ************************************************** */
-        $order_str = '';
-        $where_str = '';
-        $group_str = '';
-        /**
-         * Start creating the query.
-         */
-        if ($join_needed) {
-            $query_str = 'SELECT DISTINCT ' . $this->entity['layout_localization']['alias'] . ', ' . $this->entity['layout']['alias']
-                . ' FROM ' . $this->entity['layout_localization']['name'] . ' ' . $this->entity['layout_localization']['alias']
-                . ' JOIN ' . $this->entity['layout_localization']['alias'] . '.layout ' . $this->entity['layout']['alias'];
-        } else {
-            $query_str = 'SELECT ' . $this->entity['layout']['alias'] . ' FROM ' . $this->entity['layout']['name'] . ' ' . $this->entity['layout']['alias'];
-        }
-        /**
-         * Prepare ORDER BY part of query.
-         */
-        if ($sortorder != null) {
-            foreach ($sortorder as $column => $direction) {
-                switch ($column) {
-                    case 'url_key':
-                        $order_str .= ' ' . $this->entity['layout_localization']['alias'] . '.' . $column . ' ' . $direction . ', ';
-                        break;
-                    default:
-                        $order_str .= ' ' . $this->entity['layout']['alias'] . '.' . $column . ' ' . $direction . ', ';
-                        break;
-                }
-            }
-            $order_str = rtrim($order_str, ', ');
-            $order_str = ' ORDER BY ' . $order_str . ' ';
-        }
-        if ($filter != null) {
-            $and = '(';
-            foreach ($filter as $column => $value) {
-                /** decide which alias to use */
-                switch ($column) {
-                    case 'url_key':
-                        $alias = $this->entity['layout_localization']['alias'];
-                        break;
-                    default:
-                        $alias = $this->entity['layout']['alias'];
-                        break;
-                }
-                /** If value is array we need to run through all values with a loop */
-                if (is_array($value)) {
-                    $or = '(';
-                    foreach ($value as $key => $sub_value) {
-                        if (!is_array($sub_value)) {
-                            new CoreExceptions\InvalidFilterException($this->kernel, '');
-                            break;
-                        }
-                        $tmp_sub_value = array();
-                        foreach ($sub_value as $item) {
-                            if (is_object($item)) {
-                                $tmp_sub_value[] = $item->getId();
-                            } else {
-                                $tmp_sub_value[] = $item;
-                            }
-                        }
-                        if (count($tmp_sub_value) > 0) {
-                            $sub_value = $tmp_sub_value;
-                        }
-                        $or .= ' ' . $alias . '.' . $column;
-                        switch ($key) {
-                            case 'starts':
-                                $or .= ' LIKE \'' . $sub_value[0] . '%\' ';
-                                break;
-                            case 'ends':
-                                $or .= ' LIKE \'%' . $sub_value[0] . '\' ';
-                                break;
-                            case 'contains':
-                                $or .= ' LIKE \'%' . $sub_value[0] . '%\' ';
-                                break;
-                            case 'in':
-                            case 'include':
-                                $in = implode(',', $sub_value);
-                                $or .= ' IN(' . $in . ') ';
-                                break;
-                            case 'not_in':
-                            case 'exclude':
-                                $not_in = implode(',', $sub_value);
-                                $or .= ' NOT IN(' . $not_in . ') ';
-                                break;
-                        }
-                        $or .= ') OR ';
-                    }
-                    $or = rtrim($or, ' OR');
-                    $and .= $or;
-                } else {
-                    if (is_object($value)) {
-                        $value = $value->getId();
-                    }
-                    if (is_numeric($value)) {
+	public function listLayouts($filter = null, $sortOrder = null, $limit = null){
+		$timeStamp = time();
+		if(!is_array($sortOrder) && !is_null($sortOrder)){
+			return $this->createException('InvalidSortOrderException', '$sortOrder must be an array with key => value pairs where value can only be "asc" or "desc".', 'E:S:002');
+		}
+		$oStr = $wStr = $gStr = $fStr = '';
 
-                        $and .= ' ' . $alias . '.' . $column . ' = ' . $value;
-                    } else {
-                        $and .= ' ' . $alias . '.' . $column . ' = \'' . $value . '\'';
-                    }
-                }
-                $and .= ' AND ';
-            }
-            $and = rtrim($and, ' AND') . ')';
-            $where_str .= ' WHERE ' . $and;
-        }
+		$qStr = 'SELECT '.$this->entity['l']['alias'].', '.$this->entity['l']['alias']
+			.' FROM '.$this->entity['ll']['name'].' '.$this->entity['ll']['alias']
+			.' JOIN '.$this->entity['ll']['alias'].'.layout '.$this->entity['l']['alias'];
 
-        $query_str .= $where_str . $group_str . $order_str;
-        $query = $this->em->createQuery($query_str);
+		if(!is_null($sortOrder)){
+			foreach($sortOrder as $column => $direction){
+				switch($column){
+					case 'id':
+					case 'code':
+					case 'bundle_name':
+					case 'site':
+					case 'theme':
+						$column = $this->entity['l']['alias'].'.'.$column;
+						break;
+					case 'name':
+					case 'url_key':
+						$column = $this->entity['ll']['alias'].'.'.$column;
+						break;
+				}
+				$oStr .= ' '.$column.' '.strtoupper($direction).', ';
+			}
+			$oStr = rtrim($oStr, ', ');
+			$oStr = ' ORDER BY '.$oStr.' ';
+		}
 
-        if ($limit != null) {
-            if (isset($limit['start']) && isset($limit['count'])) {
-                /** If limit is set */
-                $query->setFirstResult($limit['start']);
-                $query->setMaxResults($limit['count']);
-            } else {
-                new CoreExceptions\InvalidLimitException($this->kernel, '');
-            }
-        }
-        /**
-         * Prepare & Return Response
-         */
-        $result = $query->getResult();
-        if ($join_needed) {
-            $collection = array();
-            foreach ($result as $compound_entity) {
-                $collection[] = $compound_entity->getLayout();
-            }
-            $result = $collection;
-        }
+		if(!is_null($filter)){
+			$fStr = $this->prepareWhere($filter);
+			$wStr .= ' WHERE '.$fStr;
+		}
 
-        $total_rows = count($result);
-        if ($total_rows < 1) {
-            $this->response['code'] = 'err.db.entity.notexist';
-            return $this->response;
-        }
-        $this->response = array(
-            'rowCount' => $this->response['rowCount'],
-            'result' => array(
-                'set' => $result,
-                'total_rows' => $total_rows,
-                'last_insert_id' => null,
-            ),
-            'error' => false,
-            'code' => 'scc.db.entity.exist',
-        );
-        return $this->response;
-    }
+		$qStr .= $wStr.$gStr.$oStr;
+		$q = $this->em->createQuery($qStr);
+		$q = $this->addLimit($q, $limit);
 
-    /**
-     * @name            listMemberEditablePages ()
-     *                Lists only member editable pages | in other words pages with the status "e".
-     *
-     * @since            1.0.1
-     * @version         1.1.0
-     * @author          Can Berkol
-     *
-     * @use             $this->listPages()
-     *
-     * @param           array $sort_order
-     * @param           array $limit
-     * @param           integer $site
-     *
-     * @return          mixed           $response
-     */
-    public function listMemberEditablePages($sort_order, $limit, $site = 1)
-    {
-        $this->resetResponse();
-        if (isset($site)) {
-            $filter['site'] = $site;
-        }
-        $filter = array(
-            'status' => array('in' => array('e')),
-        );
-        $response = $this->listPages($filter, $sort_order, $limit);
-        if ($response['error']) {
-            return $response;
-        }
-        $collection = $response['result']['set'];
-        /**
-         * Prepare & Return Response
-         */
-        $this->response = array(
-            'rowCount' => $this->response['rowCount'],
-            'result' => array(
-                'set' => $collection[0],
-                'total_rows' => 1,
-                'last_insert_id' => null,
-            ),
-            'error' => false,
-            'code' => 'scc.db.entry.found',
-        );
-        return $this->response;
-    }
+		$result = $q->getResult();
+
+		$entities = array();
+		foreach($result as $entry){
+			$id = $entry->getLayout()->getId();
+			if(!isset($unique[$id])){
+				$entities[] = $entry->getLayout();
+			}
+		}
+		$totalRows = count($entities);
+		if ($totalRows < 1) {
+			return new ModelResponse(null, 0, 0, null, true, 'E:D:002', 'No entries found in database that matches to your criterion.', $timeStamp, time());
+		}
+		return new ModelResponse($entities, $totalRows, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+	}
 
     /**
      * @name            listLayoutsOfSite ()
-     *                Lists that that belong to a specific site.
      *
-     * @since            1.0.1
-     * @version         1.1.0
+     * @since           1.0.1
+     * @version         1.2.1
      * @author          Can Berkol
      *
      * @use             $this->listLayouts()
      *
-     * @param           integer $site
-     * @param           array $sort_order
-     * @param           array $limit
+     * @param           mixed 		$site
+     * @param           array 		$filter
+     * @param           array 		$sortOrder
+     * @param           array 		$limit
      *
-     * @return          array           $response
+     * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
      */
-    public function listLayoutsOfSite($site = 1, $sort_order, $limit)
-    {
-        $this->resetResponse();
-        if (isset($site)) {
-            $filter['site'] = $site;
-        }
-        $response = $this->listLayouts($filter, $sort_order, $limit);
-        if ($response['error']) {
-            return $response;
-        }
-        $collection = $response['result']['set'];
-        /**
-         * Prepare & Return Response
-         */
-        $this->response = array(
-            'rowCount' => $this->response['rowCount'],
-            'result' => array(
-                'set' => $collection[0],
-                'total_rows' => 1,
-                'last_insert_id' => null,
-            ),
-            'error' => false,
-            'code' => 'scc.db.entry.exist',
-        );
-        return $this->response;
+    public function listLayoutsOfSite($site, $filter = null, $sortOrder = null, $limit = null)    {
+        $timeStamp = time();
+		$sModel = $this->kernel->getContainer()->get('sitemanagement.model');
+        $response = $sModel->getSite($site);
+		if($response->error->exist){
+			return $response;
+		}
+		$site = $response->result->set;
+		$filter[] = array(
+			'glue' => 'and',
+			'condition' => array(
+				array(
+					'glue' => 'and',
+					'condition' => array('column' => $this->entity['l']['alias'].'.site', 'comparison' => '=', 'value' => $site->getId()),
+				)
+			)
+		);
+        $response = $this->listLayouts($filter, $sortOrder, $limit);
+ 		$response->stats->execution->start = $timeStamp;
+ 		$response->stats->execution->end = time();
+
+		return $response;
     }
 
     /**
-     * @name            listLayotusOfTheme ()
-     *                Lists that that belong to a specific site..
+     * @name            listLayoutsOfTheme()
      *
-     * @since            1.0.1
-     * @version         1.1.0
+     * @since           1.0.1
+     * @version         1.2.1
      * @author          Can Berkol
      *
      * @use             $this->listLayouts()
      *
-     * @throws          InvalidEntityException
+     * @param           mixed 		$theme
+	 * @param			array		$filter
+     * @param           array 		$sortOrder
+     * @param           array 		$limit
      *
-     * @param           mixed $theme Entity or id
-     * @param           array $sort_order
-     * @param           array $limit
-     *
-     * @return          array           $response
-     */
-    public function listLayoutsOfTheme($theme, $sort_order, $limit)
-    {
-        $this->resetResponse();
-        if (is_object($theme) && $theme instanceof BundleEntity\Theme) {
-            $theme = $theme->getId();
-        }
-        $filter = array(
-            'theme' => $theme,
-        );
-        $response = $this->listLayouts($filter, $sort_order, $limit);
-        if ($response['error']) {
-            return $response;
-        }
-        $collection = $response['result']['set'];
-        /**
-         * Prepare & Return Response
-         */
-        $this->response = array(
-            'rowCount' => $this->response['rowCount'],
-            'result' => array(
-                'set' => $collection[0],
-                'total_rows' => 1,
-                'last_insert_id' => null,
-            ),
-            'error' => false,
-            'code' => 'scc.db.entry.exist',
-        );
-        return $this->response;
-    }
+	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+	public function listLayoutsOfTheme($theme, $filter = null, $sortOrder = null, $limit = null)    {
+		$timeStamp = time();
+		$response = $this->getTheme($theme);
+		if($response->error->exist){
+			return $response;
+		}
+		$theme = $response->result->set;
+		$filter[] = array(
+			'glue' => 'and',
+			'condition' => array(
+				array(
+					'glue' => 'and',
+					'condition' => array('column' => $this->entity['l']['alias'].'.theme', 'comparison' => '=', 'value' => $theme->getId()),
+				)
+			)
+		);
+		$response = $this->listLayouts($filter, $sortOrder, $limit);
+		$response->stats->execution->start = $timeStamp;
+		$response->stats->execution->end = time();
+
+		return $response;
+	}
 
     /**
-     * @name            listModules ()
-     *                List modules from database based on a variety of conditions.
+     * @name            listModules()
      *
-     * @since            1.0.1
-     * @version         1.1.0
+     * @since           1.0.1
+     * @version         1.2.1
      * @author          Can Berkol
      *
      * @use             $this->createException
      *
-     * @param           array $filter Multi-dimensional array
+     * @param           array 		$filter
+     * @param           array 		$sortOrder
+     * @param           array 		$limit
      *
-     *                                  Example:
-     *                                  $filter = array(
-     *                                      'address_type'  => array('in' => array(2,5),
-     *                                                               'not_in' => array(4)
-     *                                                              ),
-     *                                      'member'        => array('in' => array(Member1, Member2)),
-     *                                      'tax_id'        => 21312412,
-     *                                  );
-     *
-     *                                  Each array element defines an AND condition.
-     *                                  Each array element contains another array with keys
-     *                                  in and not_in to include and to exclude data.
-     *                                  Each nested array element that is containted in condition states
-     *                                  an OR condition.
-     *
-     * @param           array $sortorder Array
-     *                                      'column'            => 'asc|desc'
-     * @param           array $limit
-     *                                      start
-     *                                      count
-     *
-     * @param           mixed $site id or Site Entity.
-     *
-     * @return          array           $response
+     * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
      */
-    public function listModules($filter = null, $sortorder = null, $limit = null, $site = 1)
-    {
-        if (isset($site)) {
-            $filter['site'] = $site;
-        }
-        $this->resetResponse();
-        if (!is_array($sortorder) && !is_null($sortorder)) {
-            return $this->createException('InvalidParameterException', 'err.invalid.parameter.sortorder', '');
-        }
-        /**
-         * Check if it is needed to join two or more tables.
-         */
-        $join_needed = false;
-        if (isset($filter['url_key']) || isset($filter['url_key'])) {
-            $join_needed = true;
-        }
-        /**
-         * Add filter checks to below to set join_needed to true.
-         */
-        /**         * ************************************************** */
-        $order_str = '';
-        $where_str = '';
-        $group_str = '';
-        /**
-         * Start creating the query.
-         */
-        if ($join_needed) {
-            $query_str = 'SELECT DISTINCT ' . $this->entity['module_localization']['alias'] . ', ' . $this->entity['module']['alias']
-                . ' FROM ' . $this->entity['module_localization']['name'] . ' ' . $this->entity['module_localization']['alias']
-                . ' JOIN ' . $this->entity['module_localization']['alias'] . '.page ' . $this->entity['module']['alias'];
-        } else {
-            $query_str = 'SELECT ' . $this->entity['module']['alias'] . ' FROM ' . $this->entity['module']['name'] . ' ' . $this->entity['module']['alias'];
-        }
-        /**
-         * Prepare ORDER BY part of query.
-         */
-        if ($sortorder != null) {
-            foreach ($sortorder as $column => $direction) {
-                switch ($column) {
-                    case 'url_key':
-                        $order_str .= ' ' . $this->entity['module_localization']['alias'] . '.' . $column . ' ' . $direction . ', ';
-                        break;
-                    default:
-                        $order_str .= ' ' . $this->entity['module']['alias'] . '.' . $column . ' ' . $direction . ', ';
-                        break;
-                }
-            }
-            $order_str = rtrim($order_str, ', ');
-            $order_str = ' ORDER BY ' . $order_str . ' ';
-        }
-        if ($filter != null) {
-            $and = '(';
-            foreach ($filter as $column => $value) {
-                /** decide which alias to use */
-                switch ($column) {
-                    case 'url_key':
-                        $alias = $this->entity['module_localization']['alias'];
-                        break;
-                    default:
-                        $alias = $this->entity['module']['alias'];
-                        break;
-                }
-                /** If value is array we need to run through all values with a loop */
-                if (is_array($value)) {
-                    $or = '(';
-                    foreach ($value as $key => $sub_value) {
-                        if (!is_array($sub_value)) {
-                            new CoreExceptions\InvalidFilterException($this->kernel, '');
-                            break;
-                        }
-                        $tmp_sub_value = array();
-                        foreach ($sub_value as $item) {
-                            if (is_object($item)) {
-                                $tmp_sub_value[] = $item->getId();
-                            } else {
-                                $tmp_sub_value[] = $item;
-                            }
-                        }
-                        if (count($tmp_sub_value) > 0) {
-                            $sub_value = $tmp_sub_value;
-                        }
-                        $or .= ' ' . $alias . '.' . $column;
-                        switch ($key) {
-                            case 'starts':
-                                $or .= ' LIKE \'' . $sub_value[0] . '%\' ';
-                                break;
-                            case 'ends':
-                                $or .= ' LIKE \'%' . $sub_value[0] . '\' ';
-                                break;
-                            case 'contains':
-                                $or .= ' LIKE \'%' . $sub_value[0] . '%\' ';
-                                break;
-                            case 'in':
-                            case 'include':
-                                $in = implode(',', $sub_value);
-                                $or .= ' IN(' . $in . ') ';
-                                break;
-                            case 'not_in':
-                            case 'exclude':
-                                $not_in = implode(',', $sub_value);
-                                $or .= ' NOT IN(' . $not_in . ') ';
-                                break;
-                        }
-                        $or .= ') OR ';
-                    }
-                    $or = rtrim($or, ' OR');
-                    $and .= $or;
-                } else {
-                    if (is_object($value)) {
-                        $value = $value->getId();
-                    }
-                    if (is_numeric($value)) {
+	public function listModules($filter = null, $sortOrder = null, $limit = null){
+		$timeStamp = time();
+		if(!is_array($sortOrder) && !is_null($sortOrder)){
+			return $this->createException('InvalidSortOrderException', '$sortOrder must be an array with key => value pairs where value can only be "asc" or "desc".', 'E:S:002');
+		}
+		$oStr = $wStr = $gStr = $fStr = '';
 
-                        $and .= ' ' . $alias . '.' . $column . ' = ' . $value;
-                    } else {
-                        $and .= ' ' . $alias . '.' . $column . ' = \'' . $value . '\'';
-                    }
-                }
-                $and .= ' AND ';
-            }
-            $and = rtrim($and, ' AND') . ')';
-            $where_str .= ' WHERE ' . $and;
-        }
+		$qStr = 'SELECT '.$this->entity['m']['alias'].', '.$this->entity['m']['alias']
+			.' FROM '.$this->entity['ml']['name'].' '.$this->entity['ml']['alias']
+			.' JOIN '.$this->entity['ml']['alias'].'.module '.$this->entity['m']['alias'];
 
-        $query_str .= $where_str . $group_str . $order_str;
-        $query = $this->em->createQuery($query_str);
+		if(!is_null($sortOrder)){
+			foreach($sortOrder as $column => $direction){
+				switch($column){
+					case 'id':
+					case 'code':
+					case 'bundle_name':
+					case 'site':
+					case 'theme':
+						$column = $this->entity['m']['alias'].'.'.$column;
+						break;
+					case 'name':
+					case 'url_key':
+						$column = $this->entity['ml']['alias'].'.'.$column;
+						break;
+				}
+				$oStr .= ' '.$column.' '.strtoupper($direction).', ';
+			}
+			$oStr = rtrim($oStr, ', ');
+			$oStr = ' ORDER BY '.$oStr.' ';
+		}
 
-        if ($limit != null) {
-            if (isset($limit['start']) && isset($limit['count'])) {
-                /** If limit is set */
-                $query->setFirstResult($limit['start']);
-                $query->setMaxResults($limit['count']);
-            } else {
-                new CoreExceptions\InvalidLimitException($this->kernel, '');
-            }
-        }
-        /**
-         * Prepare & Return Response
-         */
-        $result = $query->getResult();
-        if ($join_needed) {
-            $collection = array();
-            foreach ($result as $compound_entity) {
-                $collection[] = $compound_entity->getPage();
-            }
-            $result = $collection;
-        }
+		if(!is_null($filter)){
+			$fStr = $this->prepareWhere($filter);
+			$wStr .= ' WHERE '.$fStr;
+		}
 
-        $total_rows = count($result);
-        if ($total_rows < 1) {
-            $this->response['code'] = 'err.db.entry.notexist';
-            return $this->response;
-        }
-        $this->response = array(
-            'rowCount' => $this->response['rowCount'],
-            'result' => array(
-                'set' => $result,
-                'total_rows' => $total_rows,
-                'last_insert_id' => null,
-            ),
-            'error' => false,
-            'code' => 'scc.db.entry.exist',
-        );
-        return $this->response;
-    }
+		$qStr .= $wStr.$gStr.$oStr;
+		$q = $this->em->createQuery($qStr);
+		$q = $this->addLimit($q, $limit);
+
+		$result = $q->getResult();
+
+		$entities = array();
+		foreach($result as $entry){
+			$id = $entry->getModule()->getId();
+			if(!isset($unique[$id])){
+				$entities[] = $entry->getModule();
+			}
+		}
+		$totalRows = count($entities);
+		if ($totalRows < 1) {
+			return new ModelResponse(null, 0, 0, null, true, 'E:D:002', 'No entries found in database that matches to your criterion.', $timeStamp, time());
+		}
+		return new ModelResponse($entities, $totalRows, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+	}
 
     /**
-     * @name            listModulesOfPageLayouts ()
-     *                Lists modules located at a specific page and layout.
+     * @name            listModulesOfPageLayouts()
      *
-     * @since            1.0.1
-     * @version         1.1.0
+     * @since           1.0.1
+     * @version         1.2.5
      * @author          Can Berkol
      *
      * @use             $this->createException()
      *
-     * @param           array $filter Multi-dimensional array
-     *
-     *                                  Example:
-     *                                  $filter = array(
-     *                                      'address_type'  => array('in' => array(2,5),
-     *                                                               'not_in' => array(4)
-     *                                                              ),
-     *                                      'member'        => array('in' => array(Member1, Member2)),
-     *                                      'tax_id'        => 21312412,
-     *                                  );
-     *
-     *                                  Each array element defines an AND condition.
-     *                                  Each array element contains another array with keys
-     *                                  in and not_in to include and to exclude data.
-     *                                  Each nested array element that is containted in condition states
-     *                                  an OR condition.
-     *
-     * @param           array $sortorder Array
-     *                                      'column'            => 'asc|desc'
-     * @param           array $limit
-     *                                      start
-     *                                      count
-     *
-     * @param           mixed $site id or Site Entity.
+     * @param           array 			$filter
+     * @param           array 			$sortOrder
+     * @param           array 			$limit
      *
      * @return          array           $response
      */
-    public function listModulesOfPageLayouts($filter = null, $sortorder = null, $limit = null, $site = 1)
-    {
-        $this->resetResponse();
-        /**
-         * Check if it is needed to join two or more tables.
-         */
-        /**         * ************************************************** */
-        $order_str = '';
-        $where_str = '';
-        $group_str = '';
-        /**
-         * Start creating the query.
-         */
-        $query_str = 'SELECT ' . $this->entity['modules_of_layout']['alias'] . ', ' . $this->entity['module']['alias']
-            . ', ' . $this->entity['layout']['alias']
-            . ' FROM ' . $this->entity['modules_of_layout']['name'] . ' ' . $this->entity['modules_of_layout']['alias']
-            . ' JOIN ' . $this->entity['modules_of_layout']['alias'] . '.module ' . $this->entity['module']['alias']
-            . ' JOIN ' . $this->entity['modules_of_layout']['alias'] . '.layout ' . $this->entity['layout']['alias'];
-        /**
-         * Prepare ORDER BY part of query.
-         */
-        if ($sortorder != null) {
-            foreach ($sortorder as $column => $direction) {
-                switch ($column) {
-                    default:
-                        $order_str .= ' ' . $this->entity['modules_of_layout']['alias'] . '.' . $column . ' ' . $direction . ', ';
-                        break;
-                }
-            }
-            $order_str = rtrim($order_str, ', ');
-            $order_str = ' ORDER BY ' . $order_str . ' ';
-        }
-        if ($filter != null) {
-            $and = '(';
-            foreach ($filter as $column => $value) {
-                /** decide which alias to use */
-                switch ($column) {
-                    default:
-                        $alias = $this->entity['modules_of_layout']['alias'];
-                        break;
-                }
-                /** If value is array we need to run through all values with a loop */
-                if (is_array($value)) {
-                    $or = '(';
-                    foreach ($value as $key => $sub_value) {
-                        if (!is_array($sub_value)) {
-                            new CoreExceptions\InvalidFilterException($this->kernel, '');
-                            break;
-                        }
-                        $tmp_sub_value = array();
-                        foreach ($sub_value as $item) {
-                            if (is_object($item)) {
-                                $tmp_sub_value[] = $item->getId();
-                            } else {
-                                $tmp_sub_value[] = $item;
-                            }
-                        }
-                        if (count($tmp_sub_value) > 0) {
-                            $sub_value = $tmp_sub_value;
-                        }
-                        $or .= ' ' . $alias . '.' . $column;
-                        switch ($key) {
-                            case 'starts':
-                                $or .= ' LIKE \'' . $sub_value[0] . '%\' ';
-                                break;
-                            case 'ends':
-                                $or .= ' LIKE \'%' . $sub_value[0] . '\' ';
-                                break;
-                            case 'contains':
-                                $or .= ' LIKE \'%' . $sub_value[0] . '%\' ';
-                                break;
-                            case 'in':
-                            case 'include':
-                                $in = implode(',', $sub_value);
-                                $or .= ' IN(' . $in . ') ';
-                                break;
-                            case 'not_in':
-                            case 'exclude':
-                                $not_in = implode(',', $sub_value);
-                                $or .= ' NOT IN(' . $not_in . ') ';
-                                break;
-                        }
-                        $or .= ') OR ';
-                    }
-                    $or = rtrim($or, ' OR');
-                    $and .= $or;
-                } else {
-                    if (is_object($value)) {
-                        $value = $value->getId();
-                    }
-                    if (is_numeric($value)) {
+    public function listModulesOfPageLayouts($filter = null, $sortOrder = null, $limit = null){
+		$timeStamp = time();
+		if(!is_array($sortOrder) && !is_null($sortOrder)){
+			return $this->createException('InvalidSortOrderException', '$sortOrder must be an array with key => value pairs where value can only be "asc" or "desc".', 'E:S:002');
+		}
+		$oStr = $wStr = $gStr = $fStr = '';
 
-                        $and .= ' ' . $alias . '.' . $column . ' = ' . $value;
-                    } else {
-                        $and .= ' ' . $alias . '.' . $column . ' = \'' . $value . '\'';
-                    }
-                }
-                $and .= ' AND ';
-            }
-            $and = rtrim($and, ' AND') . ')';
-            $where_str .= ' WHERE ' . $and;
-        }
+		$qStr = 'SELECT '.$this->entity['mol']['alias'].', '.$this->entity['p']['alias'] . ', '.$this->entity['l']['alias']
+            			. ' FROM ' . $this->entity['mol']['name'] . ' ' . $this->entity['mol']['alias']
+            			. ' JOIN ' . $this->entity['mol']['alias'] . '.page ' . $this->entity['p']['alias']
+           				. ' JOIN ' . $this->entity['mol']['alias'] . '.layout ' . $this->entity['l']['alias'];
 
-        $query_str .= $where_str . $group_str . $order_str;
-        $query = $this->em->createQuery($query_str);
-//        $query->setFetchMode('BiberLtd\Bundle\ContentManagementBundle\Entity\ModulesOfLayout', 'module', 'EAGER');
-        if ($limit != null) {
-            if (isset($limit['start']) && isset($limit['count'])) {
-                /** If limit is set */
-                $query->setFirstResult($limit['start']);
-                $query->setMaxResults($limit['count']);
-            } else {
-                new CoreExceptions\InvalidLimitException($this->kernel, '');
-            }
-        }
-        /**
-         * Prepare & Return Response
-         */
-        $result = $query->getResult();
+		if(!is_null($sortOrder)){
+			foreach($sortOrder as $column => $direction){
+				switch($column){
+					case 'id':
+					case 'layout':
+					case 'module':
+					case 'section':
+					case 'sort_order':
+					case 'page':
+					case 'style':
+						$column = $this->entity['mol']['alias'].'.'.$column;
+						break;
+				}
+				$oStr .= ' '.$column.' '.strtoupper($direction).', ';
+			}
+			$oStr = rtrim($oStr, ', ');
+			$oStr = ' ORDER BY '.$oStr.' ';
+		}
 
-        $total_rows = count($result);
-        if ($total_rows < 1) {
-            $this->response['code'] = 'err.db.entry.notexist';
-            return $this->response;
-        }
-        $this->response = array(
-            'rowCount' => $this->response['rowCount'],
-            'result' => array(
-                'set' => $result,
-                'total_rows' => $total_rows,
-                'last_insert_id' => null,
-            ),
-            'error' => false,
-            'code' => 'scc.db.entry.exist',
-        );
-        return $this->response;
-    }
+		if(!is_null($filter)){
+			$fStr = $this->prepareWhere($filter);
+			$wStr .= ' WHERE '.$fStr;
+		}
+
+        $qStr .= $wStr.$gStr.$oStr;
+        $q = $this->em->createQuery($qStr);
+		$q = $this->addLimit($q, $limit);
+        $result = $q->getResult();
+
+		$totalRows = count($result);
+		if ($totalRows < 1) {
+			return new ModelResponse(null, 0, 0, null, true, 'E:D:002', 'No entries found in database that matches to your criterion.', $timeStamp, time());
+		}
+		return new ModelResponse($result, $totalRows, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+	}
 
     /**
-     * @name            listModulesOfPageLayouts ()
-     *                Lists modules located at a specific page and layout and return the modules grouped by section.
-     *
-     * @since            1.0.1
-     * @version         1.1.3
+     * @name            listModulesOfPageLayoutsGroupedBySection()
+	 *
+     * @since           1.0.1
+     * @version         1.2.5
      * @author          Can Berkol
      *
      * @use             $this->createException()
      *
-     * @param           array $page Page Entity
-     * @param           array $sortorder Array
-     *                                      'column'            => 'asc|desc'
-     * @param           array $limit
+     * @param           array 		$page
+     * @param           array 		$sortOrder
+     * @param           array 		$limit
      *
-     * @return          array           $response
+     * @return          array		$response
      */
-    public function listModulesOfPageLayoutsGroupedBySection($page, $sortorder = null, $limit = null)
-    {
-        $this->resetResponse();
-        if (!$page instanceof BundleEntity\Page || !$page || is_null($page)) {
-            return $this->createException('InvalidParameterException', 'BundleEntity\\Page','err.invalid.parameter.page');
-        }
-        $filter['page'] = $page->getId();
-        $response = $this->listModulesOfPageLayouts($filter, $sortorder, $limit);
-        if ($response['error']) {
+    public function listModulesOfPageLayoutsGroupedBySection($page, $sortOrder = null, $limit = null){
+        $timeStamp = time();
+		$response = $this->getPage($page);
+		if($response->error->exist){
+			return $response;
+		}
+		$page = $response->result->set;
+		$filter[] = array(
+			'glue' => 'and',
+			'condition' => array(
+				array(
+					'glue' => 'and',
+					'condition' => array('column' => $this->entity['p']['alias'].'.id', 'comparison' => '=', 'value' => $page->getId()),
+				)
+			)
+		);
+        $response = $this->listModulesOfPageLayouts($filter, $sortOrder, $limit);
+        if ($response->error->exist) {
             return $response;
         }
-        $mops = $response['result']['set'];
+        $mops = $response->result->set;
         $modules = array();
         $count = 0;
         foreach ($mops as $mop) {
             $modules[$mop->getSection()][$count]['entity'] = $mop->getModule();
-            $modules[$mop->getSection()][$count]['contents'] = $mop->getLocalizations();
             $modules[$mop->getSection()][$count]['style'] = $mop->getStyle();
             $count++;
         }
-        return $this->response = array(
-            'rowCount' => $this->response['rowCount'],
-            'result' => array(
-                'set' => $modules,
-                'total_rows' => $count,
-                'last_insert_id' => null,
-            ),
-            'error' => false,
-            'code' => 'scc.db.entry.exist',
-        );
-    }
+
+		if ($count < 1) {
+			return new ModelResponse(null, 0, 0, null, true, 'E:D:002', 'No entries found in database that matches to your criterion.', $timeStamp, time());
+		}
+		return new ModelResponse($modules, $count, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+	}
 
     /**
      * @name            listModulesOfSite ()
-     *                Lists modules that belong to a site.
      *
-     * @since            1.0.1
-     * @version         1.1.0
+     * @since           1.0.1
+     * @version         1.2.1
      * @author          Can Berkol
      *
      * @use             $this->listThemes()
      *
-     * @param           mixed $site id or entity
-     * @param           array $sort_order
-     * @param           array $limit
+     * @param           mixed 		$site
+     * @param           array		$filter
+     * @param           array 		$sortOrder
+     * @param           array 		$limit
      *
-     * @return          array           $response
-     */
-    public function listModulesOfSite($site, $sort_order, $limit)
-    {
-        $this->resetResponse();
-        if (is_object($site)) {
-            $site = $site->getId();
-        }
-        $filter = array(
-            'site' => $site,
-        );
-        $response = $this->listModules($filter, $sort_order, $limit);
-        if ($response['error']) {
-            return $response;
-        }
-        $collection = $response['result']['set'];
-        /**
-         * Prepare & Return Response
-         */
-        $this->response = array(
-            'rowCount' => $this->response['rowCount'],
-            'result' => array(
-                'set' => $collection[0],
-                'total_rows' => 1,
-                'last_insert_id' => null,
-            ),
-            'error' => false,
-            'code' => 'scc.db.entry.exist',
-        );
-        return $this->response;
-    }
+	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+	public function listModulesOfSite($site, $filter = null, $sortOrder = null, $limit = null)    {
+		$timeStamp = time();
+		$sModel = $this->kernel->getContainer()->get('sitemanagement.model');
+		$response = $sModel->getSite($site);
+		if($response->error->exist){
+			return $response;
+		}
+		$site = $response->result->set;
+		$filter[] = array(
+			'glue' => 'and',
+			'condition' => array(
+				array(
+					'glue' => 'and',
+					'condition' => array('column' => $this->entity['m']['alias'].'.site', 'comparison' => '=', 'value' => $site->getId()),
+				)
+			)
+		);
+		$response = $this->listModules($filter, $sortOrder, $limit);
+		$response->stats->execution->start = $timeStamp;
+		$response->stats->execution->end = time();
 
-    /**
-     * @name            listModulesOfTheme ()
-     *                Lists modules that belong to a theme.
-     *
-     * @since            1.0.1
-     * @version         1.1.0
-     * @author          Can Berkol
-     *
-     * @use             $this->listModules()
-     *
-     * @param           mixed $theme id or entity
-     * @param           array $sort_order
-     * @param           array $limit
-     *
-     * @return          array           $response
-     */
-    public function listModulesOfTheme($theme, $sort_order, $limit)
-    {
-        $this->resetResponse();
-        if (is_object($theme) && $theme instanceof BundleEntity\Theme) {
-            $theme = $theme->getId();
-        }
-        $filter = array(
-            'theme' => $theme,
-        );
-        $response = $this->listtModules($filter, $sort_order, $limit);
-        if ($response['error']) {
-            return $response;
-        }
-        $collection = $response['result']['set'];
-        /**
-         * Prepare & Return Response
-         */
-        $this->response = array(
-            'rowCount' => $this->response['rowCount'],
-            'result' => array(
-                'set' => $collection[0],
-                'total_rows' => 1,
-                'last_insert_id' => null,
-            ),
-            'error' => false,
-            'code' => 'scc.db.entry.exist',
-        );
-        return $this->response;
-    }
+		return $response;
+	}
 
-    /**
-     * @name            listNavigationItems ()
-     *                List navigation items from database based on a variety of conditions.
-     *
-     * @since            1.0.1
-     * @version         1.1.0
-     * @author          Can Berkol
-     *
-     * @use             $this->createException()
-     *
-     * @param           array $filter Multi-dimensional array
-     *
-     * @param           array $sortorder Array
-     *                                      'column'            => 'asc|desc'
-     * @param           array $limit start  count
-     *
-     * @param           mixed $site id or Site Entity.
-     *
-     * @return          array           $response
-     */
-    public function listNavigationItems($filter = null, $sortorder = null, $limit = null)
-    {
-        $this->resetResponse();
+	/**
+	 * @name            listModulesOfTheme()
+	 *
+	 * @since           1.0.1
+	 * @version         1.2.1
+	 * @author          Can Berkol
+	 *
+	 * @use             $this->listLayouts()
+	 *
+	 * @param           mixed 		$theme
+	 * @param			array		$filter
+	 * @param           array 		$sortOrder
+	 * @param           array 		$limit
+	 *
+	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+	public function listModulesOfTheme($theme, $filter = null, $sortOrder = null, $limit = null)    {
+		$timeStamp = time();
+		$response = $this->getTheme($theme);
+		if($response->error->exist){
+			return $response;
+		}
+		$theme = $response->result->set;
+		$filter[] = array(
+			'glue' => 'and',
+			'condition' => array(
+				array(
+					'glue' => 'and',
+					'condition' => array('column' => $this->entity['m']['alias'].'.theme', 'comparison' => '=', 'value' => $theme->getId()),
+				)
+			)
+		);
+		$response = $this->listModules($filter, $sortOrder, $limit);
+		$response->stats->execution->start = $timeStamp;
+		$response->stats->execution->end = time();
 
-        if (!is_array($sortorder) && !is_null($sortorder)) {
-            return $this->createException('InvalidParameterException', 'err.invalid.parameter.sortorder', '');
-        }
-        /**
-         * Check if it is needed to join two or more tables.
-         */
-        $join_needed = false;
-        if (isset($filter['url_key']) || isset($filter['url_key'])) {
-            $join_needed = true;
-        }
+		return $response;
+	}
 
-        $order_str = '';
-        $where_str = '';
-        $group_str = '';
-        /**
-         * Start creating the query.
-         */
-        if ($join_needed) {
-            $query_str = 'SELECT DISTINCT ' . $this->entity['navigation_item_localization']['alias'] . ', ' . $this->entity['navigation_item']['alias'] . ', ' . $this->entity['navigation']['alias']
-                . ' FROM ' . $this->entity['navigation_item_localization']['name'] . ' ' . $this->entity['navigation_item_localization']['alias']
-                . ' JOIN ' . $this->entity['navigation_item_localization']['alias'] . '.navigation_item ' . $this->entity['navigation_item']['alias']
-                . ' JOIN ' . $this->entity['navigation_item']['alias'] . '.navigation ' . $this->entity['navigation']['alias'];
-        } else {
-            $query_str = 'SELECT ' . $this->entity['navigation_item']['alias'] . ', ' . $this->entity['navigation']['alias'] . ', ' . $this->entity['navigation_item_localization']['alias']
-                . ' FROM ' . $this->entity['navigation_item']['name'] . ' ' . $this->entity['navigation_item']['alias']
-                . ' JOIN ' . $this->entity['navigation_item']['alias'] . '.navigation ' . $this->entity['navigation']['alias']
-                . ' JOIN ' . $this->entity['navigation_item']['alias'] . '.localizations ' . $this->entity['navigation_item_localization']['alias'];
-        }
-        /**
-         * Prepare ORDER BY part of query.
-         */
-        if ($sortorder != null) {
-            foreach ($sortorder as $column => $direction) {
-                switch ($column) {
-                    case 'name':
-                        $order_str .= ' ' . $this->entity['navigation_item_localization']['alias'] . '.' . $column . ' ' . $direction . ', ';
-                        break;
-                    default:
-                        $order_str .= ' ' . $this->entity['navigation_item']['alias'] . '.' . $column . ' ' . $direction . ', ';
-                        break;
-                }
-            }
-            $order_str = rtrim($order_str, ', ');
-            $order_str = ' ORDER BY ' . $order_str . ' ';
-        }
-        /**
-         * Prepare WHERE section of query.
-         */
-        if ($filter != null) {
-            $filter_str = $this->prepareWhere($filter);
-            $where_str .= ' WHERE ' . $filter_str;
-        }
-        $query_str .= $where_str . $group_str . $order_str;
-        $query = $this->em->createQuery($query_str);
-        if ($limit != null) {
-            if (isset($limit['start']) && isset($limit['count'])) {
-                /** If limit is set */
-                $query->setFirstResult($limit['start']);
-                $query->setMaxResults($limit['count']);
-            } else {
-                new CoreExceptions\InvalidLimitException($this->kernel, '');
-            }
-        }
-        /**
-         * Prepare & Return Response
-         */
-        $result = $query->getResult();
-        if ($join_needed) {
-            $collection = array();
-            foreach ($result as $compound_entity) {
-                $collection[] = $compound_entity->getNavigationItem();
-            }
-            $result = $collection;
-        }
+	/**
+	 * @name            listNavigationItems()
+	 *
+	 * @since           1.0.1
+	 * @version         1.2.1
+	 * @author          Can Berkol
+	 *
+	 * @use             $this->createException
+	 *
+	 * @param           array 		$filter
+	 * @param           array 		$sortOrder
+	 * @param           array 		$limit
+	 *
+	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+	public function listNavigationItems($filter = null, $sortOrder = null, $limit = null){
+		$timeStamp = time();
+		if(!is_array($sortOrder) && !is_null($sortOrder)){
+			return $this->createException('InvalidSortOrderException', '$sortOrder must be an array with key => value pairs where value can only be "asc" or "desc".', 'E:S:002');
+		}
+		$oStr = $wStr = $gStr = $fStr = '';
 
-        $total_rows = count($result);
-        if ($total_rows < 1) {
-            $this->response['code'] = 'err.db.entry.notexist';
-            return $this->response;
-        }
-        $this->response = array(
-            'result' => array(
-                'set' => $result,
-                'total_rows' => $total_rows,
-                'last_insert_id' => null,
-            ),
-            'error' => false,
-            'code' => 'scc.db.entry.exist',
-        );
-        return $this->response;
-    }
+		$qStr = 'SELECT '.$this->entity['ni']['alias'].', '.$this->entity['ni']['alias']
+			.' FROM '.$this->entity['nil']['name'].' '.$this->entity['nil']['alias']
+			.' JOIN '.$this->entity['nil']['alias'].'.navigation '.$this->entity['ni']['alias'];
+
+		if(!is_null($sortOrder)){
+			foreach($sortOrder as $column => $direction){
+				switch($column){
+					case 'id':
+					case 'url':
+					case 'target':
+					case 'sort_order':
+					case 'navigation':
+					case 'page':
+						$column = $this->entity['ni']['alias'].'.'.$column;
+						break;
+					case 'title':
+					case 'url_key':
+						$column = $this->entity['nil']['alias'].'.'.$column;
+						break;
+				}
+				$oStr .= ' '.$column.' '.strtoupper($direction).', ';
+			}
+			$oStr = rtrim($oStr, ', ');
+			$oStr = ' ORDER BY '.$oStr.' ';
+		}
+
+		if(!is_null($filter)){
+			$fStr = $this->prepareWhere($filter);
+			$wStr .= ' WHERE '.$fStr;
+		}
+
+		$qStr .= $wStr.$gStr.$oStr;
+		$q = $this->em->createQuery($qStr);
+		$q = $this->addLimit($q, $limit);
+
+		$result = $q->getResult();
+
+		$entities = array();
+		foreach($result as $entry){
+			$id = $entry->getNavigationItem()->getId();
+			if(!isset($unique[$id])){
+				$entities[] = $entry->getNavigationItem();
+			}
+		}
+		$totalRows = count($entities);
+		if ($totalRows < 1) {
+			return new ModelResponse(null, 0, 0, null, true, 'E:D:002', 'No entries found in database that matches to your criterion.', $timeStamp, time());
+		}
+		return new ModelResponse($entities, $totalRows, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+	}
 
     /**
      * @name            listNavigationItemsOfNavigation ()
-     *                Lists that navigation items of navigation
      *
-     * @since            1.0.1
-     * @version         1.1.4
+     * @since           1.0.1
+     * @version         1.2.1
      * @author          Can Berkol
      *
      * @use             $this->listNavigationItems()
      *
-     * @throws          InvalidEntityException
+     * @param           mixed 		$navigation
+     * @param           mixed 		$level
+     * @param           array 		$sortOrder
+     * @param           array 		$limit
      *
-     * @param           mixed $navigation id, entity
-     * @param           mixed $level
-     * @param           array $sort_order
-     * @param           array $limit
-     *
-     * @return          array           $response
+     * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
      */
-    public function listNavigationItemsOfNavigation($navigation, $level = 'top', $sort_order = null, $limit = null)
-    {
-        $this->resetResponse();
-        if (is_object($navigation) && $navigation instanceof BundleEntity\Navigation) {
-            $navigation = $navigation->getId();
-        } else if (!is_numeric($navigation) && is_string($navigation)) {
-            $response = $this->getNavigation($navigation, 'code');
-            if (!$response['error']) {
-                $navigationObj = $response['result']['set'];
-            }
-            $navigation = $navigationObj->getId();
-        }
-        unset($navigationObj, $response);
-        $filter = array();
+    public function listNavigationItemsOfNavigation($navigation, $level = 'top', $sortOrder = null, $limit = null){
+        $timeStamp = time();
+		$response = $this->getNavigation($navigation);
+		if($response->error->exist){
+			return $response;
+		}
+        $navigation = $response->result->set;
         $filter[] = array(
             'glue' => 'and',
             'condition' => array(
                 array(
                     'glue' => 'and',
-                    'condition' => array('column' => $this->entity['navigation_item']['alias'].'.navigation', 'comparison' => '=', 'value' => $navigation),
+                    'condition' => array('column' => $this->entity['ni']['alias'].'.navigation', 'comparison' => '=', 'value' => $navigation->getId()),
                 )
             )
         );
@@ -4220,823 +2633,1235 @@ class ContentManagementModel extends CoreModel
             'condition' => array(
                 array(
                     'glue' => 'and',
-                    'condition' => array('column' => $this->entity['navigation_item']['alias'].'.is_child', 'comparison' => '=', 'value' => $isChild),
+                    'condition' => array('column' => $this->entity['ni']['alias'].'.is_child', 'comparison' => '=', 'value' => $isChild),
                 )
             )
         );
-        return $this->listNavigationItems($filter, $sort_order, $limit);
+        $response =  $this->listNavigationItems($filter, $sortOrder, $limit);
+		$response->stats->execution->start = $timeStamp;
+		$response->stats->execution->end = time();
+
+		return $response;
     }
 
     /**
-     * @name            listNavigationItemsOfParent ()
-     *                Lists that that belong to a specific site..
+     * @name            listNavigationItemsOfParent()
      *
-     * @since            1.0.1
-     * @version         1.1.0
+     * @since           1.0.1
+     * @version         1.2.1
      * @author          Can Berkol
      *
      * @use             $this->listNavigationItems()
      *
-     * @param           mixed $parent id, entity
-     * @param           array $sort_order
-     * @param           array $limit
+     * @param           mixed 		$parent
+     * @param           array 		$sortOrder
+     * @param           array 		$limit
      *
-     * @return          array           $response
+     * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
      */
-    public function listNavigationItemsOfParent($parent = 1, $sort_order = null, $limit = null)
-    {
-        $this->resetResponse();
-        if (is_object($parent) && $parent instanceof BundleEntity\NavigationItem) {
-            $parent = $parent->getId();
-        } else if (!is_numeric($parent) && is_string($parent)) {
-            $response = $this->getNavigation($parent, 'code');
-            if (!$response['error']) {
-                $parentObj = $response['result']['set'];
-            }
-            $parent = $parentObj->getId();
-        }
-        unset($parentObj);
-        $filter = array();
+    public function listNavigationItemsOfParent($parent, $sortOrder = null, $limit = null){
+        $timeStamp = time();
+		$response = $this->getNavigationItem($parent);
+		if($response->error->exist){
+			return $response;
+		}
+		$parent = $response->result->set;
         $filter[] = array(
             'glue' => 'and',
             'condition' => array(
                 array(
                     'glue' => 'and',
-                    'condition' => array('column' => $this->entity['navigation_item']['alias'].'.parent', 'comparison' => '=', 'value' => $parent),
+                    'condition' => array('column' => $this->entity['ni']['alias'].'.parent', 'comparison' => '=', 'value' => $parent->getId()),
                 )
             )
         );
-        $response = $this->listNavigationItems($filter, $sort_order, $limit);
-        if ($response['error']) {
-            return $response;
-        }
-        $collection = $response['result']['set'];
-        /**
-         * Prepare & Return Response
-         */
-        $this->response = array(
-            'result' => array(
-                'set' => $collection,
-                'total_rows' => count($collection),
-                'last_insert_id' => null,
-            ),
-            'error' => false,
-            'code' => 'scc.db.entry.exist',
-        );
-        return $this->response;
+        $response = $this->listNavigationItems($filter, $sortOrder, $limit);
+		$response->stats->execution->start = $timeStamp;
+		$response->stats->execution->end = time();
+
+		return $response;
     }
 
     /**
-     * @name            listNavigations ()
-     *                List navigations from database based on a variety of conditions.
+     * @name            listNavigations()
      *
-     * @since            1.0.1
-     * @version         1.1.2
+     * @since           1.0.1
+     * @version         1.2.1
      * @author          Can Berkol
      *
      * @use             $this->createException()
      *
-     * @param           array $filter Multi-dimensional array
+     * @param           array 			$filter
+     * @param           array 			$sortOrder
+     * @param           array 			$limit
      *
-     *                                  Example:
-     *                                  $filter = array(
-     *                                      'address_type'  => array('in' => array(2,5),
-     *                                                               'not_in' => array(4)
-     *                                                              ),
-     *                                      'member'        => array('in' => array(Member1, Member2)),
-     *                                      'tax_id'        => 21312412,
-     *                                  );
-     *
-     *                                  Each array element defines an AND condition.
-     *                                  Each array element contains another array with keys
-     *                                  in and not_in to include and to exclude data.
-     *                                  Each nested array element that is containted in condition states
-     *                                  an OR condition.
-     *
-     * @param           array $sortorder Array
-     *                                      'column'            => 'asc|desc'
-     * @param           array $limit
-     *                                      start
-     *                                      count
-     *
-     * @param           mixed $site id or Site Entity.
-     *
-     * @return          array           $response
+     * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
      */
-    public function listNavigations($filter = null, $sortorder = null, $limit = null, $site = 1)
-    {
-        $filter[] = array(
-            'glue' => 'and',
-            'condition' => array(
-                array(
-                    'glue' => 'and',
-                    'condition' => array('column' =>$this->entity['navigation']['alias'].'.site' , 'comparison' => '=', 'value' =>$site ),
-                )
-            )
-        );
-        $this->resetResponse();
-        if (!is_array($sortorder) && !is_null($sortorder)) {
-            return $this->createException('InvalidParameterException', 'err.invalid.parameter.sortorder', '');
-        }
-        /**
-         * Check if it is needed to join two or more tables.
-         */
-        $join_needed = false;
-        if (isset($filter['url_key']) || isset($filter['url_key'])) {
-            $join_needed = true;
-        }
-        /**
-         * Add filter checks to below to set join_needed to true.
-         */
-        /**         * ************************************************** */
-        $order_str = '';
-        $where_str = '';
-        $group_str = '';
-        /**
-         * Start creating the query.
-         */
-        if ($join_needed) {
-            $query_str = 'SELECT DISTINCT ' . $this->entity['navigation_localization']['alias'] . ', ' . $this->entity['navigation']['alias']
-                . ' FROM ' . $this->entity['navigation_localization']['name'] . ' ' . $this->entity['navigation_localization']['alias']
-                . ' JOIN ' . $this->entity['navigation_localization']['alias'] . '.navigation ' . $this->entity['navigation']['alias'];
-        } else {
-            $query_str = 'SELECT ' . $this->entity['navigation']['alias'] . ' FROM ' . $this->entity['navigation']['name'] . ' ' . $this->entity['navigation']['alias'];
-        }
-        /**
-         * Prepare ORDER BY part of query.
-         */
-        if ($sortorder != null) {
-            foreach ($sortorder as $column => $direction) {
-                switch ($column) {
-                    case 'url_key':
-                        $order_str .= ' ' . $this->entity['navigation_localization']['alias'] . '.' . $column . ' ' . $direction . ', ';
-                        break;
-                    default:
-                        $order_str .= ' ' . $this->entity['navigation']['alias'] . '.' . $column . ' ' . $direction . ', ';
-                        break;
-                }
-            }
-            $order_str = rtrim($order_str, ', ');
-            $order_str = ' ORDER BY ' . $order_str . ' ';
-        }
-        /**
-         * Prepare WHERE section of query.
-         */
-        if ($filter != null) {
-            $filter_str = $this->prepareWhere($filter);
-            $where_str .= ' WHERE ' . $filter_str;
-        }
-        $query_str .= $where_str . $group_str . $order_str;
-        $query = $this->em->createQuery($query_str);
+	public function listNavigations($filter = null, $sortOrder = null, $limit = null){
+		$timeStamp = time();
+		if(!is_array($sortOrder) && !is_null($sortOrder)){
+			return $this->createException('InvalidSortOrderException', '$sortOrder must be an array with key => value pairs where value can only be "asc" or "desc".', 'E:S:002');
+		}
+		$oStr = $wStr = $gStr = $fStr = '';
 
+		$qStr = 'SELECT '.$this->entity['n']['alias'].', '.$this->entity['nl']['alias']
+			.' FROM '.$this->entity['nl']['name'].' '.$this->entity['nl']['alias']
+			.' JOIN '.$this->entity['nl']['alias'].'.navigation '.$this->entity['n']['alias'];
 
-        if ($limit != null) {
-            if (isset($limit['start']) && isset($limit['count'])) {
-                /** If limit is set */
-                $query->setFirstResult($limit['start']);
-                $query->setMaxResults($limit['count']);
-            } else {
-                new CoreExceptions\InvalidLimitException($this->kernel, '');
-            }
-        }
-        /**
-         * Prepare & Return Response
-         */
-        $result = $query->getResult();
-        if ($join_needed) {
-            $collection = array();
-            foreach ($result as $compound_entity) {
-                $collection[] = $compound_entity->getNavigation();
-            }
-            $result = $collection;
-        }
+		if(!is_null($sortOrder)){
+			foreach($sortOrder as $column => $direction){
+				switch($column){
+					case 'id':
+					case 'code':
+					case 'site':
+					case 'date_added':
+					case 'date_updated':
+					case 'date_removed':
+						$column = $this->entity['n']['alias'].'.'.$column;
+						break;
+					case 'name':
+					case 'url_key':
+						$column = $this->entity['nl']['alias'].'.'.$column;
+						break;
+				}
+				$oStr .= ' '.$column.' '.strtoupper($direction).', ';
+			}
+			$oStr = rtrim($oStr, ', ');
+			$oStr = ' ORDER BY '.$oStr.' ';
+		}
 
-        $total_rows = count($result);
-        if ($total_rows < 1) {
-            $this->response['code'] = 'err.db.ntry.notexist';
-            return $this->response;
-        }
-        $this->response = array(
-            'rowCount' => $this->response['rowCount'],
-            'result' => array(
-                'set' => $result,
-                'total_rows' => $total_rows,
-                'last_insert_id' => null,
-            ),
-            'error' => false,
-            'code' => 'scc.db.entry.exist',
-        );
-        return $this->response;
-    }
+		if(!is_null($filter)){
+			$fStr = $this->prepareWhere($filter);
+			$wStr .= ' WHERE '.$fStr;
+		}
+
+		$qStr .= $wStr.$gStr.$oStr;
+		$q = $this->em->createQuery($qStr);
+		$q = $this->addLimit($q, $limit);
+
+		$result = $q->getResult();
+
+		$entities = array();
+		foreach($result as $entry){
+			$id = $entry->getNavigation()->getId();
+			if(!isset($unique[$id])){
+				$entities[] = $entry->getNavigation();
+			}
+		}
+		$totalRows = count($entities);
+		if ($totalRows < 1) {
+			return new ModelResponse(null, 0, 0, null, true, 'E:D:002', 'No entries found in database that matches to your criterion.', $timeStamp, time());
+		}
+		return new ModelResponse($entities, $totalRows, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+	}
+
+	/**
+	 * @name            listPageRevisions()
+	 *
+	 * @since           1.1.9
+	 * @version         1.2.1
+	 * @author          Can Berkol
+	 *
+	 * @use             $this->createException()
+	 *
+	 * @param           array 			$filter
+	 * @param           array 			$sortOrder
+	 * @param           array 			$limit
+	 *
+	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+	public function listPageRevisions($filter = null, $sortOrder = null, $limit = null){
+		$timeStamp = time();
+		if(!is_array($sortOrder) && !is_null($sortOrder)){
+			return $this->createException('InvalidSortOrderException', '$sortOrder must be an array with key => value pairs where value can only be "asc" or "desc".', 'E:S:002');
+		}
+		$oStr = $wStr = $gStr = $fStr = '';
+
+		$qStr = 'SELECT '.$this->entity['pr']['alias'].', '.$this->entity['pr']['alias']
+			.' FROM '.$this->entity['pr']['name'].' '.$this->entity['pr']['alias'];
+
+		if(!is_null($sortOrder)){
+			foreach($sortOrder as $column => $direction){
+				switch($column){
+					case 'page':
+					case 'language':
+					case 'title':
+					case 'url_key':
+					case 'meta_title':
+					case 'revision_number':
+					case 'date_added':
+					case 'date_removed':
+						$column = $this->entity['pr']['alias'].'.'.$column;
+						break;
+				}
+				$oStr .= ' '.$column.' '.strtoupper($direction).', ';
+			}
+			$oStr = rtrim($oStr, ', ');
+			$oStr = ' ORDER BY '.$oStr.' ';
+		}
+
+		if(!is_null($filter)){
+			$fStr = $this->prepareWhere($filter);
+			$wStr .= ' WHERE '.$fStr;
+		}
+
+		$qStr .= $wStr.$gStr.$oStr;
+		$q = $this->em->createQuery($qStr);
+		$q = $this->addLimit($q, $limit);
+
+		$result = $q->getResult();
+
+		$totalRows = count($result);
+		if ($totalRows < 1) {
+			return new ModelResponse(null, 0, 0, null, true, 'E:D:002', 'No entries found in database that matches to your criterion.', $timeStamp, time());
+		}
+		return new ModelResponse($result, $totalRows, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+	}
+    /**
+     * @name            listPages()
+     *
+     * @since           1.0.0
+     * @version         1.2.4
+     * @author          Can Berkol
+     *
+     * @use             $this->createException()
+     *
+     * @param           array 			$filter
+     * @param           array 			$sortOrder
+     * @param           array 			$limit
+     *
+     * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+     */
+	public function listPages($filter = null, $sortOrder = null, $limit = null){
+		$timeStamp = time();
+		if(!is_array($sortOrder) && !is_null($sortOrder)){
+			return $this->createException('InvalidSortOrderException', '$sortOrder must be an array with key => value pairs where value can only be "asc" or "desc".', 'E:S:002');
+		}
+		$oStr = $wStr = $gStr = $fStr = '';
+
+		$qStr = 'SELECT '.$this->entity['p']['alias'].', '.$this->entity['pl']['alias']
+			.' FROM '.$this->entity['pl']['name'].' '.$this->entity['pl']['alias']
+			.' JOIN '.$this->entity['pl']['alias'].'.page '.$this->entity['p']['alias'];
+
+		if(!is_null($sortOrder)){
+			foreach($sortOrder as $column => $direction){
+				switch($column){
+					case 'id':
+					case 'code':
+					case 'status':
+					case 'bundle_name':
+						$column = $this->entity['p']['alias'].'.'.$column;
+						break;
+					case 'name':
+					case 'url_key':
+						$column = $this->entity['pl']['alias'].'.'.$column;
+						break;
+				}
+				$oStr .= ' '.$column.' '.strtoupper($direction).', ';
+			}
+			$oStr = rtrim($oStr, ', ');
+			$oStr = ' ORDER BY '.$oStr.' ';
+		}
+
+		if(!is_null($filter)){
+			$fStr = $this->prepareWhere($filter);
+			$wStr .= ' WHERE '.$fStr;
+		}
+
+		$qStr .= $wStr.$gStr.$oStr;
+		$q = $this->em->createQuery($qStr);
+		$q = $this->addLimit($q, $limit);
+
+		$result = $q->getResult();
+
+		$entities = array();
+		foreach($result as $entry){
+			$id = $entry->getPage()->getId();
+			if(!isset($unique[$id])){
+				$entities[] = $entry->getPage();
+			}
+		}
+		$totalRows = count($entities);
+		if ($totalRows < 1) {
+			return new ModelResponse(null, 0, 0, null, true, 'E:D:002', 'No entries found in database that matches to your criterion.', $timeStamp, time());
+		}
+		return new ModelResponse($entities, $totalRows, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+	}
 
     /**
-     * @name            listNotEditablePages ()
-     *                Lists all editable pages | in other words pages with the status "e" and "s".
+     * @name            listPagesOfLayout()
      *
-     * @since            1.0.1
-     * @version         1.1.0
+     * @since           1.0.1
+     * @version         1.2.1
      * @author          Can Berkol
      *
      * @use             $this->listPages()
+
      *
-     * @param           array $sort_order
-     * @param           array $limit
-     * @param           integer $site
-     *
-     * @return          mixed           $response
+     * @param           mixed 			$layout
+	 * @param           array           $sortOrder
+	 * @param 			array			$limit
+	 *
+     * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
      */
-    public function listNotEditablePages($sort_order, $limit, $site = 1)
-    {
-        $this->resetResponse();
-        if (isset($site)) {
-            $filter['site'] = $site;
-        }
-        $filter = array(
-            'status' => array('in' => array('x')),
-        );
-        $response = $this->listPages($filter, $sort_order, $limit);
-        if ($response['error']) {
-            return $response;
-        }
-        $collection = $response['result']['set'];
-        /**
-         * Prepare & Return Response
-         */
-        $this->response = array(
-            'rowCount' => $this->response['rowCount'],
-            'result' => array(
-                'set' => $collection[0],
-                'total_rows' => 1,
-                'last_insert_id' => null,
-            ),
-            'error' => false,
-            'code' => 'scc.db.entity.exist',
-        );
-        return $this->response;
+    public function listPagesOfLayout($layout, $sortOrder, $limit) {
+        $timeStamp = time();
+        $response = $this->getLayout($layout);
+		if($response->error->exist){
+			return $response;
+		}
+		$layout = $response->result->set;
 
-    }
+		$filter[] = array(
+			'glue' => 'and',
+			'condition' => array(
+				array(
+					'glue' => 'and',
+					'condition' => array('column' => $this->entity['p']['alias'].'.layout', 'comparison' => '=', 'value' => $layout->getId()),
+				)
+			)
+		);
 
-    /**
-     * @name            listPages ()
-     *                List pages from database based on a variety of conditions.
-     *
-     * @since            1.0.0
-     * @version         1.1.1
-     * @author          Can Berkol
-     *
-     * @use             $this->createException()
-     *
-     * @param           array $filter Multi-dimensional array
-     *
-     *                                  Example:
-     *                                  $filter = array(
-     *                                      'address_type'  => array('in' => array(2,5),
-     *                                                               'not_in' => array(4)
-     *                                                              ),
-     *                                      'member'        => array('in' => array(Member1, Member2)),
-     *                                      'tax_id'        => 21312412,
-     *                                  );
-     *
-     *                                  Each array element defines an AND condition.
-     *                                  Each array element contains another array with keys
-     *                                  in and not_in to include and to exclude data.
-     *                                  Each nested array element that is containted in condition states
-     *                                  an OR condition.
-     *
-     * @param           array $sortorder Array
-     *                                      'column'            => 'asc|desc'
-     * @param           array $limit
-     *                                      start
-     *                                      count
-     *
-     * @param           mixed $site id or Site Entity.
-     * @param           string $query_str
-     *
-     * @return          array           $response
-     */
-    public function listPages($filter = null, $sortorder = null, $limit = null, $site = 1, $query_str = null)
-    {
-        $this->resetResponse();
-        if (!is_array($sortorder) && !is_null($sortorder)) {
-            return $this->createException('InvalidSortOrderException', '', 'err.invalid.parameter.sortorder');
-        }
-        /**
-         * Add filter checks to below to set join_needed to true.
-         */
-        /**         * ************************************************** */
-        $order_str = '';
-        $where_str = '';
-        $group_str = '';
-        $filter_str = '';
+        $response = $this->listPages($filter, $sortOrder, $limit);
+		$response->stats->execution->start = $timeStamp;
+		$response->stats->execution->end = time();
 
-        /**
-         * Start creating the query.
-         *
-         * Note that if no custom select query is provided we will use the below query as a start.
-         */
-        if (is_null($query_str)) {
-            $query_str = 'SELECT ' . $this->entity['page_localization']['alias'] . ', ' . $this->entity['page']['alias'] . ' ' . ', ' . $this->entity['layout']['alias']
-                . ' FROM ' . $this->entity['page_localization']['name'] . ' ' . $this->entity['page_localization']['alias']
-                . ' JOIN ' . $this->entity['page_localization']['alias'] . '.page ' . $this->entity['page']['alias']
-                . ' JOIN ' . $this->entity['page']['alias'] . '.layout ' . $this->entity['layout']['alias'];
-        }
-
-        /**
-         * Prepare ORDER BY section of query.
-         */
-        if ($sortorder != null) {
-            foreach ($sortorder as $column => $direction) {
-                switch ($column) {
-                    case 'id':
-                    case 'code':
-                    case 'bundle_name':
-                        $column = $this->entity['page']['alias'] . '.' . $column;
-                        break;
-                    case 'title':
-                    case 'url_key':
-                    case 'meta_title':
-                        $column = $this->entity['page_localization']['alias'] . '.' . $column;
-                        break;
-                }
-                $order_str .= ' ' . $column . ' ' . strtoupper($direction) . ', ';
-            }
-            $order_str = rtrim($order_str, ', ');
-            $order_str = ' ORDER BY ' . $order_str . ' ';
-        }
-
-        /**
-         * Prepare WHERE section of query.
-         */
-        if ($filter != null) {
-            $filter_str = $this->prepareWhere($filter);
-            $where_str .= ' WHERE ' . $filter_str;
-        }
-
-        $query_str .= $where_str . $group_str . $order_str;
-
-        $query = $this->em->createQuery($query_str);
-
-        $query = $this->addLimit($query, $limit);
-        /**
-         * Prepare & Return Response
-         */
-        $result = $query->getResult();
-        $pages = array();
-        $unique = array();
-        foreach ($result as $entry) {
-            $id = $entry->getPage()->getId();
-            if (!isset($unique[$id])) {
-                $pages[] = $entry->getPage();
-                $unique[$id] = $entry->getPage();
-            }
-        }
-        unset($unique);
-        $total_rows = count($pages);
-        if ($total_rows < 1) {
-            $this->response['code'] = 'err.db.entry.notexist';
-            return $this->response;
-        }
-        $this->response = array(
-            'rowCount' => $this->response['rowCount'],
-            'result' => array(
-                'set' => $pages,
-                'total_rows' => $total_rows,
-                'last_insert_id' => null,
-            ),
-            'error' => false,
-            'code' => 'scc.db.entry.exist',
-        );
-        return $this->response;
-    }
-
-    /**
-     * @name            listPagesOfLayout ()
-     *                Lists pages that belong to a specifiv layout.
-     *
-     * @since            1.0.1
-     * @version         1.1.0
-     * @author          Can Berkol
-     *
-     * @use             $this->list_pages()
-     *
-     * @throws          InvalidEntityException
-     *
-     * @param           mixed $layout Layout id, entity
-     * @param           string $by entity, id, url key or username
-     *
-     * @return          mixed           $response
-     */
-    public function listPagesOfLayout($layout, $sort_order, $limit, $site = 1)
-    {
-        $this->resetResponse();
-        if (isset($site)) {
-            $filter['site'] = $site;
-        }
-        if (is_object($layout)) {
-            if (!$layout instanceof BundleEntity\Layout) {
-                return $this->createException('InvalidParameterException', 'err.invalid.parameter.layout', 'BundleEntity\\Layout');
-            }
-            $layout = $layout->getId();
-        }
-        $filter = array(
-            'layout' => $layout,
-        );
-        $response = $this->listPages($filter, $sort_order, $limit);
-        if ($response['error']) {
-            return $response;
-        }
-        $collection = $response['result']['set'];
-        /**
-         * Prepare & Return Response
-         */
-        $this->response = array(
-            'rowCount' => $this->response['rowCount'],
-            'result' => array(
-                'set' => $collection[0],
-                'total_rows' => 1,
-                'last_insert_id' => null,
-            ),
-            'error' => false,
-            'code' => 'scc.db.entry.exist',
-        );
-        return $this->response;
+		return $response;
     }
 
     /**
      * @name            listPagesOfSite ()
-     *                Lists pages that that belong to a specific site.
      *
-     * @since            1.0.1
-     * @version         1.1.0
+     * @since           1.0.1
+     * @version         1.1.2
      * @author          Can Berkol
      *
      * @use             $this->listPages()
      *
-     * @param           integer $site
-     * @param           array $sort_order
-     * @param           array $limit
+     * @param           mixed	 	$site
+     * @param           array 		$sortOrder
+     * @param           array 		$limit
      *
-     * @return          array           $response
+     * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
      */
-    public function listPagesOfSite($site = 1, $sort_order, $limit)
-    {
-        $this->resetResponse();
-        if (isset($site)) {
-            $filter['site'] = $site;
-        }
-        $response = $this->listPages($filter, $sort_order, $limit);
-        if ($response['error']) {
-            return $response;
-        }
-        $collection = $response['result']['set'];
-        /**
-         * Prepare & Return Response
-         */
-        $this->response = array(
-            'rowCount' => $this->response['rowCount'],
-            'result' => array(
-                'set' => $collection[0],
-                'total_rows' => 1,
-                'last_insert_id' => null,
-            ),
-            'error' => false,
-            'code' => 'scc.db.entry.exist',
-        );
-        return $this->response;
+    public function listPagesOfSite($site = 1, $sortOrder, $limit){
+		$timeStamp = time();
+		$sModel = $this->kernel->getContainer()->get('sitemanagement.model');
+		$response = $sModel->getSite($site);
+		if($response->error->exist){
+			return $response;
+		}
+		$layout = $response->result->set;
+
+		$filter[] = array(
+			'glue' => 'and',
+			'condition' => array(
+				array(
+					'glue' => 'and',
+					'condition' => array('column' => $this->entity['p']['alias'].'.layout', 'comparison' => '=', 'value' => $layout->getId()),
+				)
+			)
+		);
+
+		$response = $this->listPages($filter, $sortOrder, $limit);
+		$response->stats->execution->start = $timeStamp;
+		$response->stats->execution->end = time();
+
+		return $response;
     }
 
-    /**
-     * @name            listSupportEditablePages ()
-     *                Lists only support staff editable pages | in other words pages with the status "e" and "s".
-     *
-     * @since            1.0.1
-     * @version         1.1.0
-     * @author          Can Berkol
-     *
-     * @use             $this->listPages()
-     *
-     * @param           array $sort_order
-     * @param           array $limit
-     * @param           integer $site
-     *
-     * @return          mixed           $response
-     */
-    public function listSupportEditablePages($sort_order, $limit, $site = 1)
-    {
-        $this->resetResponse();
-        if (isset($site)) {
-            $filter['site'] = $site;
-        }
-        $filter = array(
-            'status' => array('in' => array('s')),
-        );
-        $response = $this->listPages($filter, $sort_order, $limit);
-        if ($response['error']) {
-            return $response;
-        }
-        $collection = $response['result']['set'];
-        /**
-         * Prepare & Return Response
-         */
-        $this->response = array(
-            'rowCount' => $this->response['rowCount'],
-            'result' => array(
-                'set' => $collection[0],
-                'total_rows' => 1,
-                'last_insert_id' => null,
-            ),
-            'error' => false,
-            'code' => 'scc.db.entry.exist',
-        );
-        return $this->response;
-    }
+	/**
+	 * @name            listThemes()
+	 *
+	 * @since           1.0.0
+	 * @version         1.2.1
+	 * @author          Can Berkol
+	 *
+	 * @use             $this->createException()
+	 *
+	 * @param           array 			$filter
+	 * @param           array 			$sortOrder
+	 * @param           array 			$limit
+	 *
+	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+	public function listThemes($filter = null, $sortOrder = null, $limit = null){
+		$timeStamp = time();
+		if(!is_array($sortOrder) && !is_null($sortOrder)){
+			return $this->createException('InvalidSortOrderException', '$sortOrder must be an array with key => value pairs where value can only be "asc" or "desc".', 'E:S:002');
+		}
+		$oStr = $wStr = $gStr = $fStr = '';
 
-    /**
-     * @name            listThemes ()
-     *                List themes from database based on a variety of conditions.
-     *
-     * @since            1.0.1
-     * @version         1.1.0
-     * @author          Can Berkol
-     *
-     * @use             $this->createException()
-     *
-     * @param           array $filter Multi-dimensional array
-     *
-     *                                  Example:
-     *                                  $filter = array(
-     *                                      'address_type'  => array('in' => array(2,5),
-     *                                                               'not_in' => array(4)
-     *                                                              ),
-     *                                      'member'        => array('in' => array(Member1, Member2)),
-     *                                      'tax_id'        => 21312412,
-     *                                  );
-     *
-     *                                  Each array element defines an AND condition.
-     *                                  Each array element contains another array with keys
-     *                                  in and not_in to include and to exclude data.
-     *                                  Each nested array element that is containted in condition states
-     *                                  an OR condition.
-     *
-     * @param           array $sortorder Array
-     *                                      'column'            => 'asc|desc'
-     * @param           array $limit
-     *                                      start
-     *                                      count
-     *
-     * @param           mixed $site id or Site Entity.
-     *
-     * @return          array           $response
-     */
-    public function listThemes($filter = null, $sortorder = null, $limit = null, $site = 1)
-    {
-        $this->resetResponse();
-        if (isset($site)) {
-            $filter['site'] = $site;
-        }
-        if (!is_array($sortorder) && !is_null($sortorder)) {
-            return $this->createException('InvalidParameterException', 'err.invalid.parameter.sortorder', '');
-        }
-        /**
-         * Check if it is needed to join two or more tables.
-         */
-        $join_needed = false;
-        if (isset($filter['name']) || isset($filter['name'])) {
-            $join_needed = true;
-        }
+		$qStr = 'SELECT '.$this->entity['t']['alias'].', '.$this->entity['t']['alias']
+			.' FROM '.$this->entity['tl']['name'].' '.$this->entity['tl']['alias']
+			.' JOIN '.$this->entity['tl']['alias'].'.theme '.$this->entity['t']['alias'];
 
-        /**         * ************************************************** */
-        $order_str = '';
-        $where_str = '';
-        $group_str = '';
-        /**
-         * Start creating the query.
-         */
-        if ($join_needed) {
-            $query_str = 'SELECT DISTINCT ' . $this->entity['theme_localization']['alias']
-                . ' FROM ' . $this->entity['theme_localization']['name'] . ' ' . $this->entity['theme_localization']['alias']
-                . ' JOIN ' . $this->entity['theme_localization']['alias'] . '.theme ' . $this->entity['theme']['alias'];
-//            $group_str = ' GROUP BY '.$this->entity['page']['alias'].'.id';
-        } else {
-            $query_str = 'SELECT ' . $this->entity['theme']['alias'] . ' FROM ' . $this->entity['theme']['name'] . ' ' . $this->entity['theme']['alias'];
-        }
-        /**
-         * Prepare ORDER BY part of query.
-         */
-        if ($sortorder != null) {
-            foreach ($sortorder as $column => $direction) {
-                switch ($column) {
-                    case 'name':
-                        $order_str .= ' ' . $this->entity['theme_localization']['alias'] . '.' . $column . ' ' . $direction . ', ';
-                        break;
-                    default:
-                        $order_str .= ' ' . $this->entity['theme']['alias'] . '.' . $column . ' ' . $direction . ', ';
-                        break;
-                }
-            }
-            $order_str = rtrim($order_str, ', ');
-            $order_str = ' ORDER BY ' . $order_str . ' ';
-        }
-        if ($filter != null) {
-            $and = '(';
-            foreach ($filter as $column => $value) {
-                /** decide which alias to use */
-                switch ($column) {
-                    case 'name':
-                        $alias = $this->entity['theme_localization']['alias'];
-                        break;
-                    default:
-                        $alias = $this->entity['theme']['alias'];
-                        break;
-                }
-                /** If value is array we need to run through all values with a loop */
-                if (is_array($value)) {
-                    $or = '(';
-                    foreach ($value as $key => $sub_value) {
-                        if (!is_array($sub_value)) {
-                            new CoreExceptions\InvalidFilterException($this->kernel, '');
-                            break;
-                        }
-                        $tmp_sub_value = array();
-                        foreach ($sub_value as $item) {
-                            if (is_object($item)) {
-                                $tmp_sub_value[] = $item->getId();
-                            } else {
-                                $tmp_sub_value[] = $item;
-                            }
-                        }
-                        if (count($tmp_sub_value) > 0) {
-                            $sub_value = $tmp_sub_value;
-                        }
-                        $or .= ' ' . $alias . '.' . $column;
-                        switch ($key) {
-                            case 'starts':
-                                $or .= ' LIKE \'' . $sub_value[0] . '%\' ';
-                                break;
-                            case 'ends':
-                                $or .= ' LIKE \'%' . $sub_value[0] . '\' ';
-                                break;
-                            case 'contains':
-                                $or .= ' LIKE \'%' . $sub_value[0] . '%\' ';
-                                break;
-                            case 'in':
-                            case 'include':
-                                $in = implode(',', $sub_value);
-                                $or .= ' IN(' . $in . ') ';
-                                break;
-                            case 'not_in':
-                            case 'exclude':
-                                $not_in = implode(',', $sub_value);
-                                $or .= ' NOT IN(' . $not_in . ') ';
-                                break;
-                        }
-                        $or .= ') OR ';
-                    }
-                    $or = rtrim($or, ' OR');
-                    $and .= $or;
-                } else {
-                    if (is_object($value)) {
-                        $value = $value->getId();
-                    }
-                    if (is_numeric($value)) {
+		if(!is_null($sortOrder)){
+			foreach($sortOrder as $column => $direction){
+				switch($column){
+					case 'id':
+					case 'folder':
+					case 'type':
+					case 'date_added':
+					case 'date_updated':
+					case 'date_removed':
+					case 'count_modules':
+					case 'count_layouts':
+					case 'site':
+						$column = $this->entity['t']['alias'].'.'.$column;
+						break;
+					case 'name':
+						$column = $this->entity['tl']['alias'].'.'.$column;
+						break;
+				}
+				$oStr .= ' '.$column.' '.strtoupper($direction).', ';
+			}
+			$oStr = rtrim($oStr, ', ');
+			$oStr = ' ORDER BY '.$oStr.' ';
+		}
 
-                        $and .= ' ' . $alias . '.' . $column . ' = ' . $value;
-                    } else {
-                        $and .= ' ' . $alias . '.' . $column . ' = \'' . $value . '\'';
-                    }
-                }
-                $and .= ' AND ';
-            }
-            $and = rtrim($and, ' AND') . ')';
-            $where_str .= ' WHERE ' . $and;
-        }
+		if(!is_null($filter)){
+			$fStr = $this->prepareWhere($filter);
+			$wStr .= ' WHERE '.$fStr;
+		}
 
-        $query_str .= $where_str . $group_str . $order_str;
-        $query = $this->em->createQuery($query_str);
+		$qStr .= $wStr.$gStr.$oStr;
+		$q = $this->em->createQuery($qStr);
+		$q = $this->addLimit($q, $limit);
 
-        if ($limit != null) {
-            if (isset($limit['start']) && isset($limit['count'])) {
-                /** If limit is set */
-                $query->setFirstResult($limit['start']);
-                $query->setMaxResults($limit['count']);
-            } else {
-                new CoreExceptions\InvalidLimitException($this->kernel, '');
-            }
-        }
-        /**
-         * Prepare & Return Response
-         */
-        $result = $query->getResult();
-        if ($join_needed) {
-            $collection = array();
-            foreach ($result as $compound_entity) {
-                $collection[] = $compound_entity->getTheme();
-            }
-            $result = $collection;
-        }
+		$result = $q->getResult();
 
-        $total_rows = count($result);
-        if ($total_rows < 1) {
-            $this->response['code'] = 'err.db.entry.notexist';
-            return $this->response;
-        }
-        $this->response = array(
-            'rowCount' => $this->response['rowCount'],
-            'result' => array(
-                'set' => $result,
-                'total_rows' => $total_rows,
-                'last_insert_id' => null,
-            ),
-            'error' => false,
-            'code' => 'scc.db.entry.exist',
-        );
-        return $this->response;
-    }
+		$entities = array();
+		foreach($result as $entry){
+			$id = $entry->getTheme()->getId();
+			if(!isset($unique[$id])){
+				$entities[] = $entry->getTheme();
+			}
+		}
+		$totalRows = count($entities);
+		if ($totalRows < 1) {
+			return new ModelResponse(null, 0, 0, null, true, 'E:D:002', 'No entries found in database that matches to your criterion.', $timeStamp, time());
+		}
+		return new ModelResponse($entities, $totalRows, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+	}
 
-    /**
-     * @name            listThemesOfSite ()
-     *                Lists that that belong to a specific site.
-     *
-     * @since            1.0.1
-     * @version         1.1.0
-     * @author          Can Berkol
-     *
-     * @use             $this->listThemes()
-     *
-     * @throws          InvalidEntityException
-     *
-     * @param           integer $site
-     * @param           array $sort_order
-     * @param           array $limit
-     *
-     * @return          array           $response
-     */
-    public function listThemesOfSite($site = 1, $sort_order, $limit)
-    {
-        $this->resetResponse();
-        if (isset($site)) {
-            $filter['site'] = $site;
-        }
-        $response = $this->listThemes($filter, $sort_order, $limit);
-        if ($response['error']) {
-            return $response;
-        }
-        $collection = $response['result']['set'];
-        /**
-         * Prepare & Return Response
-         */
-        $this->response = array(
-            'rowCount' => $this->response['rowCount'],
-            'result' => array(
-                'set' => $collection[0],
-                'total_rows' => 1,
-                'last_insert_id' => null,
-            ),
-            'error' => false,
-            'code' => 'scc.db.entry.exist',
-        );
-        return $this->response;
-    }
+	/**
+	 * @name            listThemesOfSite()
+	 *
+	 * @since           1.0.1
+	 * @version         1.1.2
+	 * @author          Can Berkol
+	 *
+	 * @use             $this->listPages()
+	 *
+	 * @param           mixed	 	$site
+	 * @param           array 		$sortOrder
+	 * @param           array 		$limit
+	 *
+	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+	public function listThemesOfSite($site = 1, $sortOrder, $limit){
+		$timeStamp = time();
+		$sModel = $this->kernel->getContainer()->get('sitemanagement.model');
+		$response = $sModel->getSite($site);
+		if($response->error->exist){
+			return $response;
+		}
+		$layout = $response->result->set;
 
+		$filter[] = array(
+			'glue' => 'and',
+			'condition' => array(
+				array(
+					'glue' => 'and',
+					'condition' => array('column' => $this->entity['p']['alias'].'.layout', 'comparison' => '=', 'value' => $layout->getId()),
+				)
+			)
+		);
+
+		$response = $this->listThemes($filter, $sortOrder, $limit);
+		$response->stats->execution->start = $timeStamp;
+		$response->stats->execution->end = time();
+
+		return $response;
+	}
+	/**
+	 * @name            markPagesAsDeleted()
+	 *
+	 * @since           1.2.6
+	 * @version         1.2.6
+	 *
+	 * @author          Can Berkol
+	 *
+	 * @use             $this->createException()
+	 *
+	 * @param           array 			$collection
+	 *
+	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+	public function markPagesAsDeleted($collection){
+		$timeStamp = time();
+		if (!is_array($collection)) {
+			return $this->createException('InvalidParameterValueException', 'Invalid parameter value. Parameter must be an array collection', 'E:S:001');
+		}
+		$now = new \DateTime('now', new \DateTimeZone($this->kernel->getContainer()->getParameter('app_timezone')));
+		$toUpdate = array();
+		foreach ($collection as $page) {
+			if(!$page instanceof BundleEntity\Page){
+				$response = $this->getPage($page);
+				if($response->error->exist){
+					return $response;
+				}
+				$page = $response->result->set;
+				unset($response);
+			}
+			$page->setStatus('d');
+			$toUpdate[] = $page;
+		}
+		$response = $this->updatePages($toUpdate);
+		$response->stats->execution->start = $timeStamp;
+		$response->stats->execution->end = time();
+
+		return $response;
+	}
+	/**
+	 * @name            updateLayout ()
+	 *
+	 * @since           1.0.1
+	 * @version         1.2.1
+	 * @author          Can Berkol
+	 *
+	 * @use             $this->updateLayouts()
+	 *
+	 * @param           mixed 			$layout
+	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+	public function updateLayout($layout){
+		return $this->updateLayouts(array($layout));
+	}
+
+	/**
+	 * @name            updateLayouts ()
+	 *
+	 * @since           1.0.1
+	 * @version         1.2.4
+	 * @author          Can Berkol
+	 *
+	 * @use             $this->createException()
+	 *
+	 * @param           array 			$collection
+	 *
+	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+	public function updateLayouts($collection){
+		/** Parameter must be an array */
+		if (!is_array($collection)) {
+			return $this->createException('InvalidParameter', 'Array', 'err.invalid.parameter.collection');
+		}
+		$countUpdates = 0;
+		$updatedItems = array();
+		foreach ($collection as $data) {
+			if ($data instanceof BundleEntity\Layout) {
+				$entity = $data;
+				$this->em->persist($entity);
+				$updatedItems[] = $entity;
+				$countUpdates++;
+			}
+			else if (is_object($data)) {
+				if(!property_exists($data, 'id') || !is_numeric($data->id)){
+					return $this->createException('InvalidParameterException', 'Parameter must be an object with the "id" property and id property ​must have an integer value.', 'E:S:003');
+				}
+				if (!property_exists($data, 'site')) {
+					$data->site = 1;
+				}
+				if (!property_exists($data, 'theme')) {
+					$data->theme = 1;
+				}
+				$response = $this->getLayout($data->id, 'id');
+				if ($response->error->exist) {
+					return $this->createException('EntityDoesNotExist', 'Layout with id ' . $data->id, 'err.invalid.entity');
+				}
+				$oldEntity = $response->result->set;
+				foreach ($data as $column => $value) {
+					$set = 'set' . $this->translateColumnName($column);
+					switch ($column) {
+						case 'local':
+							$localizations = array();
+							foreach ($value as $langCode => $translation) {
+								$localization = $oldEntity->getLocalization($langCode, true);
+								$newLocalization = false;
+								if (!$localization) {
+									$newLocalization = true;
+									$localization = new BundleEntity\LayoutLocalization();
+									$mlsModel = $this->kernel->getContainer()->get('multilanguagesupport.model');
+									$response = $mlsModel->getLanguage($langCode, 'iso_code');
+									$localization->setLanguage($response->result->set);
+									$localization->setLayout($oldEntity);
+								}
+								foreach ($translation as $transCol => $transVal) {
+									$transSet = 'set' . $this->translateColumnName($transCol);
+									$localization->$transSet($transVal);
+								}
+								if ($newLocalization) {
+									$this->em->persist($localization);
+								}
+								$localizations[] = $localization;
+							}
+							$oldEntity->setLocalizations($localizations);
+							break;
+						case 'theme':
+							$response = $this->getTheme($value);
+							if (!$response->error->exist) {
+								$oldEntity->$set($response->result->set);
+							}
+							else {
+								return $this->createException('EntityDoesNotExist', 'Theme with id '.$value.' does not exist in database.', 'E:D:002');
+							}
+							unset($response, $fModel);
+							break;
+						case 'site':
+							$sModel = $this->kernel->getContainer()->get('sitemanagement.model');
+							$response = $sModel->getSite($value);
+							if (!$response->error->exist) {
+								$oldEntity->$set($response->result->set);
+							} else {
+								return $this->createException('EntityDoesNotExist', 'Site with id  / url_key'.$value.' does not exist in database.', 'E:D:002');
+							}
+							unset($response, $sModel);
+							break;
+						case 'id':
+							break;
+						default:
+							$oldEntity->$set($value);
+							break;
+					}
+					if ($oldEntity->isModified()) {
+						$this->em->persist($oldEntity);
+						$countUpdates++;
+						$updatedItems[] = $oldEntity;
+					}
+				}
+			}
+		}
+		if($countUpdates > 0){
+			$this->em->flush();
+			return new ModelResponse($updatedItems, $countUpdates, 0, null, false, 'S:D:004', 'Selected entries have been successfully updated within database.', $timeStamp, time());
+		}
+		return new ModelResponse(null, 0, 0, null, true, 'E:D:004', 'One or more entities cannot be updated within database.', $timeStamp, time());
+	}
+	/**
+	 * @name            updateModule ()
+	 *
+	 * @since           1.0.2
+	 * @version         1.2.1
+	 * @author          Can Berkol
+	 *
+	 * @use             $this->updateModules()
+	 *
+	 * @param           mixed			$module
+	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+	public function updateModule($module){
+		return $this->updateModules(array($module));
+	}
+	/**
+	 * @name            updateModules ()
+	 *
+	 * @since           1.0.2
+	 * @version         1.2.1
+	 * @author          Can Berkol
+	 *
+	 * @use             $this->createException
+	 *
+	 * @param           array			$collection
+	 *
+	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+	public function updateModules($collection){
+		$timeStamp = time();
+		/** Parameter must be an array */
+		if (!is_array($collection)) {
+			return $this->createException('InvalidParameterValueException', 'Invalid parameter value. Parameter must be an array collection', 'E:S:001');
+		}
+		$countUpdates = 0;
+		$updatedItems = array();
+		foreach ($collection as $data) {
+			if ($data instanceof BundleEntity\Module) {
+				$entity = $data;
+				$this->em->persist($entity);
+				$updatedItems[] = $entity;
+				$countUpdates++;
+			}
+			else if (is_object($data)) {
+				if(!property_exists($data, 'id') || !is_numeric($data->id)){
+					return $this->createException('InvalidParameterException', 'Parameter must be an object with the "id" property and id property ​must have an integer value.', 'E:S:003');
+				}
+				if (!property_exists($data, 'site')) {
+					$data->site = 1;
+				}
+				if (!property_exists($data, 'theme')) {
+					$data->theme = 1;
+				}
+				$response = $this->getModule($data->id);
+				if ($response->errpr->exist) {
+					return $this->createException('EntityDoesNotExist', 'Module with id '.$data->id.' does not exist in database.', 'E:D:002');
+				}
+				$oldEntity = $response->result->set;
+				foreach ($data as $column => $value) {
+					$set = 'set' . $this->translateColumnName($column);
+					switch ($column) {
+						case 'local':
+							$localizations = array();
+							foreach ($value as $langCode => $translation) {
+								$localization = $oldEntity->getLocalization($langCode, true);
+								$newLocalization = false;
+								if (!$localization) {
+									$newLocalization = true;
+									$localization = new BundleEntity\ModuleLocalization();
+									$mlsModel = $this->kernel->getContainer()->get('multilanguagesupport.model');
+									$response = $mlsModel->getLanguage($langCode, 'iso_code');
+									$localization->setLanguage($response->result->set);
+									$localization->setModule($oldEntity);
+								}
+								foreach ($translation as $transCol => $transVal) {
+									$transSet = 'set' . $this->translateColumnName($transCol);
+									$localization->$transSet($transVal);
+								}
+								if ($newLocalization) {
+									$this->em->persist($localization);
+								}
+								$localizations[] = $localization;
+							}
+							$oldEntity->setLocalizations($localizations);
+							break;
+						case 'theme':
+							$response = $this->getTheme($value, 'id');
+							if (!$response->error->exist) {
+								$oldEntity->$set($response->result->set);
+							}
+							else {
+								return $this->createException('EntityDoesNotExist', 'Theme with id / code '.$value.' does not exist in database.', 'E:D:002');
+							}
+							unset($response);
+							break;
+						case 'site':
+							$sModel = $this->kernel->getContainer()->get('sitemanagement.model');
+							$response = $sModel->getSite($value, 'id');
+							if (!$response->error->exist) {
+								$oldEntity->$set($response->result->set);
+							}
+							else {
+								return $this->createException('EntityDoesNotExist', 'Site with id /url_key '.$value.' does not exist in database.', 'E:D:002');
+							}
+							unset($response, $sModel);
+							break;
+						case 'id':
+							break;
+						default:
+							$oldEntity->$set($value);
+							break;
+					}
+					if ($oldEntity->isModified()) {
+						$this->em->persist($oldEntity);
+						$countUpdates++;
+						$updatedItems[] = $oldEntity;
+					}
+				}
+			}
+		}
+		if($countUpdates > 0){
+			$this->em->flush();
+			return new ModelResponse($updatedItems, $countUpdates, 0, null, false, 'S:D:004', 'Selected entries have been successfully updated within database.', $timeStamp, time());
+		}
+		return new ModelResponse(null, 0, 0, null, true, 'E:D:004', 'One or more entities cannot be updated within database.', $timeStamp, time());
+	}
+	/**
+	 * @name            updateModuleLayoutEntry ()
+	 *
+	 * @since           1.1.5
+	 * @version         1.2.1
+	 * @author          Can Berkol
+	 *
+	 * @use             $this->updateModuleLayoutEntries()
+	 *
+	 * @param           mixed 			$entry
+	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+	public function updateModuleLayoutEntry($entry)    {
+		return $this->updateModuleLayoutEntries(array($entry));
+	}
+
+	/**
+	 * @name            updateModuleLayoutEntries()
+	 *
+	 * @since           1.1.5
+	 * @version         1.2.1
+	 * @author          Can Berkol
+	 *
+	 * @use             $this->createException()
+	 *
+	 * @param           array 			$collection
+	 *
+	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+	public function updateModuleLayoutEntries($collection){
+		$timeStamp = time();
+		if (!is_array($collection)) {
+			return $this->createException('InvalidParameterValueException', 'Invalid parameter value. Parameter must be an array collection', 'E:S:001');
+		}
+		$countUpdates = 0;
+		$updatedItems = array();
+		foreach ($collection as $data) {
+			if ($data instanceof BundleEntity\ModulesOfLayout) {
+				$entity = $data;
+				$this->em->persist($entity);
+				$updatedItems[] = $entity;
+				$countUpdates++;
+			}
+			else if (is_object($data)) {
+				if(!property_exists($data, 'id') || !is_numeric($data->id)){
+					return $this->createException('InvalidParameterException', 'Parameter must be an object with the "id" property and id property ​must have an integer value.', 'E:S:003');
+				}
+				if (!property_exists($data, 'sort_order')) {
+					$data->sort_order = 1;
+				}
+				$response = $this->getModuleLayoutEntry($data->id);
+				if ($response->error->exist) {
+					return $this->createException('EntityDoesNotExist', 'ModulesOfLayout with id '.$data->id.' does not exist in database.', 'E:D:002');
+				}
+				$oldEntity = $response->result->set;
+				foreach ($data as $column => $value) {
+					$set = 'set' . $this->translateColumnName($column);
+					switch ($column) {
+						case 'page':
+							$response = $this->getPage($value);
+							if (!$response->error->exist){
+								$oldEntity->$set($response->result->set);
+							}
+							else {
+								return $this->createException('EntityDoesNotExist', 'Page with id / code '.$value.' does not exist in database.', 'E:D:002');
+							}
+							unset($response);
+							break;
+						case 'layout':
+							$response = $this->getLayout($value);
+							if (!$response->error->exist) {
+								$oldEntity->$set($response->result->set);
+							}
+							else {
+								return $this->createException('EntityDoesNotExist', 'Layout with id '.$value.' does not exist in database.', 'E:D:002');
+							}
+							unset($response, $fModel);
+							break;
+						case 'module':
+							$response = $this->getModule($value);
+							if (!$response->error->exist) {
+								$oldEntity->$set($response->result->set);
+							}
+							else {
+								return $this->createException('EntityDoesNotExist', 'Module with id '.$value.' does not exist in database.', 'E:D:002');
+							}
+							unset($response, $fModel);
+							break;
+						case 'id':
+							break;
+						default:
+							$oldEntity->$set($value);
+							break;
+					}
+					if ($oldEntity->isModified()) {
+						$this->em->persist($oldEntity);
+						$countUpdates++;
+						$updatedItems[] = $oldEntity;
+					}
+				}
+			}
+		}
+		if($countUpdates > 0){
+			$this->em->flush();
+			return new ModelResponse($updatedItems, $countUpdates, 0, null, false, 'S:D:004', 'Selected entries have been successfully updated within database.', $timeStamp, time());
+		}
+		return new ModelResponse(null, 0, 0, null, true, 'E:D:004', 'One or more entities cannot be updated within database.', $timeStamp, time());
+	}
+	/**
+	 * @name            updateNavigation()
+	 *
+	 * @since           1.0.1
+	 * @version         1.2.1
+	 * @author          Can Berkol
+	 *
+	 * @use             $this->updateNavigations()
+	 *
+	 * @param           mixed 			$navigation
+	 * @return			BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+	public function updateNavigation($navigation){
+		return $this->updateNavigations(array($navigation));
+	}
+
+	/**
+	 * @name            updateNavigations ()
+	 *
+	 * @since           1.0.1
+	 * @version         1.2.1
+	 * @author          Can Berkol
+	 *
+	 * @use             $his->createException()
+	 *
+	 * @param           array 			$collection
+	 *
+	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+	public function updateNavigations($collection){
+		$timeStamp = time();
+		if (!is_array($collection)) {
+			return $this->createException('InvalidParameterValueException', 'Invalid parameter value. Parameter must be an array collection', 'E:S:001');
+		}
+		$countUpdates = 0;
+		$updatedItems = array();
+		foreach ($collection as $data) {
+			if ($data instanceof BundleEntity\Navigation) {
+				$entity = $data;
+				$this->em->persist($entity);
+				$updatedItems[] = $entity;
+				$countUpdates++;
+			}
+			else if (is_object($data)) {
+				if(!property_exists($data, 'id') || !is_numeric($data->id)){
+					return $this->createException('EntityDoesNotExist', 'Navigation with id '.$data->id.' does not exist in database.', 'E:D:002');
+				}
+				if (property_exists($data, 'date_added')) {
+					unset($data->date_added);
+				}
+				if (!property_exists($data, 'site')) {
+					$data->site = 1;
+				}
+				$response = $this->getNavigation($data->id);
+				if ($response->error->exist) {
+					return $this->createException('EntityDoesNotExist', 'Navigation with id '.$value.' does not exist in database.', 'E:D:002');
+				}
+				$oldEntity = $response->result->set;
+				foreach ($data as $column => $value) {
+					$set = 'set' . $this->translateColumnName($column);
+					switch ($column) {
+						case 'local':
+							$localizations = array();
+							foreach ($value as $langCode => $translation) {
+								$localization = $oldEntity->getLocalization($langCode, true);
+								$newLocalization = false;
+								if (!$localization) {
+									$newLocalization = true;
+									$localization = new BundleEntity\NavigationLocalization();
+									$mlsModel = $this->kernel->getContainer()->get('multilanguagesupport.model');
+									$response = $mlsModel->getLanguage($langCode);
+									$localization->setLanguage($response->result->set);
+									$localization->setNavigation($oldEntity);
+								}
+								foreach ($translation as $transCol => $transVal) {
+									$transSet = 'set' . $this->translateColumnName($transCol);
+									$localization->$transSet($transVal);
+								}
+								if ($newLocalization) {
+									$this->em->persist($localization);
+								}
+								$localizations[] = $localization;
+							}
+							$oldEntity->setLocalizations($localizations);
+							break;
+						case 'site':
+							$sModel = $this->kernel->getContainer()->get('sitemanagement.model');
+							$response = $sModel->getSite($value);
+							if (!$response->error->exist) {
+								$oldEntity->$set($response->result->set);
+							}
+							else {
+								return $this->createException('EntityDoesNotExist', 'Site with id / url_key '.$value.' does not exist in database.', 'E:D:002');
+							}
+							unset($response, $sModel);
+							break;
+						case 'id':
+							break;
+						default:
+							$oldEntity->$set($value);
+							break;
+					}
+					if ($oldEntity->isModified()) {
+						$this->em->persist($oldEntity);
+						$countUpdates++;
+						$updatedItems[] = $oldEntity;
+					}
+				}
+			}
+		}
+		if($countUpdates > 0){
+			$this->em->flush();
+			return new ModelResponse($updatedItems, $countUpdates, 0, null, false, 'S:D:004', 'Selected entries have been successfully updated within database.', $timeStamp, time());
+		}
+		return new ModelResponse(null, 0, 0, null, true, 'E:D:004', 'One or more entities cannot be updated within database.', $timeStamp, time());
+	}
+	/**
+	 * @name            updateNavigationItem ()
+	 *
+	 * @since           1.0.1
+	 * @version         1.2.1
+	 * @author          Can Berkol
+	 *
+	 * @use             $this->update_themes()
+	 *
+	 * @param           mixed           $item
+	 *
+	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+	public function updateNavigationItem($item){
+		return $this->updateNavigationItems(array($item));
+	}
+
+	/**
+	 * @name            updateNavigationItems ()
+	 *
+	 * @since           1.0.1
+	 * @version         1.2.1
+	 * @author          Can Berkol
+	 *
+	 * @use             $this->createException()
+	 *
+	 * @param           array 			$collection
+	 *
+	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+	public function updateNavigationItems($collection){
+		$timeStamp = time();
+		/** Parameter must be an array */
+		if (!is_array($collection)) {
+			return $this->createException('InvalidParameterValueException', 'Invalid parameter value. Parameter must be an array collection', 'E:S:001');
+		}
+		$countUpdates = 0;
+		$updatedItems = array();
+		foreach ($collection as $data) {
+			if ($data instanceof BundleEntity\NavigationItem) {
+				$entity = $data;
+				$this->em->persist($entity);
+				$updatedItems[] = $entity;
+				$countUpdates++;
+			}
+			else if (is_object($data)) {
+				if(!property_exists($data, 'id') || !is_numeric($data->id)){
+					return $this->createException('InvalidParameterException', 'Parameter must be an object with the "id" property and id property ​must have an integer value.', 'E:S:003');
+				}
+				$response = $this->getNavigationItem($data->id);
+				if ($response->error->exist) {
+					return $this->createException('EntityDoesNotExist', 'Navigation Item with id '.$data->id.' does not exist in database.', 'E:D:002');
+				}
+				$oldEntity = $response->result->set;
+				foreach ($data as $column => $value) {
+					$set = 'set' . $this->translateColumnName($column);
+					switch ($column) {
+						case 'local':
+							$localizations = array();
+							foreach ($value as $langCode => $translation) {
+								$localization = $oldEntity->getLocalization($langCode, true);
+								$newLocalization = false;
+								if (!$localization) {
+									$newLocalization = true;
+									$localization = new BundleEntity\NavigationItemLocalization();
+									$mlsModel = $this->kernel->getContainer()->get('multilanguagesupport.model');
+									$response = $mlsModel->getLanguage($langCode);
+									$localization->setLanguage($response->result->set);
+									$localization->setNavigationItem($oldEntity);
+								}
+								foreach ($translation as $transCol => $transVal) {
+									$transSet = 'set' . $this->translateColumnName($transCol);
+									$localization->$transSet($transVal);
+								}
+								if ($newLocalization) {
+									$this->em->persist($localization);
+								}
+								$localizations[] = $localization;
+							}
+							$oldEntity->setLocalizations($localizations);
+							break;
+						case 'page':
+							$response = $this->getPage($value);
+							if (!$response->error->exist) {
+								$oldEntity->$set($response->result->set);
+							}
+							else {
+								return $this->createException('EntityDoesNotExist', 'Page with id / code '.$value.' does not exist in database.', 'E:D:002');
+							}
+							unset($response);
+							break;
+						case 'parent':
+							$response = $this->getNavigationItem($value);
+							if (!$response->error->exist) {
+								$oldEntity->$set($response->result->set);
+							}
+							else {
+								return $this->createException('EntityDoesNotExist', 'NavigationItem with id'.$value.' does not exist in database.', 'E:D:002');
+							}
+							unset($response, $fModel);
+							break;
+						case 'navigation':
+							$response = $this->getNavigation($value);
+							if (!$response->error->exist) {
+								$oldEntity->$set($response->result->set);
+							} else {
+								return $this->createException('EntityDoesNotExist', 'Navigation with id '.$value.' does not exist in database.', 'E:D:002');
+							}
+							unset($response, $sModel);
+							break;
+						case 'id':
+							break;
+						default:
+							$oldEntity->$set($value);
+							break;
+					}
+					if ($oldEntity->isModified()) {
+						$this->em->persist($oldEntity);
+						$countUpdates++;
+						$updatedItems[] = $oldEntity;
+					}
+				}
+			}
+		}
+		if($countUpdates > 0){
+			$this->em->flush();
+			return new ModelResponse($updatedItems, $countUpdates, 0, null, false, 'S:D:004', 'Selected entries have been successfully updated within database.', $timeStamp, time());
+		}
+		return new ModelResponse(null, 0, 0, null, true, 'E:D:004', 'One or more entities cannot be updated within database.', $timeStamp, time());
+	}
     /**
      * @name            updatePage ()
-     *                Updates single page.
      *
-     * @since            1.0.0
-     * @version         1.1.0
+     * @since           1.0.0
+     * @version         1.2.1
      * @author          Can Berkol
      *
      * @use             $this->updatePages()
      *
-     * @param           mixed $page Page entity, id, or code.
-     * @return          mixed           $response
+     * @param           mixed 			$page
+	 *
+     * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
      */
-    public function updatePage($page)
-    {
+    public function updatePage($page){
         return $this->updatePages(array($page));
     }
+	/**
+	 * @name            updatePageRevision()
+	 *
+	 * @since           1.1.9
+	 * @version         1.2.1
+	 * @author          Can Berkol
+	 *
+	 * @use             $this->updatePageRevisions()
+	 *
+	 * @param           mixed 			$revision
+	 *
+	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+	public function updatePageRevision($revision){
+		return $this->updatePageRevisions(array($revision));
+	}
+	/**
+	 * @name            updatePageRevisions()
+	 *
+	 * @since           1.1.9
+	 * @version         1.2.2
+	 * @author          Can Berkol
+	 *
+	 * @use             $this->createException()
+	 *
+	 * @param           array 			$collection
+	 *
+	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+	public function updatePageRevisions($collection) {
+		$timeStamp = time();
+		/** Parameter must be an array */
+		if (!is_array($collection)) {
+			return $this->createException('InvalidParameterValueException', 'Invalid parameter value. Parameter must be an array collection', 'E:S:001');
+		}
+		$countUpdates = 0;
+		$updatedItems = array();
+		foreach ($collection as $data) {
+			if ($data instanceof BundleEntity\PageRevision) {
+				$entity = $data;
+				$this->em->persist($entity);
+				$updatedItems[] = $entity;
+				$countUpdates++;
+			}
+			else if (is_object($data)) {
+				if (!property_exists($data, 'date_updated')) {
+					$data->date_updated = new \DateTime('now', new \DateTimeZone($this->kernel->getContainer()->getParameter('app_timezone')));
+				}
+				if (property_exists($data, 'date_added')) {
+					unset($data->date_added);
+				}
+				$response = $this->getPageRevision($data->page, $data->language, $data->revision_number);
+				if ($response->error->exist) {
+					return $this->createException('EntityDoesNotExist', 'Page revision cannot be found in database.', 'E:D:002');
+				}
+				$oldEntity = $response->result->set;
 
+				foreach ($data as $column => $value) {
+					$set = 'set' . $this->translateColumnName($column);
+					switch ($column) {
+						case 'page':
+							$response = $this->getPage($value);
+							if (!$response->error->exist) {
+								$oldEntity->$set($response->result->set);
+							}
+							else {
+								return $this->createException('EntityDoesNotExist', 'Page with id / code '.$value.' does not exist in database.', 'E:D:002');
+							}
+							unset($response, $pModel);
+							break;
+						case 'language':
+							$lModel = $this->kernel->getContainer()->get('multilanguagesupport.model');
+							$response = $lModel->getLanguage($value);
+							if (!$response->error->exist) {
+								$oldEntity->$set($response->result->set);
+							}
+							else {
+								return $this->createException('EntityDoesNotExist', 'Language with id / url_key / iso_code '.$data->id.' does not exist in database.', 'E:D:002');
+							}
+							unset($response, $lModel);
+							break;
+						default:
+							$oldEntity->$set($value);
+							break;
+					}
+					if ($oldEntity->isModified()) {
+						$this->em->persist($oldEntity);
+						$countUpdates++;
+						$updatedItems[] = $oldEntity;
+					}
+				}
+			}
+		}
+		if($countUpdates > 0){
+			$this->em->flush();
+			return new ModelResponse($updatedItems, $countUpdates, 0, null, false, 'S:D:004', 'Selected entries have been successfully updated within database.', $timeStamp, time());
+		}
+		return new ModelResponse(null, 0, 0, null, true, 'E:D:004', 'One or more entities cannot be updated within database.', $timeStamp, time());
+	}
     /**
-     * @name            updatePages ()
-     *                Updates one or more group details in database.
+     * @name            updatePages()
      *
-     * @since            1.0.0
-     * @version         1.1.6
+     * @since           1.0.0
+     * @version         1.2.1
      * @author          Can Berkol
      *
-     * @use              $this->createException()
+     * @use             $this->createException()
      *
-     * @param           array $collection Collection of Page entities or array of entity details.
+     * @param           array 			$collection
      *
-     * @return          array           $response
+     * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
      */
-    public function updatePages($collection)
-    {
-        $this->resetResponse();
-        /** Parameter must be an array */
-        if (!is_array($collection)) {
-            return $this->createException('InvalidParameter', 'Array', 'err.invalid.parameter.collection');
-        }
+    public function updatePages($collection){
+		$timeStamp = time();
+		if (!is_array($collection)) {
+			return $this->createException('InvalidParameterValueException', 'Invalid parameter value. Parameter must be an array collection', 'E:S:001');
+		}
         $countUpdates = 0;
         $updatedItems = array();
         foreach ($collection as $data) {
@@ -5045,20 +3870,21 @@ class ContentManagementModel extends CoreModel
                 $this->em->persist($entity);
                 $updatedItems[] = $entity;
                 $countUpdates++;
-            } else if (is_object($data)) {
-                if (!property_exists($data, 'id') || !is_numeric($data->id)) {
-                    return $this->createException('InvalidParameter', 'Each data must contain a valid identifier id, integer', 'err.invalid.parameter.collection');
-                }
+            }
+			else if (is_object($data)) {
+				if(!property_exists($data, 'id') || !is_numeric($data->id)){
+					return $this->createException('InvalidParameterException', 'Parameter must be an object with the "id" property and id property ​must have an integer value.', 'E:S:003');
+				}
                 if (!property_exists($data, 'site')) {
                     $data->site = 1;
                 }
                 $response = $this->getPage($data->id, 'id');
-                if ($response['error']) {
-                    return $this->createException('EntityDoesNotExist', 'Page with id ' . $data->id, 'err.invalid.entity');
+                if ($response->error->exist) {
+					return $this->createException('EntityDoesNotExist', 'Page with id / code '.$data->id.' does not exist in database.', 'E:D:002');
                 }
                 unset($data->id);
 
-                $oldEntity = $response['result']['set'];
+                $oldEntity = $response->result->set;
                 foreach ($data as $column => $value) {
                     $set = 'set' . $this->translateColumnName($column);
                     switch ($column) {
@@ -5072,7 +3898,7 @@ class ContentManagementModel extends CoreModel
                                     $localization = new BundleEntity\PageLocalization();
                                     $mlsModel = $this->kernel->getContainer()->get('multilanguagesupport.model');
                                     $response = $mlsModel->getLanguage($langCode, 'iso_code');
-                                    $localization->setLanguage($response['result']['set']);
+                                    $localization->setLanguage($response->result->set);
                                     $localization->setPage($oldEntity);
                                 }
                                 foreach ($translation as $transCol => $transVal) {
@@ -5089,10 +3915,10 @@ class ContentManagementModel extends CoreModel
                         case 'site':
                             $sModel = $this->kernel->getContainer()->get('sitemanagement.model');
                             $response = $sModel->getSite($value, 'id');
-                            if (!$response['error']) {
-                                $oldEntity->$set($response['result']['set']);
+                            if (!$response->error->exist) {
+                                $oldEntity->$set($response->result->set);
                             } else {
-                                new CoreExceptions\SiteDoesNotExistException($this->kernel, $value);
+								return $this->createException('EntityDoesNotExist', 'Site with id / url_key '.$value.' does not exist in database.', 'E:D:002');
                             }
                             unset($response, $sModel);
                             break;
@@ -5108,783 +3934,49 @@ class ContentManagementModel extends CoreModel
                         $updatedItems[] = $oldEntity;
                     }
                 }
-            } else {
-                new CoreExceptions\InvalidDataException($this->kernel);
             }
         }
-        if ($countUpdates > 0) {
-            $this->em->flush();
-        }
-        /**
-         * Prepare & Return Response
-         */
-        $this->response = array(
-            'rowCount' => $this->response['rowCount'],
-            'result' => array(
-                'set' => $updatedItems,
-                'total_rows' => $countUpdates,
-                'last_insert_id' => null,
-            ),
-            'error' => false,
-            'code' => 'scc.db.update.done',
-        );
-        return $this->response;
-    }
-
+		if($countUpdates > 0){
+			$this->em->flush();
+			return new ModelResponse($updatedItems, $countUpdates, 0, null, false, 'S:D:004', 'Selected entries have been successfully updated within database.', $timeStamp, time());
+		}
+		return new ModelResponse(null, 0, 0, null, true, 'E:D:004', 'One or more entities cannot be updated within database.', $timeStamp, time());
+	}
     /**
-     * @name            updateModule ()
-     *                Updates single module.
-     *
-     * @since            1.0.2
-     * @version         1.1.0
-     * @author          Can Berkol
-     *
-     * @use             $this->updateModules()
-     *
-     * @param           mixed $module Page entity, id, or code.
-     * @return          mixed           $response
-     */
-    public function updateModule($module)
-    {
-        return $this->updateModules(array($module));
-    }
-
-    /**
-     * @name            updateModules ()
-     *                Updates one or more group details in database.
-     *
-     * @since            1.0.2
-     * @version         1.1.6
-     * @author          Can Berkol
-     *
-     * @use             $this->createException
-     *
-     * @param           array $collection Collection of Module entities or array of entity details.
-     *
-     * @return          array           $response
-     */
-    public function updateModules($collection)
-    {
-        $this->resetResponse();
-        /** Parameter must be an array */
-        if (!is_array($collection)) {
-            return $this->createException('InvalidParameter', 'Array', 'err.invalid.parameter.collection');
-        }
-        $countUpdates = 0;
-        $updatedItems = array();
-        foreach ($collection as $data) {
-            if ($data instanceof BundleEntity\Module) {
-                $entity = $data;
-                $this->em->persist($entity);
-                $updatedItems[] = $entity;
-                $countUpdates++;
-            } else if (is_object($data)) {
-                if (!property_exists($data, 'id') || !is_numeric($data->id)) {
-                    return $this->createException('InvalidParameter', 'Each data must contain a valid identifier id, integer', 'err.invalid.parameter.collection');
-                }
-                if (!property_exists($data, 'site')) {
-                    $data->site = 1;
-                }
-                if (!property_exists($data, 'theme')) {
-                    $data->theme = 1;
-                }
-                $response = $this->getModule($data->id, 'id');
-                if ($response['error']) {
-                    return $this->createException('EntityDoesNotExist', 'Module with id ' . $data->id, 'err.invalid.entity');
-                }
-                $oldEntity = $response['result']['set'];
-                foreach ($data as $column => $value) {
-                    $set = 'set' . $this->translateColumnName($column);
-                    switch ($column) {
-                        case 'local':
-                            $localizations = array();
-                            foreach ($value as $langCode => $translation) {
-                                $localization = $oldEntity->getLocalization($langCode, true);
-                                $newLocalization = false;
-                                if (!$localization) {
-                                    $newLocalization = true;
-                                    $localization = new BundleEntity\ProductCategoryLocalization();
-                                    $mlsModel = $this->kernel->getContainer()->get('multilanguagesupport.model');
-                                    $response = $mlsModel->getLanguage($langCode, 'iso_code');
-                                    $localization->setLanguage($response['result']['set']);
-                                    $localization->setCategory($oldEntity);
-                                }
-                                foreach ($translation as $transCol => $transVal) {
-                                    $transSet = 'set' . $this->translateColumnName($transCol);
-                                    $localization->$transSet($transVal);
-                                }
-                                if ($newLocalization) {
-                                    $this->em->persist($localization);
-                                }
-                                $localizations[] = $localization;
-                            }
-                            $oldEntity->setLocalizations($localizations);
-                            break;
-                        case 'theme':
-                            $response = $this->getTheme($value, 'id');
-                            if (!$response['error']) {
-                                $oldEntity->$set($response['result']['set']);
-                            } else {
-                                new CoreExceptions\EntityDoesNotExistEception($this->kernel, $value);
-                            }
-                            unset($response, $fModel);
-                            break;
-                        case 'site':
-                            $sModel = $this->kernel->getContainer()->get('sitemanagement.model');
-                            $response = $sModel->getSite($value, 'id');
-                            if (!$response['error']) {
-                                $oldEntity->$set($response['result']['set']);
-                            } else {
-                                new CoreExceptions\SiteDoesNotExistException($this->kernel, $value);
-                            }
-                            unset($response, $sModel);
-                            break;
-                        case 'id':
-                            break;
-                        default:
-                            $oldEntity->$set($value);
-                            break;
-                    }
-                    if ($oldEntity->isModified()) {
-                        $this->em->persist($oldEntity);
-                        $countUpdates++;
-                        $updatedItems[] = $oldEntity;
-                    }
-                }
-            } else {
-                new CoreExceptions\InvalidDataException($this->kernel);
-            }
-        }
-        if ($countUpdates > 0) {
-            $this->em->flush();
-        }
-        /**
-         * Prepare & Return Response
-         */
-        $this->response = array(
-            'rowCount' => $this->response['rowCount'],
-            'result' => array(
-                'set' => $updatedItems,
-                'total_rows' => $countUpdates,
-                'last_insert_id' => null,
-            ),
-            'error' => false,
-            'code' => 'scc.db.update.done',
-        );
-        return $this->response;
-    }
-
-    /**
-     * @name            updateLayout ()
-     *                Updates single layout.
-     *
-     * @since            1.0.1
-     * @version         1.1.0
-     * @author          Can Berkol
-     *
-     * @use             $this->updateLayouts()
-     *
-     * @param           mixed $layout Layout entity, id, or code.
-     * @return          mixed           $response
-     */
-    public function updateLayout($layout)
-    {
-        return $this->updateLayouts(array($layout));
-    }
-
-    /**
-     * @name            updateLayouts ()
-     *                Updates one or more layouts details in database.
-     *
-     * @since            1.0.1
-     * @version         1.1.6
-     * @author          Can Berkol
-     *
-     * @use             $this->createException()
-     *
-     * @param           array $collection Collection of Layout entities or array of entity details.
-     *
-     * @return          array           $response
-     */
-    public function updateLayouts($collection)
-    {
-        $this->resetResponse();
-        /** Parameter must be an array */
-        if (!is_array($collection)) {
-            return $this->createException('InvalidParameter', 'Array', 'err.invalid.parameter.collection');
-        }
-        $countUpdates = 0;
-        $updatedItems = array();
-        foreach ($collection as $data) {
-            if ($data instanceof BundleEntity\Layout) {
-                $entity = $data;
-                $this->em->persist($entity);
-                $updatedItems[] = $entity;
-                $countUpdates++;
-            } else if (is_object($data)) {
-                if (!property_exists($data, 'id') || !is_numeric($data->id)) {
-                    return $this->createException('InvalidParameter', 'Each data must contain a valid identifier id, integer', 'err.invalid.parameter.collection');
-                }
-                if (!property_exists($data, 'site')) {
-                    $data->site = 1;
-                }
-                if (!property_exists($data, 'theme')) {
-                    $data->theme = 1;
-                }
-                $response = $this->getLayout($data->id, 'id');
-                if ($response['error']) {
-                    return $this->createException('EntityDoesNotExist', 'Layout with id ' . $data->id, 'err.invalid.entity');
-                }
-                $oldEntity = $response['result']['set'];
-                foreach ($data as $column => $value) {
-                    $set = 'set' . $this->translateColumnName($column);
-                    switch ($column) {
-                        case 'local':
-                            $localizations = array();
-                            foreach ($value as $langCode => $translation) {
-                                $localization = $oldEntity->getLocalization($langCode, true);
-                                $newLocalization = false;
-                                if (!$localization) {
-                                    $newLocalization = true;
-                                    $localization = new BundleEntity\ProductCategoryLocalization();
-                                    $mlsModel = $this->kernel->getContainer()->get('multilanguagesupport.model');
-                                    $response = $mlsModel->getLanguage($langCode, 'iso_code');
-                                    $localization->setLanguage($response['result']['set']);
-                                    $localization->setLayout($oldEntity);
-                                }
-                                foreach ($translation as $transCol => $transVal) {
-                                    $transSet = 'set' . $this->translateColumnName($transCol);
-                                    $localization->$transSet($transVal);
-                                }
-                                if ($newLocalization) {
-                                    $this->em->persist($localization);
-                                }
-                                $localizations[] = $localization;
-                            }
-                            $oldEntity->setLocalizations($localizations);
-                            break;
-                        case 'theme':
-                            $response = $this->getTheme($value, 'id');
-                            if (!$response['error']) {
-                                $oldEntity->$set($response['result']['set']);
-                            } else {
-                                new CoreExceptions\EntityDoesNotExistException($this->kernel, $value);
-                            }
-                            unset($response, $fModel);
-                            break;
-                        case 'site':
-                            $sModel = $this->kernel->getContainer()->get('sitemanagement.model');
-                            $response = $sModel->getSite($value, 'id');
-                            if (!$response['error']) {
-                                $oldEntity->$set($response['result']['set']);
-                            } else {
-                                new CoreExceptions\SiteDoesNotExistException($this->kernel, $value);
-                            }
-                            unset($response, $sModel);
-                            break;
-                        case 'id':
-                            break;
-                        default:
-                            $oldEntity->$set($value);
-                            break;
-                    }
-                    if ($oldEntity->isModified()) {
-                        $this->em->persist($oldEntity);
-                        $countUpdates++;
-                        $updatedItems[] = $oldEntity;
-                    }
-                }
-            } else {
-                new CoreExceptions\InvalidDataException($this->kernel);
-            }
-        }
-        if ($countUpdates > 0) {
-            $this->em->flush();
-        }
-        /**
-         * Prepare & Return Response
-         */
-        $this->response = array(
-            'rowCount' => $this->response['rowCount'],
-            'result' => array(
-                'set' => $updatedItems,
-                'total_rows' => $countUpdates,
-                'last_insert_id' => null,
-            ),
-            'error' => false,
-            'code' => 'scc.db.update.done',
-        );
-        return $this->response;
-    }
-
-    /**
-     * @name            updateModuleLayoutEntry ()
-     *                Updates single module layout entry.
-     *
-     * @since            1.1.5
-     * @version         1.1.5
-     * @author          Can Berkol
-     *
-     * @use             $this->updateLayouts()
-     *
-     * @param           mixed $entry Module Layout entity, id, or code.
-     * @return          mixed           $response
-     */
-    public function updateModuleLayoutEntry($entry)
-    {
-        return $this->updateModuleLayoutEntries(array($entry));
-    }
-
-    /**
-     * @name            updateModuleLayoutEntries ()
-     *                Updates one or more module layout entries
-     *
-     * @since            1.1.5
-     * @version         1.1.6
-     * @author          Can Berkol
-     *
-     * @use             $this->doesModuleLayoutEntryExist()
-     * @use             $this->createException()
-     *
-     * @param           array $collection Collection of Layout entities or array of entity details.
-     *
-     * @return          array           $response
-     */
-    public function updateModuleLayoutEntries($collection)
-    {
-        $this->resetResponse();
-        /** Parameter must be an array */
-        if (!is_array($collection)) {
-            return $this->createException('InvalidParameter', 'Array', 'err.invalid.parameter.collection');
-        }
-        $countUpdates = 0;
-        $updatedItems = array();
-        foreach ($collection as $data) {
-            if ($data instanceof BundleEntity\ModulesOfLayout) {
-                $entity = $data;
-                $this->em->persist($entity);
-                $updatedItems[] = $entity;
-                $countUpdates++;
-            } else if (is_object($data)) {
-                if (!property_exists($data, 'id') || !is_numeric($data->id)) {
-                    return $this->createException('InvalidParameter', 'Each data must contain a valid identifier id, integer', 'err.invalid.parameter.collection');
-                }
-                if (!property_exists($data, 'sort_order')) {
-                    $data->sort_order = 1;
-                }
-                $response = $this->getModuleLayoutEntry($data->id, 'id');
-                if ($response['error']) {
-                    return $this->createException('EntityDoesNotExist', 'ModulesOfLayout with id ' . $data->id, 'err.invalid.entity');
-                }
-                $oldEntity = $response['result']['set'];
-                foreach ($data as $column => $value) {
-                    $set = 'set' . $this->translateColumnName($column);
-                    switch ($column) {
-                        case 'local':
-                            $localizations = array();
-                            foreach ($value as $langCode => $translation) {
-                                $localization = $oldEntity->getLocalization($langCode, true);
-                                $newLocalization = false;
-                                if (!$localization) {
-                                    $newLocalization = true;
-                                    $localization = new BundleEntity\ProductCategoryLocalization();
-                                    $mlsModel = $this->kernel->getContainer()->get('multilanguagesupport.model');
-                                    $response = $mlsModel->getLanguage($langCode, 'iso_code');
-                                    $localization->setLanguage($response['result']['set']);
-                                    $localization->setModulesOfLayout($oldEntity);
-                                }
-                                foreach ($translation as $transCol => $transVal) {
-                                    $transSet = 'set' . $this->translateColumnName($transCol);
-                                    $localization->$transSet($transVal);
-                                }
-                                if ($newLocalization) {
-                                    $this->em->persist($localization);
-                                }
-                                $localizations[] = $localization;
-                            }
-                            $oldEntity->setLocalizations($localizations);
-                            break;
-                        case 'page':
-                            $response = $this->getPage($value, 'id');
-                            if (!$response['error']) {
-                                $oldEntity->$set($response['result']['set']);
-                            } else {
-                                new CoreExceptions\EntityDoesNotExistException($this->kernel, $value);
-                            }
-                            unset($response, $fModel);
-                            break;
-                        case 'layout':
-                            $response = $this->getLayout($value, 'id');
-                            if (!$response['error']) {
-                                $oldEntity->$set($response['result']['set']);
-                            } else {
-                                new CoreExceptions\EntityDoesNotExistException($this->kernel, $value);
-                            }
-                            unset($response, $fModel);
-                            break;
-                        case 'module':
-                            $response = $this->getModule($value, 'id');
-                            if (!$response['error']) {
-                                $oldEntity->$set($response['result']['set']);
-                            } else {
-                                new CoreExceptions\EntityDoesNotExistException($this->kernel, $value);
-                            }
-                            unset($response, $fModel);
-                            break;
-                        case 'id':
-                            break;
-                        default:
-                            $oldEntity->$set($value);
-                            break;
-                    }
-                    if ($oldEntity->isModified()) {
-                        $this->em->persist($oldEntity);
-                        $countUpdates++;
-                        $updatedItems[] = $oldEntity;
-                    }
-                }
-            } else {
-                new CoreExceptions\InvalidDataException($this->kernel);
-            }
-        }
-        if ($countUpdates > 0) {
-            $this->em->flush();
-        }
-        /**
-         * Prepare & Return Response
-         */
-        $this->response = array(
-            'rowCount' => $this->response['rowCount'],
-            'result' => array(
-                'set' => $updatedItems,
-                'total_rows' => $countUpdates,
-                'last_insert_id' => null,
-            ),
-            'error' => false,
-            'code' => 'scc.db.update.done',
-        );
-        return $this->response;
-    }
-
-    /**
-     * @name            updateNavigation ()
-     *                Updates single navigation.
-     *
-     * @since            1.0.1
-     * @version         1.1.0
-     * @author          Can Berkol
-     *
-     * @use             $this->updateNavigations()
-     *
-     * @param           mixed $navigation Navigation entity, id, or code.
-     * @return          mixed           $response
-     */
-    public function updateNavigation($navigation)
-    {
-        return $this->updateNavigations(array($navigation));
-    }
-
-    /**
-     * @name            updateNavigations ()
-     *                Updates one or more navigation details in database.
-     *
-     * @since            1.0.1
-     * @version         1.1.6
-     * @author          Can Berkol
-     *
-     * @use             $his->createException()
-     *
-     * @param           array $collection Collection of Navigation entities or array of entity details.
-     *
-     * @return          array           $response
-     */
-    public function updateNavigations($collection)
-    {
-        $this->resetResponse();
-        /** Parameter must be an array */
-        if (!is_array($collection)) {
-            return $this->createException('InvalidParameter', 'Array', 'err.invalid.parameter.collection');
-        }
-        $countUpdates = 0;
-        $updatedItems = array();
-        foreach ($collection as $data) {
-            if ($data instanceof BundleEntity\Navigation) {
-                $entity = $data;
-                $this->em->persist($entity);
-                $updatedItems[] = $entity;
-                $countUpdates++;
-            } else if (is_object($data)) {
-                if (!property_exists($data, 'id') || !is_numeric($data->id)) {
-                    return $this->createException('InvalidParameter', 'Each data must contain a valid identifier id, integer', 'err.invalid.parameter.collection');
-                }
-                if (property_exists($data, 'date_added')) {
-                    unset($data->date_added);
-                }
-                if (!property_exists($data, 'site')) {
-                    $data->site = 1;
-                }
-                $response = $this->getNavigation($data->id, 'id');
-                if ($response['error']) {
-                    return $this->createException('EntityDoesNotExist', 'Navigation with id ' . $data->id, 'err.invalid.entity');
-                }
-                $oldEntity = $response['result']['set'];
-                foreach ($data as $column => $value) {
-                    $set = 'set' . $this->translateColumnName($column);
-                    switch ($column) {
-                        case 'local':
-                            $localizations = array();
-                            foreach ($value as $langCode => $translation) {
-                                $localization = $oldEntity->getLocalization($langCode, true);
-                                $newLocalization = false;
-                                if (!$localization) {
-                                    $newLocalization = true;
-                                    $localization = new BundleEntity\ProductCategoryLocalization();
-                                    $mlsModel = $this->kernel->getContainer()->get('multilanguagesupport.model');
-                                    $response = $mlsModel->getLanguage($langCode, 'iso_code');
-                                    $localization->setLanguage($response['result']['set']);
-                                    $localization->setNavigation($oldEntity);
-                                }
-                                foreach ($translation as $transCol => $transVal) {
-                                    $transSet = 'set' . $this->translateColumnName($transCol);
-                                    $localization->$transSet($transVal);
-                                }
-                                if ($newLocalization) {
-                                    $this->em->persist($localization);
-                                }
-                                $localizations[] = $localization;
-                            }
-                            $oldEntity->setLocalizations($localizations);
-                            break;
-                        case 'site':
-                            $sModel = $this->kernel->getContainer()->get('sitemanagement.model');
-                            $response = $sModel->getSite($value, 'id');
-                            if (!$response['error']) {
-                                $oldEntity->$set($response['result']['set']);
-                            } else {
-                                new CoreExceptions\SiteDoesNotExistException($this->kernel, $value);
-                            }
-                            unset($response, $sModel);
-                            break;
-                        case 'id':
-                            break;
-                        default:
-                            $oldEntity->$set($value);
-                            break;
-                    }
-                    if ($oldEntity->isModified()) {
-                        $this->em->persist($oldEntity);
-                        $countUpdates++;
-                        $updatedItems[] = $oldEntity;
-                    }
-                }
-            } else {
-                new CoreExceptions\InvalidDataException($this->kernel);
-            }
-        }
-        if ($countUpdates > 0) {
-            $this->em->flush();
-        }
-        /**
-         * Prepare & Return Response
-         */
-        $this->response = array(
-            'rowCount' => $this->response['rowCount'],
-            'result' => array(
-                'set' => $updatedItems,
-                'total_rows' => $countUpdates,
-                'last_insert_id' => null,
-            ),
-            'error' => false,
-            'code' => 'scc.db.update.done',
-        );
-        return $this->response;
-    }
-
-    /**
-     * @name            updateNavigationItem ()
-     *                Updates single navigation_item.
-     *
-     * @since            1.0.1
-     * @version         1.1.0
-     * @author          Can Berkol
-     *
-     * @use             $this->update_themes()
-     *
-     * @param           mixed           navigation_item           Navigation entity, id, or code.
-     * @return          mixed           $response
-     */
-    public function updateNavigationItem($navigation_item)
-    {
-        return $this->updateNavigationItems(array($navigation_item));
-    }
-
-    /**
-     * @name            updateNavigationItems ()
-     *                  Updates one or more navigation item details in database.
+     * @name            updateTheme()
      *
      * @since           1.0.1
-     * @version         1.1.8
-     * @author          Can Berkol
-     *
-     * @use             $this->createException()
-     *
-     * @param           array $collection Collection of Navigation entities or array of entity details.
-     *
-     * @return          array           $response
-     */
-    public function updateNavigationItems($collection)
-    {
-        $this->resetResponse();
-        /** Parameter must be an array */
-        if (!is_array($collection)) {
-            return $this->createException('InvalidParameter', 'Array', 'err.invalid.parameter.collection');
-        }
-        $countUpdates = 0;
-        $updatedItems = array();
-        foreach ($collection as $data) {
-            if ($data instanceof BundleEntity\NavigationItem) {
-                $entity = $data;
-                $this->em->persist($entity);
-                $updatedItems[] = $entity;
-                $countUpdates++;
-            } else if (is_object($data)) {
-                if (!property_exists($data, 'id') || !is_numeric($data->id)) {
-                    return $this->createException('InvalidParameter', 'Each data must contain a valid identifier id, integer', 'err.invalid.parameter.collection');
-                }
-                $response = $this->getNavigationItem($data->id, 'id');
-                if ($response['error']) {
-                    return $this->createException('EntityDoesNotExist', 'NavigationItem with id ' . $data->id, 'err.invalid.entity');
-                }
-                $oldEntity = $response['result']['set'];
-                foreach ($data as $column => $value) {
-                    $set = 'set' . $this->translateColumnName($column);
-                    switch ($column) {
-                        case 'local':
-                            $localizations = array();
-                            foreach ($value as $langCode => $translation) {
-                                $localization = $oldEntity->getLocalization($langCode, true);
-                                $newLocalization = false;
-                                if (!$localization) {
-                                    $newLocalization = true;
-                                    $localization = new BundleEntity\NavigationItemLocalization();
-                                    $mlsModel = $this->kernel->getContainer()->get('multilanguagesupport.model');
-                                    $response = $mlsModel->getLanguage($langCode, 'iso_code');
-                                    $localization->setLanguage($response['result']['set']);
-                                    $localization->setNavigationItem($oldEntity);
-                                }
-                                foreach ($translation as $transCol => $transVal) {
-                                    $transSet = 'set' . $this->translateColumnName($transCol);
-                                    $localization->$transSet($transVal);
-                                }
-                                if ($newLocalization) {
-                                    $this->em->persist($localization);
-                                }
-                                $localizations[] = $localization;
-                            }
-                            $oldEntity->setLocalizations($localizations);
-                            break;
-                        case 'page':
-                            $response = $this->getPage($value, 'id');
-                            if (!$response['error']) {
-                                $oldEntity->$set($response['result']['set']);
-                            } else {
-                                new CoreExceptions\EntityDoesNotExistException($this->kernel, $value);
-                            }
-                            unset($response);
-                            break;
-                        case 'parent':
-                            $response = $this->getNavigation($value, 'id');
-                            if (!$response['error']) {
-                                $oldEntity->$set($response['result']['set']);
-                            } else {
-                                new CoreExceptions\EntityDoesNotExistException($this->kernel, $value);
-                            }
-                            unset($response, $fModel);
-                            break;
-                        case 'navigation':
-                            $response = $this->getNavigation($value, 'id');
-                            if (!$response['error']) {
-                                $oldEntity->$set($response['result']['set']);
-                            } else {
-                                new CoreExceptions\EntityDoesNotExistException($this->kernel, $value);
-                            }
-                            unset($response, $sModel);
-                            break;
-                        case 'id':
-                            break;
-                        default:
-                            $oldEntity->$set($value);
-                            break;
-                    }
-                    if ($oldEntity->isModified()) {
-                        $this->em->persist($oldEntity);
-                        $countUpdates++;
-                        $updatedItems[] = $oldEntity;
-                    }
-                }
-            } else {
-                new CoreExceptions\InvalidDataException($this->kernel);
-            }
-        }
-        if ($countUpdates > 0) {
-            $this->em->flush();
-        }
-        /**
-         * Prepare & Return Response
-         */
-        $this->response = array(
-            'rowCount' => $this->response['rowCount'],
-            'result' => array(
-                'set' => $updatedItems,
-                'total_rows' => $countUpdates,
-                'last_insert_id' => null,
-            ),
-            'error' => false,
-            'code' => 'scc.db.update.done',
-        );
-        return $this->response;
-    }
-
-    /**
-     * @name            updateTheme ()
-     *                Updates single theme.
-     *
-     * @since            1.0.1
-     * @version         1.1.0
+     * @version         1.2.1
      * @author          Can Berkol
      *
      * @use             $this->updateThemes()
      *
-     * @param           mixed $theme Theme entity, id, or code.
-     * @return          mixed           $response
+     * @param           mixed			$theme
+     * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
      */
-    public function updateTheme($theme)
-    {
+    public function updateTheme($theme){
         return $this->updateThemes(array($theme));
     }
 
     /**
-     * @name            updateThemes ()
-     *                Updates one or more theme details in database.
+     * @name            updateThemes()
      *
      * @since           1.0.1
-     * @version         1.0.6
+     * @version         1.2.1
      *
      * @author          Can Berkol
      *
      * @use             $this->createException()
      *
-     * @param           array $collection Collection of Theme entities or array of entity details.
+     * @param           array 			$collection
      *
-     * @return          array           $response
+     * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
      */
-    public function updateThemes($collection)
-    {
-        $this->resetResponse();
-        /** Parameter must be an array */
-        if (!is_array($collection)) {
-            return $this->createException('InvalidParameter', 'Array', 'err.invalid.parameter.collection');
-        }
+    public function updateThemes($collection){
+        $timeStamp = time();
+		if (!is_array($collection)) {
+			return $this->createException('InvalidParameterValueException', 'Invalid parameter value. Parameter must be an array collection', 'E:S:001');
+		}
         $countUpdates = 0;
         $updatedItems = array();
         foreach ($collection as $data) {
@@ -5893,10 +3985,11 @@ class ContentManagementModel extends CoreModel
                 $this->em->persist($entity);
                 $updatedItems[] = $entity;
                 $countUpdates++;
-            } else if (is_object($data)) {
-                if (!property_exists($data, 'id') || !is_numeric($data->id)) {
-                    return $this->createException('InvalidParameter', 'Each data must contain a valid identifier id, integer', 'err.invalid.parameter.collection');
-                }
+            }
+			else if (is_object($data)) {
+				if(!property_exists($data, 'id') || !is_numeric($data->id)){
+					return $this->createException('InvalidParameterException', 'Parameter must be an object with the "id" property and id property ​must have an integer value.', 'E:S:003');
+				}
                 if (!property_exists($data, 'date_updated')) {
                     $data->date_updated = new \DateTime('now', new \DateTimeZone($this->kernel->getContainer()->getParameter('app_timezone')));
                 }
@@ -5912,11 +4005,11 @@ class ContentManagementModel extends CoreModel
                 if (!property_exists($data, 'count_layouts')) {
                     $data->count_layouts = 0;
                 }
-                $response = $this->getTheme($data->id, 'id');
-                if ($response['error']) {
-                    return $this->createException('EntityDoesNotExist', 'ProductCategory with id ' . $data->id, 'err.invalid.entity');
+                $response = $this->getTheme($data->id);
+                if ($response->error->exist) {
+					return $this->createException('EntityDoesNotExist', 'Member with id / username / email '.$data->id.' does not exist in database.', 'E:D:002');
                 }
-                $oldEntity = $response['result']['set'];
+                $oldEntity = $response->result->set;
                 foreach ($data as $column => $value) {
                     $set = 'set' . $this->translateColumnName($column);
                     switch ($column) {
@@ -5927,10 +4020,10 @@ class ContentManagementModel extends CoreModel
                                 $newLocalization = false;
                                 if (!$localization) {
                                     $newLocalization = true;
-                                    $localization = new BundleEntity\ProductCategoryLocalization();
+                                    $localization = new BundleEntity\ThemeLocalization();
                                     $mlsModel = $this->kernel->getContainer()->get('multilanguagesupport.model');
-                                    $response = $mlsModel->getLanguage($langCode, 'iso_code');
-                                    $localization->setLanguage($response['result']['set']);
+                                    $response = $mlsModel->getLanguage($langCode);
+                                    $localization->setLanguage($response->result->set);
                                     $localization->setTheme($oldEntity);
                                 }
                                 foreach ($translation as $transCol => $transVal) {
@@ -5944,16 +4037,16 @@ class ContentManagementModel extends CoreModel
                             }
                             $oldEntity->setLocalizations($localizations);
                             break;
-                        case 'site':
-                            $sModel = $this->kernel->getContainer()->get('sitemanagement.model');
-                            $response = $sModel->getSite($value, 'id');
-                            if (!$response['error']) {
-                                $oldEntity->$set($response['result']['set']);
-                            } else {
-                                new CoreExceptions\SiteDoesNotExistException($this->kernel, $value);
-                            }
-                            unset($response, $sModel);
-                            break;
+						case 'site':
+							$sModel = $this->kernel->getContainer()->get('sitemanagement.model');
+							$response = $sModel->getSite($value, 'id');
+							if (!$response->error->exist) {
+								$oldEntity->$set($response->result->set);
+							} else {
+								return $this->createException('EntityDoesNotExist', 'Site with id / url_key '.$value.' does not exist in database.', 'E:D:002');
+							}
+							unset($response, $sModel);
+							break;
                         case 'id':
                             break;
                         default:
@@ -5966,32 +4059,84 @@ class ContentManagementModel extends CoreModel
                         $updatedItems[] = $oldEntity;
                     }
                 }
-            } else {
-                new CoreExceptions\InvalidDataException($this->kernel);
             }
         }
-        if ($countUpdates > 0) {
-            $this->em->flush();
-        }
-        /**
-         * Prepare & Return Response
-         */
-        $this->response = array(
-            'rowCount' => $this->response['rowCount'],
-            'result' => array(
-                'set' => $updatedItems,
-                'total_rows' => $countUpdates,
-                'last_insert_id' => null,
-            ),
-            'error' => false,
-            'code' => 'scc.db.update.done',
-        );
-        return $this->response;
-    }
+		if($countUpdates > 0){
+			$this->em->flush();
+			return new ModelResponse($updatedItems, $countUpdates, 0, null, false, 'S:D:004', 'Selected entries have been successfully updated within database.', $timeStamp, time());
+		}
+		return new ModelResponse(null, 0, 0, null, true, 'E:D:004', 'One or more entities cannot be updated within database.', $timeStamp, time());
+	}
 }
-
 /**
  * Change Log
+ * **************************************
+ * v1.2.6                      12.06.2015
+ * Can Berkol
+ * **************************************
+ * BF :: insertNavigationLovalizations() rewritten.
+ * BF :: insertNavigationItemLovalizations() rewritten.
+ * BF :: insertPageLocalizations() rewritten.
+ * FR :: markPagesAsDeleted() implemented.
+ *
+ * **************************************
+ * v1.2.5                      04.06.2015
+ * Can Berkol
+ * **************************************
+ * BF :: listModulesOFLayout & listModulesOfPageLayoutsGroupedBySection methods have been fixed.
+ *
+ * **************************************
+ * v1.2.4                      26.05.2015
+ * Can Berkol
+ * **************************************
+ * BF :: Deprecated use of $this->resetResponse() is removed.
+ * BF :: listPagesMethod() was trying to associate page_localization to navigation. Association now points to page.
+ * BF :: Use header added for ModelResponse.
+ * BF :: Entity definition access kets fixed.
+ *
+ * **************************************
+ * v1.2.3                      25.05.2015
+ * Can Berkol
+ * **************************************
+ * BF :: db_connection is replaced with dbConnection
+ *
+ * **************************************
+ * v1.2.2                      10.05.2015
+ * Can Berkol
+ * **************************************
+ * BF :: Old style method calls fixed.
+ *
+ * **************************************
+ * v1.2.1                     03.05.2015
+ * Can Berkol
+ * **************************************
+ * CR :: Made compatible with CoreBundle v3.3.
+ *
+ * **************************************
+ * v1.1.9                      29.04.2015
+ * TW #
+ * Can Berkol
+ * **************************************
+ * U listModulesOfPageLayoutsGroupedBySection()
+ *
+ * **************************************
+ * v1.1.9                      24.04.2015
+ * TW #3568871
+ * Can Berkol
+ * **************************************
+ * A deleteNvigations()
+ * A deletePageRevision()
+ * A deletePageRevisions()
+ * A getLastRevisionOfPage()
+ * A getPageRevision()
+ * A insertPageRevision()
+ * A insertPageRevisions()
+ * A listPageRevisions()
+ * A listRevisionsOfPage()
+ * A updatePageRevision()
+ * A updatePageRevisions()
+ * D deletNavigations()
+ *
  * **************************************
  * v1.1.8                      Can Berkol
  * 29.03.2014
@@ -6042,122 +4187,5 @@ class ContentManagementModel extends CoreModel
  * **************************************
  * B listItemsOfNavigation() bug fixes.
  * U listNavigationItemsOfNavigation() Now accepts string, integer or object for $navigation parameter.
- *
- * **************************************
- * v1.1.3                      Can Berkol
- * 01.12.2013
- * **************************************
- * U listModulesOfPageLayoutsGroupedBySection()
- *
- * **************************************
- * v1.1.2                      Can Berkol
- * 27.11.2013
- * **************************************
- * B getPage() Response return bug on error is fixed.
- * U getPage() Lazyloading JOIN added.
- * U listNavigations() Lazyloading JOIN added.
- *
- * **************************************
- * v1.1.1                      Can Berkol
- * 21.11.2013
- * **************************************
- * A listPages()
- * B listModulesOfPageLayoutsGroupedBySection()
- * D list_pages()
- *
- * **************************************
- * v1.1.0                      Can Berkol
- * 13.11.2013
- * **************************************
- * A getLayoutLocalization()
- * A getModuleLocalization()
- * A getNavigationLocalization()
- * A getNavigationItemLocalization()
- * A getPageLocalization()
- * A getThemeLocalization()
- * A listModulesOfPageLayouts
- * M function names are now camelCase.
- *
- * **************************************
- * v1.0.2                      Can Berkol
- * 10.10.2013
- * **************************************
- * A update_module()
- * A update_modules()
- *
- * **************************************
- * v1.0.1                      Can Berkol
- * 09.09.2013
- * **************************************
- * A delete_layout()
- * A delete_layouts()
- * A delete_module()
- * A delete_modules()
- * A delete_navigation()
- * A delete_navigations()
- * A delete_navigation_item()
- * A delete_navigation_items()
- * A delete_theme()
- * A delete_themes()
- * A does_layout_exist()
- * A does_module_exist()
- * A does_navigation_exists()
- * A does_navigation_item_exists()
- * A does_theme_exists()
- * A getLayout()
- * A getNavigation()
- * A getNavigationItem()
- * A insert_navigation()
- * A insert_navigations()
- * A insert_navigation_item()
- * A insert_navigation_items()
- * A list_control_panel_themes()
- * A list_editable_pages()
- * A list_files_of_page()
- * A list_frontend_themes()
- * A list_items_of_navigation()
- * A list_layouts()
- * A list_layouts_of_theme()
- * A list_layouts_of_site()
- * A list_member_editable_pages()
- * A list_modules()
- * A list_modules_of_theme()
- * A list_modules_of_page_layout()
- * A list_modules_of_site()
- * A list_navigation_items()
- * A list_navigation_items_of_navigation()
- * A list_navigation_items_of_parent()
- * A list_navigations()
- * A list_not_editable_pages()
- * A list_pages_of_layout()
- * A list_pages_of_site()
- * A list_support_editable_pages()
- * A list_themes()
- * A list_themes_of_site()
- * A update_layout()
- * A update_layouts()
- * A update_navigation()
- * A update_navigations()
- * A update_navigation_item()
- * A update_navigation_items()
- * A update_theme()
- * A update_themes()
- *
- * **************************************
- * v1.0.0                      Can Berkol
- * 08.09.2013
- * **************************************
- * A __construct()
- * A __destruct()
- * A delete_page()
- * A delete_pages()
- * A does_page_exist()
- * A getModule()
- * A getPage()
- * A insert_pages()
- * A insert_page()
- * A list_pages()
- * A update_page()
- * A update_pages()
  *
  */

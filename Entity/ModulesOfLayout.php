@@ -1,12 +1,14 @@
 <?php
+
 /**
  * @name        ModulesOfLayout
  * @package		BiberLtd\Bundle\CoreBundle\ContentManagementBundle
  *
+ * @author		cAN bERKOL
  * @author		Murat Ünal
  *
- * @version     1.0.0
- * @date        24.09.2013
+ * @version     1.0.1
+ * @date        26.05.2015
  *
  * @copyright   Biber Ltd. (http://www.biberltd.com)
  * @license     GPL v3.0
@@ -17,83 +19,74 @@
 namespace BiberLtd\Bundle\ContentManagementBundle\Entity;
 use Doctrine\ORM\Mapping AS ORM;
 use BiberLtd\Bundle\CoreBundle\CoreLocalizableEntity;
-/** 
+/**
  * @ORM\Entity
  * @ORM\Table(
  *     name="modules_of_layout",
  *     options={"charset":"utf8","collate":"utf8_turkish_ci","engine":"innodb"},
- *     indexes={@ORM\Index(name="idx_n_modules_of_layout_section", columns={"section"})},
+ *     indexes={@ORM\Index(name="idxNSectionOfLayout", columns={"section"})},
  *     uniqueConstraints={
- *         @ORM\UniqueConstraint(name="idx_u_modules_of_layout_id", columns={"id"}),
- *         @ORM\UniqueConstraint(name="idx_u_modules_of_layout", columns={"layout","module","page","section"})
+ *         @ORM\UniqueConstraint(name="idxUModulesOfLayoutId", columns={"id"}),
+ *         @ORM\UniqueConstraint(name="idxUModulesOfLayout", columns={"layout","module","page","section"})
  *     }
  * )
  */
 class ModulesOfLayout extends CoreLocalizableEntity
 {
-    /** 
-     * @ORM\Id
-     * @ORM\Column(type="integer", length=10)
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
+	/**
+	 * @ORM\Id
+	 * @ORM\Column(type="integer", length=10)
+	 * @ORM\GeneratedValue(strategy="AUTO")
+	 */
+	private $id;
 
-    /** 
-     * @ORM\Column(type="string", length=45, nullable=true)
-     */
-    private $section;
+	/**
+	 * @ORM\Column(type="string", length=45, nullable=true)
+	 */
+	private $section;
 
-    /** 
-     * @ORM\Column(type="integer", length=10, nullable=true)
-     */
-    private $sort_order;
+	/**
+	 * @ORM\Column(type="integer", length=10, nullable=true, options={"default":1})
+	 */
+	private $sort_order;
 
-    /** 
-     * @ORM\Column(type="string", length=45, nullable=true)
-     */
-    private $style;
+	/**
+	 * @ORM\Column(type="string", length=45, nullable=true)
+	 */
+	private $style;
 
-    /** 
-     * @ORM\OneToMany(
-     *     targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\ModulesOfLayoutLocalization",
-     *     mappedBy="modules_of_layout"
-     * )
-     */
-    protected $localizations;
+	/**
+	 * @ORM\ManyToOne(
+	 *     targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\Layout",
+	 *     inversedBy="modules_of_layout"
+	 * )
+	 * @ORM\JoinColumn(name="layout", referencedColumnName="id", nullable=false, onDelete="CASCADE")
+	 */
+	private $layout;
 
-    /** 
-     * @ORM\ManyToOne(
-     *     targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\Layout",
-     *     inversedBy="modules_of_layout"
-     * )
-     * @ORM\JoinColumn(name="layout", referencedColumnName="id", nullable=false, onDelete="CASCADE")
-     */
-    private $layout;
+	/**
+	 * @ORM\ManyToOne(
+	 *     targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\Page",
+	 *     inversedBy="modules_of_layout"
+	 * )
+	 * @ORM\JoinColumn(name="page", referencedColumnName="id", nullable=false, onDelete="CASCADE")
+	 */
+	private $page;
 
-    /** 
-     * @ORM\ManyToOne(
-     *     targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\Page",
-     *     inversedBy="modules_of_layout"
-     * )
-     * @ORM\JoinColumn(name="page", referencedColumnName="id", nullable=false, onDelete="CASCADE")
-     */
-    private $page;
-
-    /** 
-     * @ORM\ManyToOne(
-     *     targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\Module",
-     *     inversedBy="modules_of_layout"
-     * )
-     * @ORM\JoinColumn(name="module", referencedColumnName="id", nullable=false, onDelete="CASCADE")
-     */
-    private $module;
+	/**
+	 * @ORM\ManyToOne(
+	 *     targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\Module",
+	 *     inversedBy="modules_of_layout"
+	 * )
+	 * @ORM\JoinColumn(name="module", referencedColumnName="id", nullable=false, onDelete="CASCADE")
+	 */
+	private $module;
     /******************************************************************
      * PUBLIC SET AND GET FUNCTIONS                                   *
      ******************************************************************/
 
     /**
      * @name            getId()
-     *  				Gets $id property.
      * .
      * @author          Murat Ünal
      * @since			1.0.0
@@ -107,9 +100,7 @@ class ModulesOfLayout extends CoreLocalizableEntity
 
 
     /**
-     * @name                  setLayout ()
-     *                                  Sets the layout property.
-     *                                  Updates the data only if stored value and value to be set are different.
+     * @name            setLayout ()
      *
      * @author          Can Berkol
      *
@@ -132,7 +123,6 @@ class ModulesOfLayout extends CoreLocalizableEntity
 
     /**
      * @name            getLayout ()
-     *                            Returns the value of layout property.
      *
      * @author          Can Berkol
      *
@@ -146,9 +136,7 @@ class ModulesOfLayout extends CoreLocalizableEntity
     }
 
     /**
-     * @name                  setModule ()
-     *                                  Sets the module property.
-     *                                  Updates the data only if stored value and value to be set are different.
+     * @name            setModule ()
      *
      * @author          Can Berkol
      *
@@ -171,7 +159,6 @@ class ModulesOfLayout extends CoreLocalizableEntity
 
     /**
      * @name            getModule ()
-     *                            Returns the value of module property.
      *
      * @author          Can Berkol
      *
@@ -185,9 +172,7 @@ class ModulesOfLayout extends CoreLocalizableEntity
     }
 
     /**
-     * @name                  setPage ()
-     *                                Sets the page property.
-     *                                Updates the data only if stored value and value to be set are different.
+     * @name            setPage ()
      *
      * @author          Can Berkol
      *
@@ -210,7 +195,6 @@ class ModulesOfLayout extends CoreLocalizableEntity
 
     /**
      * @name            getPage ()
-     *                          Returns the value of page property.
      *
      * @author          Can Berkol
      *
@@ -224,10 +208,8 @@ class ModulesOfLayout extends CoreLocalizableEntity
     }
 
     /**
-     * @name                  setSection ()
-     *                                   Sets the section property.
-     *                                   Updates the data only if stored value and value to be set are different.
-     *
+     * @name            setSection ()
+	 *
      * @author          Can Berkol
      *
      * @since           1.0.0
@@ -249,7 +231,6 @@ class ModulesOfLayout extends CoreLocalizableEntity
 
     /**
      * @name            getSection ()
-     *                             Returns the value of section property.
      *
      * @author          Can Berkol
      *
@@ -263,9 +244,7 @@ class ModulesOfLayout extends CoreLocalizableEntity
     }
 
     /**
-     * @name                  setSortOrder ()
-     *                                     Sets the sort_order property.
-     *                                     Updates the data only if stored value and value to be set are different.
+     * @name            setSortOrder ()
      *
      * @author          Can Berkol
      *
@@ -288,7 +267,6 @@ class ModulesOfLayout extends CoreLocalizableEntity
 
     /**
      * @name            getSortOrder ()
-     *                               Returns the value of sort_order property.
      *
      * @author          Can Berkol
      *
@@ -302,9 +280,7 @@ class ModulesOfLayout extends CoreLocalizableEntity
     }
 
     /**
-     * @name                  setStyle ()
-     *                                 Sets the style property.
-     *                                 Updates the data only if stored value and value to be set are different.
+     * @name            setStyle ()
      *
      * @author          Can Berkol
      *
@@ -327,7 +303,6 @@ class ModulesOfLayout extends CoreLocalizableEntity
 
     /**
      * @name            getStyle ()
-     *                           Returns the value of style property.
      *
      * @author          Can Berkol
      *
@@ -339,10 +314,15 @@ class ModulesOfLayout extends CoreLocalizableEntity
     public function getStyle() {
         return $this->style;
     }
-
 }
 /**
  * Change Log:
+ * **************************************
+ * v1.0.1                      26.05.2015
+ * Can Berkol
+ * **************************************
+ * BF :: Entity name spaces in annotations have been fixed.
+ *
  * **************************************
  * v1.0.0                      Murat Ünal
  * 24.09.2013

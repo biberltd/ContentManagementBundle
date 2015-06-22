@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @name        LayoutLocalization
  * @package		BiberLtd\Bundle\CoreBundle\ContentManagementBundle
@@ -17,14 +18,14 @@
 namespace BiberLtd\Bundle\ContentManagementBundle\Entity;
 use Doctrine\ORM\Mapping AS ORM;
 use BiberLtd\Bundle\CoreBundle\CoreEntity;
-/** 
+/**
  * @ORM\Entity
  * @ORM\Table(
  *     name="layout_localizatiom",
  *     options={"charset":"utf8","collate":"utf8_turkish_ci","engine":"innodb"},
  *     uniqueConstraints={
- *         @ORM\UniqueConstraint(name="idx_u_layout_localization", columns={"layout","language"}),
- *         @ORM\UniqueConstraint(name="idx_u_layout_localization_url_key", columns={"layout","language","url_key"})
+ *         @ORM\UniqueConstraint(name="idxULayoutLocalization", columns={"layout","language"}),
+ *         @ORM\UniqueConstraint(name="idxULayoutLocalizationUrlKey", columns={"layout","language","url_key"})
  *     }
  * )
  */
@@ -49,10 +50,7 @@ class LayoutLocalization extends CoreEntity
 
     /** 
      * @ORM\Id
-     * @ORM\ManyToOne(
-     *     targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\Layout",
-     *     inversedBy="localizations"
-     * )
+     * @ORM\ManyToOne(targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\Layout", inversedBy="localizations")
      * @ORM\JoinColumn(name="layout", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
     private $layout;
@@ -78,7 +76,7 @@ class LayoutLocalization extends CoreEntity
             return $this;
         }
         $this->language = $language;
-		return this;
+		return $this;
     }
 
     /**
@@ -117,7 +115,7 @@ class LayoutLocalization extends CoreEntity
             return $this;
         }
         $this->layout = $layout;
-		return this;
+		return $this;
     }
 
     /**
@@ -156,7 +154,7 @@ class LayoutLocalization extends CoreEntity
             return $this;
         }
         $this->name = $name;
-		return this;
+		return $this;
     }
 
     /**
@@ -195,7 +193,7 @@ class LayoutLocalization extends CoreEntity
             return $this;
         }
         $this->url_key = $url_key;
-		return this;
+		return $this;
     }
 
     /**
