@@ -11,8 +11,8 @@
  *
  * @copyright   Biber Ltd. (www.biberltd.com)
  *
- * @version     1.2.6
- * @date        12.06.2015
+ * @version     1.2.7
+ * @date        26.06.2015
  *
  */
 
@@ -2518,8 +2518,9 @@ class ContentManagementModel extends CoreModel{
 	 * @name            listNavigationItems()
 	 *
 	 * @since           1.0.1
-	 * @version         1.2.1
+	 * @version         1.2.7
 	 * @author          Can Berkol
+	 * @author          Said İmamoğlu
 	 *
 	 * @use             $this->createException
 	 *
@@ -2536,9 +2537,9 @@ class ContentManagementModel extends CoreModel{
 		}
 		$oStr = $wStr = $gStr = $fStr = '';
 
-		$qStr = 'SELECT '.$this->entity['ni']['alias'].', '.$this->entity['ni']['alias']
+		$qStr = 'SELECT '.$this->entity['ni']['alias'].', '.$this->entity['nil']['alias']
 			.' FROM '.$this->entity['nil']['name'].' '.$this->entity['nil']['alias']
-			.' JOIN '.$this->entity['nil']['alias'].'.navigation '.$this->entity['ni']['alias'];
+			.' JOIN '.$this->entity['nil']['alias'].'.navigation_item '.$this->entity['ni']['alias'];
 
 		if(!is_null($sortOrder)){
 			foreach($sortOrder as $column => $direction){
@@ -2576,7 +2577,7 @@ class ContentManagementModel extends CoreModel{
 		$entities = array();
 		foreach($result as $entry){
 			$id = $entry->getNavigationItem()->getId();
-			if(!isset($unique[$id])){
+			if(!isset($entities[$id])){
 				$entities[] = $entry->getNavigationItem();
 			}
 		}
@@ -2601,7 +2602,7 @@ class ContentManagementModel extends CoreModel{
      * @param           array 		$sortOrder
      * @param           array 		$limit
      *
-     * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+     * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
      */
     public function listNavigationItemsOfNavigation($navigation, $level = 'top', $sortOrder = null, $limit = null){
         $timeStamp = time();
@@ -4070,6 +4071,11 @@ class ContentManagementModel extends CoreModel{
 }
 /**
  * Change Log
+ * **************************************
+ * v1.2.7                      26.06.2015
+ * Said İmamoğlu
+ * **************************************
+ * BF :: listNavigationItems() updated.
  * **************************************
  * v1.2.6                      12.06.2015
  * Can Berkol
