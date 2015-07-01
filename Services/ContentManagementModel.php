@@ -2160,8 +2160,8 @@ class ContentManagementModel extends CoreModel{
 		$entities = array();
 		foreach($result as $entry){
 			$id = $entry->getLayout()->getId();
-			if(!isset($unique[$id])){
-				$entities[] = $entry->getLayout();
+			if(!isset($entities[$id])){
+				$entities[$id] = $entry->getLayout();
 			}
 		}
 		$totalRows = count($entities);
@@ -2311,8 +2311,8 @@ class ContentManagementModel extends CoreModel{
 		$entities = array();
 		foreach($result as $entry){
 			$id = $entry->getModule()->getId();
-			if(!isset($unique[$id])){
-				$entities[] = $entry->getModule();
+			if(!isset($entities[$id])){
+				$entities[$id] = $entry->getModule();
 			}
 		}
 		$totalRows = count($entities);
@@ -2578,7 +2578,7 @@ class ContentManagementModel extends CoreModel{
 		foreach($result as $entry){
 			$id = $entry->getNavigationItem()->getId();
 			if(!isset($entities[$id])){
-				$entities[] = $entry->getNavigationItem();
+				$entities[$id] = $entry->getNavigationItem();
 			}
 		}
 		$totalRows = count($entities);
@@ -2745,8 +2745,8 @@ class ContentManagementModel extends CoreModel{
 		$entities = array();
 		foreach($result as $entry){
 			$id = $entry->getNavigation()->getId();
-			if(!isset($unique[$id])){
-				$entities[] = $entry->getNavigation();
+			if(!isset($entities[$id])){
+				$entities[$id] = $entry->getNavigation();
 			}
 		}
 		$totalRows = count($entities);
@@ -2878,8 +2878,8 @@ class ContentManagementModel extends CoreModel{
 		$entities = array();
 		foreach($result as $entry){
 			$id = $entry->getPage()->getId();
-			if(!isset($unique[$id])){
-				$entities[] = $entry->getPage();
+			if(!isset($entities[$id])){
+				$entities[$id] = $entry->getPage();
 			}
 		}
 		$totalRows = count($entities);
@@ -3035,8 +3035,8 @@ class ContentManagementModel extends CoreModel{
 		$entities = array();
 		foreach($result as $entry){
 			$id = $entry->getTheme()->getId();
-			if(!isset($unique[$id])){
-				$entities[] = $entry->getTheme();
+			if(!isset($entities[$id])){
+				$entities[$id] = $entry->getTheme();
 			}
 		}
 		$totalRows = count($entities);
