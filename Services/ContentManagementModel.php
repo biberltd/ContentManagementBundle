@@ -1265,6 +1265,7 @@ class ContentManagementModel extends CoreModel{
 
 		$response->stats->execution->start = $timeStamp;
 		$response->stats->execution->end = time();
+		$response->result->set = $response->result->set[0];
 
 		return $response;
     }
@@ -2160,8 +2161,9 @@ class ContentManagementModel extends CoreModel{
 		$entities = array();
 		foreach($result as $entry){
 			$id = $entry->getLayout()->getId();
-			if(!isset($entities[$id])){
-				$entities[$id] = $entry->getLayout();
+			if(!isset($unique[$id])){
+				$unique[$id] = '';
+				$entities[] = $entry->getLayout();
 			}
 		}
 		$totalRows = count($entities);
@@ -2311,8 +2313,9 @@ class ContentManagementModel extends CoreModel{
 		$entities = array();
 		foreach($result as $entry){
 			$id = $entry->getModule()->getId();
-			if(!isset($entities[$id])){
-				$entities[$id] = $entry->getModule();
+			if(!isset($unique[$id])){
+				$unique[$id] = '';
+				$entities[] = $entry->getModule();
 			}
 		}
 		$totalRows = count($entities);
@@ -2577,8 +2580,9 @@ class ContentManagementModel extends CoreModel{
 		$entities = array();
 		foreach($result as $entry){
 			$id = $entry->getNavigationItem()->getId();
-			if(!isset($entities[$id])){
-				$entities[$id] = $entry->getNavigationItem();
+			if(!isset($unique[$id])){
+				$unique[$id] = '';
+				$entities[] = $entry->getNavigationItem();
 			}
 		}
 		$totalRows = count($entities);
@@ -2745,8 +2749,9 @@ class ContentManagementModel extends CoreModel{
 		$entities = array();
 		foreach($result as $entry){
 			$id = $entry->getNavigation()->getId();
-			if(!isset($entities[$id])){
-				$entities[$id] = $entry->getNavigation();
+			if(!isset($unique[$id])){
+				$unique[$id] = '';
+				$entities[] = $entry->getNavigation();
 			}
 		}
 		$totalRows = count($entities);
@@ -2878,8 +2883,9 @@ class ContentManagementModel extends CoreModel{
 		$entities = array();
 		foreach($result as $entry){
 			$id = $entry->getPage()->getId();
-			if(!isset($entities[$id])){
-				$entities[$id] = $entry->getPage();
+			if(!isset($unique[$id])){
+				$unique[$id] = '';
+				$entities[] = $entry->getPage();
 			}
 		}
 		$totalRows = count($entities);
@@ -3035,8 +3041,9 @@ class ContentManagementModel extends CoreModel{
 		$entities = array();
 		foreach($result as $entry){
 			$id = $entry->getTheme()->getId();
-			if(!isset($entities[$id])){
-				$entities[$id] = $entry->getTheme();
+			if(!isset($unique[$id])){
+				$unique[$id] = '';
+				$entities[] = $entry->getTheme();
 			}
 		}
 		$totalRows = count($entities);
