@@ -11,8 +11,8 @@
  *
  * @copyright   Biber Ltd. (www.biberltd.com)
  *
- * @version     1.2.7
- * @date        26.06.2015
+ * @version     1.2.8
+ * @date        29.07.2015
  *
  */
 
@@ -102,7 +102,7 @@ class ContentManagementModel extends CoreModel{
      * @param           array       	$files
      * @param           mixed       	$page
      *
-     * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+     * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
      */
 	public function addFilesToPage($files, $page) {
 		$timeStamp = time();
@@ -152,7 +152,7 @@ class ContentManagementModel extends CoreModel{
      *
      * @param           mixed 			$layout
 	 *
-     * @return         BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+     * @return         \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
      */
     public function deleteLayout($layout)    {
         return $this->deleteLayouts(array($layout));
@@ -169,7 +169,7 @@ class ContentManagementModel extends CoreModel{
      *
      * @param           array 			$collection
      *
-     * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+     * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
      */
 	public function deleteLayouts($collection) {
 		$timeStamp = time();
@@ -210,7 +210,7 @@ class ContentManagementModel extends CoreModel{
      *
      * @param           mixed 			$module
      *
-     * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+     * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
      */
     public function deleteModule($module)    {
         return $this->deleteModules(array($module));
@@ -228,7 +228,7 @@ class ContentManagementModel extends CoreModel{
      *
      * @param           array 			$collection
      *
-     * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+     * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
      */
 	public function deleteModules($collection) {
 		$timeStamp = time();
@@ -269,7 +269,7 @@ class ContentManagementModel extends CoreModel{
      *
      * @param           mixed 			$navigation
      *
-     * @return          mixed           $response
+     * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
      */
     public function deleteNavigation($navigation){
         return $this->deleteNavigations(array($navigation));
@@ -287,7 +287,7 @@ class ContentManagementModel extends CoreModel{
 	 *
 	 * @param           array 			$collection
 	 *
-	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function deleteNavigations($collection) {
 		$timeStamp = time();
@@ -328,7 +328,7 @@ class ContentManagementModel extends CoreModel{
      *
      * @param           mixed 			$item
      *
-     * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+     * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
      */
     public function deleteNavigationItem($item) {
         return $this->deleteNavigationItems(array($item));
@@ -346,7 +346,7 @@ class ContentManagementModel extends CoreModel{
 	 *
 	 * @param           array 			$collection
 	 *
-	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function deleteNavigationItems($collection) {
 		$timeStamp = time();
@@ -386,7 +386,7 @@ class ContentManagementModel extends CoreModel{
      * @use             $this->deletePages()
      *
      * @param           mixed 			$page
-     * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+     * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
      */
     public function deletePage($page){
         return $this->deletePages(array($page));
@@ -403,7 +403,7 @@ class ContentManagementModel extends CoreModel{
 	 *
 	 * @param           mixed 			$revision
 	 *
-	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function deletePageRevision($revision){
 		return $this->deletePageRevisions(array($revision));
@@ -420,7 +420,7 @@ class ContentManagementModel extends CoreModel{
 	 *
 	 * @param           array           $collection             Collection consists one of the following: PageRevision
 	 *
-	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function deletePageRevisions($collection){
 		$timeStamp = time();
@@ -452,7 +452,7 @@ class ContentManagementModel extends CoreModel{
      *
      * @param           array 			$collection
      *
-     * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+     * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
      */
     public function deletePages($collection){
 		$timeStamp = time();
@@ -491,7 +491,7 @@ class ContentManagementModel extends CoreModel{
      * @use             $this->deleteThemes()
      *
      * @param           mixed 			$theme
-     * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+     * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
      */
     public function deleteTheme($theme) {
         return $this->deleteThemes(array($theme));
@@ -507,7 +507,7 @@ class ContentManagementModel extends CoreModel{
 	 *
 	 * @param           array 			$collection
 	 *
-	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function deleteThemes($collection){
 		$timeStamp = time();
@@ -549,7 +549,7 @@ class ContentManagementModel extends CoreModel{
      * @param           mixed 			$layout
      * @param           bool 			$bypass 			If set to true does not return response but only the result.
      *
-     * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+     * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
      */
 	public function doesLayoutExist($layout, $bypass = false) {
 		$timeStamp = time();
@@ -585,7 +585,7 @@ class ContentManagementModel extends CoreModel{
 	 * @param           mixed 			$module
 	 * @param           bool 			$bypass 			If set to true does not return response but only the result.
 	 *
-	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function doesModuleExist($module, $bypass = false) {
 		$timeStamp = time();
@@ -621,7 +621,7 @@ class ContentManagementModel extends CoreModel{
 	 * @param           mixed 			$entry
 	 * @param           bool 			$bypass 			If set to true does not return response but only the result.
 	 *
-	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function doesModuleLayoutEntryExist($entry, $bypass = false) {
 		$timeStamp = time();
@@ -657,7 +657,7 @@ class ContentManagementModel extends CoreModel{
 	 * @param           mixed 			$navigation
 	 * @param           bool 			$bypass 			If set to true does not return response but only the result.
 	 *
-	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function doesNavigationExist($navigation, $bypass = false) {
 		$timeStamp = time();
@@ -693,7 +693,7 @@ class ContentManagementModel extends CoreModel{
 	 * @param           mixed 			$item
 	 * @param           bool 			$bypass 			If set to true does not return response but only the result.
 	 *
-	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function doesNavigationItemExist($item, $bypass = false) {
 		$timeStamp = time();
@@ -729,7 +729,7 @@ class ContentManagementModel extends CoreModel{
 	 * @param           mixed 			$page
 	 * @param           bool 			$bypass 			If set to true does not return response but only the result.
 	 *
-	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function doesPageExist($page, $bypass = false) {
 		$timeStamp = time();
@@ -765,7 +765,7 @@ class ContentManagementModel extends CoreModel{
 	 * @param           mixed 			$theme
 	 * @param           bool 			$bypass 			If set to true does not return response but only the result.
 	 *
-	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function doesThemeExist($theme, $bypass = false) {
 		$timeStamp = time();
@@ -797,7 +797,7 @@ class ContentManagementModel extends CoreModel{
 	 * @author          Can Berkol
 	 *
 	 * @page			mixed			$page
-	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function getLastRevisionOfPage($page){
 		$timeStamp = time();
@@ -833,7 +833,7 @@ class ContentManagementModel extends CoreModel{
 	 *
 	 * @param           mixed           $layout
 	 *
-	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function getLayout($layout) {
 		$timeStamp = time();
@@ -848,7 +848,7 @@ class ContentManagementModel extends CoreModel{
 			case is_string($layout):
 				$result = $this->em->getRepository($this->entity['l']['name'])->findOneBy(array('code' => $layout));
 				if(is_null($result)){
-					$response = $this->getLayoutByUrlKey($module);
+					$response = $this->getLayoutByUrlKey($layout);
 					if(!$response->error->exist){
 						$result = $response->result->set;
 					}
@@ -875,7 +875,7 @@ class ContentManagementModel extends CoreModel{
 	 * @param           mixed 			$urlKey
 	 * @param			mixed			$language
 	 *
-	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function getLayoutByUrlKey($urlKey, $language = null){
 		$timeStamp = time();
@@ -924,7 +924,7 @@ class ContentManagementModel extends CoreModel{
      * @param           mixed   			$page
      * @param           bool    			$bypass     if set to true return bool instead of response
      *
-     * @return          mixed           bool | $response
+     * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
      */
     public function getMaxSortOrderOfFilesOfPage($page, $bypass = false){
         $timeStamp = time();
@@ -952,7 +952,7 @@ class ContentManagementModel extends CoreModel{
 	 *
 	 * @param           mixed           $module
 	 *
-	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function getModule($module) {
 		$timeStamp = time();
@@ -994,7 +994,7 @@ class ContentManagementModel extends CoreModel{
 	 * @param           mixed 			$urlKey
 	 * @param			mixed			$language
 	 *
-	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function getModuleByUrlKey($urlKey, $language = null){
 		$timeStamp = time();
@@ -1041,7 +1041,7 @@ class ContentManagementModel extends CoreModel{
 	 *
 	 * @param           mixed           $entry
 	 *
-	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function getModuleLayoutEntry($entry) {
 		$timeStamp = time();
@@ -1070,7 +1070,7 @@ class ContentManagementModel extends CoreModel{
 	 *
 	 * @param           mixed           $navigation
 	 *
-	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function getNavigation($navigation) {
 		$timeStamp = time();
@@ -1102,7 +1102,7 @@ class ContentManagementModel extends CoreModel{
 	 *
 	 * @param           mixed           $item
 	 *
-	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function getNavigationItem($item) {
 		$timeStamp = time();
@@ -1141,7 +1141,7 @@ class ContentManagementModel extends CoreModel{
 	 * @param           mixed 			$urlKey
 	 * @param			mixed			$language
 	 *
-	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function getNavigationItemByUrlKey($urlKey, $language = null){
 		$timeStamp = time();
@@ -1188,7 +1188,7 @@ class ContentManagementModel extends CoreModel{
 	 *
 	 * @param           mixed           $page
 	 *
-	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function getPage($page) {
 		$timeStamp = time();
@@ -1230,7 +1230,7 @@ class ContentManagementModel extends CoreModel{
      * @param           mixed 			$urlKey
 	 * @param			mixed			$language
      *
-     * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+     * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
      */
     public function getPageByUrlKey($urlKey, $language = null){
         $timeStamp = time();
@@ -1328,7 +1328,7 @@ class ContentManagementModel extends CoreModel{
 	 *
 	 * @param           mixed           $theme
 	 *
-	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function getTheme($theme) {
 		$timeStamp = time();
@@ -1359,7 +1359,7 @@ class ContentManagementModel extends CoreModel{
      *
      * @param           array 			$navigation
 	 *
-     * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+     * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
      */
     public function insertNavigation($navigation)    {
         return $this->insertNavigations(array($navigation));
@@ -1376,7 +1376,7 @@ class ContentManagementModel extends CoreModel{
      *
      * @param           array 			$collection
      *
-     * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+     * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
      */
 	public function insertNavigationLocalizations($collection) {
 		$timeStamp = time();
@@ -1439,7 +1439,7 @@ class ContentManagementModel extends CoreModel{
      *
      * @param           array 			$collection
      *
-     * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+     * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
      */
 	public function insertNavigations($collection)	{
 		$timeStamp = time();
@@ -1529,7 +1529,7 @@ class ContentManagementModel extends CoreModel{
      *
      * @param           mixed			$item
 	 *
-     * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+     * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
      */
     public function insertNavigationItem($item){
         return $this->insertNavigationItems(array($item));
@@ -1546,7 +1546,7 @@ class ContentManagementModel extends CoreModel{
 	 *
 	 * @param           array 			$collection
 	 *
-	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function insertNavigationItemLocalizations($collection) {
 		$timeStamp = time();
@@ -1609,7 +1609,7 @@ class ContentManagementModel extends CoreModel{
 	 *
 	 * @param           array 			$collection
 	 *
-	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function insertNavigationItems($collection)	{
 		$timeStamp = time();
@@ -1710,7 +1710,7 @@ class ContentManagementModel extends CoreModel{
 	 *
 	 * @param           mixed			$page
 	 *
-	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function insertPage($page){
 		return $this->insertPages(array($page));
@@ -1727,7 +1727,7 @@ class ContentManagementModel extends CoreModel{
 	 *
 	 * @param           array 			$collection
 	 *
-	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function insertPageLocalizations($collection) {
 		$timeStamp = time();
@@ -1790,7 +1790,7 @@ class ContentManagementModel extends CoreModel{
 	 *
 	 * @param           mixed			$revision
 	 *
-	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function insertPageRevision($revision) {
 		return $this->insertPageRevisions(array($revision));
@@ -1807,7 +1807,7 @@ class ContentManagementModel extends CoreModel{
 	 *
 	 * @param           array 			$collection
 	 *
-	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function insertPageRevisions($collection) {
 		$timeStamp = time();
@@ -1875,7 +1875,7 @@ class ContentManagementModel extends CoreModel{
 	 *
 	 * @param           array 			$collection
 	 *
-	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function insertPages($collection)	{
 		$timeStamp = time();
@@ -1968,7 +1968,7 @@ class ContentManagementModel extends CoreModel{
      * @param           mixed       $page
      * @param           bool        $bypass     true or false
      *
-     * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+     * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
      */
     public function isFileAssociatedWithPage($file, $page, $bypass = false){
         $timeStamp = time();
@@ -2021,7 +2021,7 @@ class ContentManagementModel extends CoreModel{
      * @param           array				$sortOrder
 	 * @param           array 				$limit
      *
-     * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+     * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
      */
     public function listFilesOfPage($page, $filter = null, $sortOrder = null, $limit = null){
         $timeStamp = time();
@@ -2094,7 +2094,7 @@ class ContentManagementModel extends CoreModel{
      * @param           array 		$sortOrder
      * @param           array 		$limit
      *
-     * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+     * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
      */
     public function listItemsOfNavigation($navigation, $level = null, $sortOrder = null, $limit = null){
         return $this->listNavigationItemsOfNavigation($navigation, $level, $sortOrder, $limit);
@@ -2113,7 +2113,7 @@ class ContentManagementModel extends CoreModel{
      * @param           array 		$sortOrder
      * @param           array 		$limit
      *
-     * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+     * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
      */
 	public function listLayouts($filter = null, $sortOrder = null, $limit = null){
 		$timeStamp = time();
@@ -2187,7 +2187,7 @@ class ContentManagementModel extends CoreModel{
      * @param           array 		$sortOrder
      * @param           array 		$limit
      *
-     * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+     * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
      */
     public function listLayoutsOfSite($site, $filter = null, $sortOrder = null, $limit = null)    {
         $timeStamp = time();
@@ -2227,7 +2227,7 @@ class ContentManagementModel extends CoreModel{
      * @param           array 		$sortOrder
      * @param           array 		$limit
      *
-	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function listLayoutsOfTheme($theme, $filter = null, $sortOrder = null, $limit = null)    {
 		$timeStamp = time();
@@ -2251,7 +2251,68 @@ class ContentManagementModel extends CoreModel{
 
 		return $response;
 	}
+	/**
+	 * @name            listLocalizationsOfPage()
+	 *
+	 * @since           1.2.8
+	 * @version         1.2.8
+	 * @author          Can Berkol
+	 *
+	 * @use             $this->createException()
+	 *
+	 * @param           mixed $page
+	 * @param           array $sortOrder
+	 * @param           array $limit
+	 *
+	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+	public function listLocalizationsOfProduct($page, $sortOrder = null, $limit = null){
+		$timeStamp = time();
+		if (!is_array($sortOrder) && !is_null($sortOrder)) {
+			return $this->createException('InvalidSortOrderException', '$sortOrder must be an array with key => value pairs where value can only be "asc" or "desc".', 'E:S:002');
+		}
+		$response = $this->getPage($page);
+		if($response->error->exist){
+			return $response;
+		}
+		$page = $response->result->set;
+		$oStr = $wStr = $gStr = $fStr = '';
 
+		$qStr = 'SELECT ' . $this->entity['pl']['alias']
+			. ' FROM ' . $this->entity['pl']['name'] . ' ' . $this->entity['pl']['alias']
+			. ' JOIN ' . $this->entity['pl']['alias'] . '.page ' . $this->entity['p']['alias'];
+
+		if (!is_null($sortOrder)) {
+			foreach ($sortOrder as $column => $direction) {
+				switch ($column) {
+					case 'name':
+					case 'description':
+					case 'meta_keywords':
+					case 'meta_description':
+						$column = $this->entity['pl']['alias'] . '.' . $column;
+						break;
+				}
+				$oStr .= ' ' . $column . ' ' . strtoupper($direction) . ', ';
+			}
+			$oStr = rtrim($oStr, ', ');
+			if(!empty($oStr)){
+				$oStr = ' ORDER BY ' . $oStr . ' ';
+			}
+		}
+
+		$wStr .= ' WHERE '.$this->entity['pl']['alias'].'.page = '.$page->getId();
+
+		$qStr .= $wStr . $gStr . $oStr;
+		$q = $this->em->createQuery($qStr);
+		$q = $this->addLimit($q, $limit);
+		$result = $q->getResult();
+
+		$totalRows = count($result);
+		if ($totalRows < 1) {
+			return new ModelResponse(null, 0, 0, null, true, 'E:D:002', 'No entries found in database that matches to your criterion.', $timeStamp, time());
+		}
+		return new ModelResponse($result, $totalRows, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+	}
     /**
      * @name            listModules()
      *
@@ -2265,7 +2326,7 @@ class ContentManagementModel extends CoreModel{
      * @param           array 		$sortOrder
      * @param           array 		$limit
      *
-     * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+     * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
      */
 	public function listModules($filter = null, $sortOrder = null, $limit = null){
 		$timeStamp = time();
@@ -2338,7 +2399,7 @@ class ContentManagementModel extends CoreModel{
      * @param           array 			$sortOrder
      * @param           array 			$limit
      *
-     * @return          array           $response
+     * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
      */
     public function listModulesOfPageLayouts($filter = null, $sortOrder = null, $limit = null){
 		$timeStamp = time();
@@ -2452,7 +2513,7 @@ class ContentManagementModel extends CoreModel{
      * @param           array 		$sortOrder
      * @param           array 		$limit
      *
-	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function listModulesOfSite($site, $filter = null, $sortOrder = null, $limit = null)    {
 		$timeStamp = time();
@@ -2492,7 +2553,7 @@ class ContentManagementModel extends CoreModel{
 	 * @param           array 		$sortOrder
 	 * @param           array 		$limit
 	 *
-	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function listModulesOfTheme($theme, $filter = null, $sortOrder = null, $limit = null)    {
 		$timeStamp = time();
@@ -2531,7 +2592,7 @@ class ContentManagementModel extends CoreModel{
 	 * @param           array 		$sortOrder
 	 * @param           array 		$limit
 	 *
-	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function listNavigationItems($filter = null, $sortOrder = null, $limit = null){
 		$timeStamp = time();
@@ -2662,7 +2723,7 @@ class ContentManagementModel extends CoreModel{
      * @param           array 		$sortOrder
      * @param           array 		$limit
      *
-     * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+     * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
      */
     public function listNavigationItemsOfParent($parent, $sortOrder = null, $limit = null){
         $timeStamp = time();
@@ -2700,7 +2761,7 @@ class ContentManagementModel extends CoreModel{
      * @param           array 			$sortOrder
      * @param           array 			$limit
      *
-     * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+     * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
      */
 	public function listNavigations($filter = null, $sortOrder = null, $limit = null){
 		$timeStamp = time();
@@ -2774,7 +2835,7 @@ class ContentManagementModel extends CoreModel{
 	 * @param           array 			$sortOrder
 	 * @param           array 			$limit
 	 *
-	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function listPageRevisions($filter = null, $sortOrder = null, $limit = null){
 		$timeStamp = time();
@@ -2836,7 +2897,7 @@ class ContentManagementModel extends CoreModel{
      * @param           array 			$sortOrder
      * @param           array 			$limit
      *
-     * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+     * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
      */
 	public function listPages($filter = null, $sortOrder = null, $limit = null){
 		$timeStamp = time();
@@ -2909,7 +2970,7 @@ class ContentManagementModel extends CoreModel{
 	 * @param           array           $sortOrder
 	 * @param 			array			$limit
 	 *
-     * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+     * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
      */
     public function listPagesOfLayout($layout, $sortOrder, $limit) {
         $timeStamp = time();
@@ -2949,7 +3010,7 @@ class ContentManagementModel extends CoreModel{
      * @param           array 		$sortOrder
      * @param           array 		$limit
      *
-     * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+     * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
      */
     public function listPagesOfSite($site = 1, $sortOrder, $limit){
 		$timeStamp = time();
@@ -2990,7 +3051,7 @@ class ContentManagementModel extends CoreModel{
 	 * @param           array 			$sortOrder
 	 * @param           array 			$limit
 	 *
-	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function listThemes($filter = null, $sortOrder = null, $limit = null){
 		$timeStamp = time();
@@ -3066,7 +3127,7 @@ class ContentManagementModel extends CoreModel{
 	 * @param           array 		$sortOrder
 	 * @param           array 		$limit
 	 *
-	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function listThemesOfSite($site = 1, $sortOrder, $limit){
 		$timeStamp = time();
@@ -3105,7 +3166,7 @@ class ContentManagementModel extends CoreModel{
 	 *
 	 * @param           array 			$collection
 	 *
-	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function markPagesAsDeleted($collection){
 		$timeStamp = time();
@@ -3142,7 +3203,7 @@ class ContentManagementModel extends CoreModel{
 	 * @use             $this->updateLayouts()
 	 *
 	 * @param           mixed 			$layout
-	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function updateLayout($layout){
 		return $this->updateLayouts(array($layout));
@@ -3159,9 +3220,10 @@ class ContentManagementModel extends CoreModel{
 	 *
 	 * @param           array 			$collection
 	 *
-	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function updateLayouts($collection){
+		$timeStamp = time();
 		/** Parameter must be an array */
 		if (!is_array($collection)) {
 			return $this->createException('InvalidParameter', 'Array', 'err.invalid.parameter.collection');
@@ -3267,7 +3329,7 @@ class ContentManagementModel extends CoreModel{
 	 * @use             $this->updateModules()
 	 *
 	 * @param           mixed			$module
-	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function updateModule($module){
 		return $this->updateModules(array($module));
@@ -3283,7 +3345,7 @@ class ContentManagementModel extends CoreModel{
 	 *
 	 * @param           array			$collection
 	 *
-	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function updateModules($collection){
 		$timeStamp = time();
@@ -3393,7 +3455,7 @@ class ContentManagementModel extends CoreModel{
 	 * @use             $this->updateModuleLayoutEntries()
 	 *
 	 * @param           mixed 			$entry
-	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function updateModuleLayoutEntry($entry)    {
 		return $this->updateModuleLayoutEntries(array($entry));
@@ -3410,7 +3472,7 @@ class ContentManagementModel extends CoreModel{
 	 *
 	 * @param           array 			$collection
 	 *
-	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function updateModuleLayoutEntries($collection){
 		$timeStamp = time();
@@ -3501,7 +3563,7 @@ class ContentManagementModel extends CoreModel{
 	 * @use             $this->updateNavigations()
 	 *
 	 * @param           mixed 			$navigation
-	 * @return			BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return			\BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function updateNavigation($navigation){
 		return $this->updateNavigations(array($navigation));
@@ -3518,7 +3580,7 @@ class ContentManagementModel extends CoreModel{
 	 *
 	 * @param           array 			$collection
 	 *
-	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function updateNavigations($collection){
 		$timeStamp = time();
@@ -3546,7 +3608,7 @@ class ContentManagementModel extends CoreModel{
 				}
 				$response = $this->getNavigation($data->id);
 				if ($response->error->exist) {
-					return $this->createException('EntityDoesNotExist', 'Navigation with id '.$value.' does not exist in database.', 'E:D:002');
+					return $this->createException('EntityDoesNotExist', 'Navigation with id '.$data->id.' does not exist in database.', 'E:D:002');
 				}
 				$oldEntity = $response->result->set;
 				foreach ($data as $column => $value) {
@@ -3618,7 +3680,7 @@ class ContentManagementModel extends CoreModel{
 	 *
 	 * @param           mixed           $item
 	 *
-	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function updateNavigationItem($item){
 		return $this->updateNavigationItems(array($item));
@@ -3635,7 +3697,7 @@ class ContentManagementModel extends CoreModel{
 	 *
 	 * @param           array 			$collection
 	 *
-	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function updateNavigationItems($collection){
 		$timeStamp = time();
@@ -3748,11 +3810,46 @@ class ContentManagementModel extends CoreModel{
      *
      * @param           mixed 			$page
 	 *
-     * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+     * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
      */
     public function updatePage($page){
         return $this->updatePages(array($page));
     }
+	/**
+	 * @name            updatePageRevisions()
+	 *
+	 * @since           1.2.8
+	 * @version         1.2.8
+	 * @author          Can Berkol
+	 *
+	 * @use             $this->createException()
+	 *
+	 * @param           array 			$collection
+	 *
+	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+	public function udatePageLocalizations($collection) {
+		$timeStamp = time();
+		/** Parameter must be an array */
+		if (!is_array($collection)) {
+			return $this->createException('InvalidParameterValueException', 'Invalid parameter value. Parameter must be an array collection', 'E:S:001');
+		}
+		$countUpdates = 0;
+		$updatedItems = array();
+		foreach ($collection as $data) {
+			if ($data instanceof BundleEntity\PageLocalization) {
+				$entity = $data;
+				$this->em->persist($entity);
+				$updatedItems[] = $entity;
+				$countUpdates++;
+			}
+		}
+		if($countUpdates > 0){
+			$this->em->flush();
+			return new ModelResponse($updatedItems, $countUpdates, 0, null, false, 'S:D:004', 'Selected entries have been successfully updated within database.', $timeStamp, time());
+		}
+		return new ModelResponse(null, 0, 0, null, true, 'E:D:004', 'One or more entities cannot be updated within database.', $timeStamp, time());
+	}
 	/**
 	 * @name            updatePageRevision()
 	 *
@@ -3764,7 +3861,7 @@ class ContentManagementModel extends CoreModel{
 	 *
 	 * @param           mixed 			$revision
 	 *
-	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function updatePageRevision($revision){
 		return $this->updatePageRevisions(array($revision));
@@ -3780,7 +3877,7 @@ class ContentManagementModel extends CoreModel{
 	 *
 	 * @param           array 			$collection
 	 *
-	 * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function updatePageRevisions($collection) {
 		$timeStamp = time();
@@ -3863,7 +3960,7 @@ class ContentManagementModel extends CoreModel{
      *
      * @param           array 			$collection
      *
-     * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+     * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
      */
     public function updatePages($collection){
 		$timeStamp = time();
@@ -3960,7 +4057,7 @@ class ContentManagementModel extends CoreModel{
      * @use             $this->updateThemes()
      *
      * @param           mixed			$theme
-     * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+     * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
      */
     public function updateTheme($theme){
         return $this->updateThemes(array($theme));
@@ -3978,7 +4075,7 @@ class ContentManagementModel extends CoreModel{
      *
      * @param           array 			$collection
      *
-     * @return          BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+     * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
      */
     public function updateThemes($collection){
         $timeStamp = time();
@@ -4079,10 +4176,18 @@ class ContentManagementModel extends CoreModel{
 /**
  * Change Log
  * **************************************
+ * v1.2.8                      29.07.2015
+ * Can Berkol
+ * **************************************
+ * FR :: listLocalizationsOfPage() added.
+ * FR :: updatePageLocalizations() added.
+ *
+ * **************************************
  * v1.2.7                      26.06.2015
  * Said İmamoğlu
  * **************************************
  * BF :: listNavigationItems() updated.
+ *
  * **************************************
  * v1.2.6                      12.06.2015
  * Can Berkol
