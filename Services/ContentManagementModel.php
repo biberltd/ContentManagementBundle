@@ -11,8 +11,8 @@
  *
  * @copyright   Biber Ltd. (www.biberltd.com)
  *
- * @version     1.2.8
- * @date        29.07.2015
+ * @version     1.2.9
+ * @date        30.07.2015
  *
  */
 
@@ -94,11 +94,10 @@ class ContentManagementModel extends CoreModel{
      *                 Associates files with a given product by creating new row in files_of_product_table.
      *
      * @since           1.1.7
-     * @version         1.2.1
+     * @version         1.2.9
      * @author          Can Berkol
      *
      * @use             $this->createException()
-
      * @param           array       	$files
      * @param           mixed       	$page
      *
@@ -116,21 +115,34 @@ class ContentManagementModel extends CoreModel{
 		}
 		$toAdd = array();
 		$fModel = $this->kernel->getContainer()->get('filemanagement.model');
+		$i = 0;
 		foreach ($files as $file) {
-			$response = $fModel->getFile($file);
+			$response = $fModel->getFile($file['file']);
 			if($response->error->exist){
-				break;
+				continue;
 			}
-			$file = $response->result->set;
-			if (!$this->isFileAssociatedWithPage($file, $page, true)) {
-				$toAdd[] = $file;
+			$fileEntity = $response->result->set;
+			if (!$this->isFileAssociatedWithPage($file['file'], $page, true)) {
+				$toAdd[$i]['file'] = $fileEntity;
+				$toAdd[$i]['count_view'] = 0;
+				if(isset($file['count_view'])){
+					$toAdd[$i]['count_view'] = $file['count_view'];
+				}
+				$toAdd[$i]['sort_order'] = 1;
+				if(isset($file['sort_order'])){
+					$toAdd[$i]['sort_order'] = $file[$i]['sort_order'];
+				}
+				$i++;
 			}
 		}
 		$now = new \DateTime('now', new \DateTimezone($this->kernel->getContainer()->getParameter('app_timezone')));
 		$insertedItems = array();
 		foreach ($toAdd as $file) {
 			$entity = new BundleEntity\FilesOfPage();
-			$entity->setFile($file)->setPage($page)->setDateAdded($now);
+			$entity->setFile($file['file'])->setPage($page)->setDateAdded($now);
+			$entity->setCountView($file['count_view']);
+			$entity->setSortOrder($file['sort_order']);
+
 			$this->em->persist($entity);
 			$insertedItems[] = $entity;
 		}
@@ -1959,7 +1971,7 @@ class ContentManagementModel extends CoreModel{
      * @name            isFileAssociatedWithPage()
      *
      * @since           1.1.7
-     * @version         1.2.1
+     * @version         1.2.9
      * @author          Can Berkol
      *
      * @use             $this->createException()
@@ -1989,7 +2001,7 @@ class ContentManagementModel extends CoreModel{
 
         $found = false;
 
-        $qStr = 'SELECT COUNT(' . $this->entity['fop']['alias'] . ')'
+        $qStr = 'SELECT COUNT(' . $this->entity['fop']['alias'] . '.file)'
             . ' FROM ' . $this->entity['fop']['name'] . ' ' . $this->entity['fop']['alias']
             . ' WHERE ' . $this->entity['fop']['alias'] . '.file = ' . $file->getId()
             . ' AND ' . $this->entity['fop']['alias'] . '.page = ' . $page->getId();
@@ -4175,6 +4187,13 @@ class ContentManagementModel extends CoreModel{
 }
 /**
  * Change Log
+ * **************************************
+ * v1.2.9                      30.07.2015
+ * Can Berkol
+ * **************************************
+ * BF :: addFilesToPage() has been fixed.
+ * BF :: isFileAssociatedWithPage() has been fixed.
+ *
  * **************************************
  * v1.2.8                      29.07.2015
  * Can Berkol
