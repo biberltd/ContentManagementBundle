@@ -2278,7 +2278,7 @@ class ContentManagementModel extends CoreModel{
 	 *
 	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
-	public function listLocalizationsOfProduct($page, $sortOrder = null, $limit = null){
+	public function listLocalizationsOfPage($page, $sortOrder = null, $limit = null){
 		$timeStamp = time();
 		if (!is_array($sortOrder) && !is_null($sortOrder)) {
 			return $this->createException('InvalidSortOrderException', '$sortOrder must be an array with key => value pairs where value can only be "asc" or "desc".', 'E:S:002');
