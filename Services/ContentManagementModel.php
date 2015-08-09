@@ -11,8 +11,8 @@
  *
  * @copyright   Biber Ltd. (www.biberltd.com)
  *
- * @version     1.2.9
- * @date        30.07.2015
+ * @version     1.3.0
+ * @date        09.08.2015
  *
  */
 
@@ -3828,10 +3828,10 @@ class ContentManagementModel extends CoreModel{
         return $this->updatePages(array($page));
     }
 	/**
-	 * @name            updatePageRevisions()
+	 * @name            updatePageLocalizations()
 	 *
 	 * @since           1.2.8
-	 * @version         1.2.8
+	 * @version         1.3.0
 	 * @author          Can Berkol
 	 *
 	 * @use             $this->createException()
@@ -3840,7 +3840,7 @@ class ContentManagementModel extends CoreModel{
 	 *
 	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
-	public function udatePageLocalizations($collection) {
+	public function updatePageLocalizations($collection) {
 		$timeStamp = time();
 		/** Parameter must be an array */
 		if (!is_array($collection)) {
@@ -4187,6 +4187,11 @@ class ContentManagementModel extends CoreModel{
 }
 /**
  * Change Log
+ * **************************************
+ * v1.3.0                      09.08.2015
+ * Can Berkol
+ * **************************************
+ * BF :: name of method fixed. udateProductLocalizations > updateProductLocalizations.
  * **************************************
  * v1.2.9                      30.07.2015
  * Can Berkol
