@@ -1,22 +1,14 @@
 <?php
-
+/**
+ * @author		Can Berkol
+ *
+ * @copyright   Biber Ltd. (http://www.biberltd.com) (C) 2015
+ * @license     GPLv3
+ *
+ * @date        22.12.2015
+ */
 namespace BiberLtd\Bundle\ContentManagementBundle\Entity;
 
-/**
- * @name        module
- * @package		BiberLtd\Bundle\CoreBundle\AccessManagementBundle
- *
- * @author      Can Berkol
- * @author		Murat Ünal
- * @version     1.0.5
- * @date        29.04.2014
- *
- * @copyright   Biber Ltd. (http://www.biberltd.com)
- * @license     GPL v3.0
- *
- * @description Model / Entity class.
- *
- */
 use Doctrine\ORM\Mapping AS ORM;
 use BiberLtd\Bundle\CoreBundle\CoreLocalizableEntity;
 /**
@@ -36,31 +28,37 @@ class Module extends CoreLocalizableEntity
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @var int
      */
     private $id;
 
     /** 
      * @ORM\Column(type="string", unique=true, length=45, nullable=false)
+     * @var string
      */
     private $code;
 
     /** 
      * @ORM\Column(type="text", nullable=true)
+     * @var string
      */
     private $html;
 
     /** 
      * @ORM\Column(type="string", length=155, nullable=true)
+     * @var string
      */
     private $bundle_name;
 
     /**
      * @ORM\Column(type="string", length=155, nullable=true)
+     * @var string
      */
     private $bundle_folder;
 
     /** 
      * @ORM\OneToMany(targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\ModulesOfLayout", mappedBy="module")
+     * @var \BiberLtd\Bundle\ContentManagementBundle\Entity\ModulesOfLayout
      */
     private $modules_of_layout;
 
@@ -69,55 +67,37 @@ class Module extends CoreLocalizableEntity
      *     targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\ModuleLocalization",
      *     mappedBy="module"
      * )
+     * @var array
      */
     protected $localizations;
 
     /** 
      * @ORM\ManyToOne(targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\Theme", inversedBy="modules")
      * @ORM\JoinColumn(name="theme", referencedColumnName="id", nullable=false, onDelete="CASCADE")
+     * @var \BiberLtd\Bundle\ContentManagementBundle\Entity\Theme
      */
     private $theme;
 
     /** 
      * @ORM\ManyToOne(targetEntity="BiberLtd\Bundle\SiteManagementBundle\Entity\Site")
      * @ORM\JoinColumn(name="site", referencedColumnName="id", nullable=false, onDelete="CASCADE")
+     * @var \BiberLtd\Bundle\SiteManagementBundle\Entity\Site
      */
     private $site;
-    /******************************************************************
-     * PUBLIC SET AND GET FUNCTIONS                                   *
-     ******************************************************************/
 
     /**
-     * @name            getId()
-     *  				Gets $id property.
-     * .
-     * @author          Murat Ünal
-     * @since			1.0.0
-     * @version         1.0.0
-     *
-     * @return          integer          $this->id
+     * @return mixed
      */
     public function getId(){
         return $this->id;
     }
 
     /**
-     * @name            setBundleName ()
-     *                  Sets the bundle_name property.
-     *                  Updates the data only if stored value and value to be set are different.
+     * @param string $bundle_name
      *
-     * @author          Can Berkol
-     *
-     * @since           1.0.3
-     * @version         1.0.3
-     *
-     * @use             $this->setModified()
-     *
-     * @param           mixed $bundle_name
-     *
-     * @return          object                $this
+     * @return $this
      */
-    public function setBundleName($bundle_name) {
+    public function setBundleName(\string $bundle_name) {
         if(!$this->setModified('bundle_name', $bundle_name)->isModified()) {
             return $this;
         }
@@ -126,37 +106,18 @@ class Module extends CoreLocalizableEntity
     }
 
     /**
-     * @name            getBundleName ()
-     *                  Returns the value of bundle_name property.
-     *
-     * @author          Can Berkol
-     *
-     * @since           1.0.3
-     * @version         1.0.3
-     *
-     * @return          mixed           $this->bundle_name
+     * @return string
      */
     public function getBundleName() {
         return $this->bundle_name;
     }
 
     /**
-     * @name            setCode ()
-     *                  Sets the code property.
-     *                  Updates the data only if stored value and value to be set are different.
+     * @param string $code
      *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @use             $this->setModified()
-     *
-     * @param           mixed $code
-     *
-     * @return          object                $this
+     * @return $this
      */
-    public function setCode($code) {
+    public function setCode(\string $code) {
         if(!$this->setModified('code', $code)->isModified()) {
             return $this;
         }
@@ -165,37 +126,18 @@ class Module extends CoreLocalizableEntity
     }
 
     /**
-     * @name            getCode ()
-     *                  Returns the value of code property.
-     *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @return          mixed           $this->code
+     * @return string
      */
     public function getCode() {
         return $this->code;
     }
 
     /**
-     * @name            setHtml ()
-     *                  Sets the html property.
-     *                  Updates the data only if stored value and value to be set are different.
+     * @param string $html
      *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @use             $this->setModified()
-     *
-     * @param           mixed $html
-     *
-     * @return          object                $this
+     * @return $this
      */
-    public function setHtml($html) {
+    public function setHtml(\string $html) {
         if(!$this->setModified('html', $html)->isModified()) {
             return $this;
         }
@@ -204,37 +146,18 @@ class Module extends CoreLocalizableEntity
     }
 
     /**
-     * @name            getHtml ()
-     *                  Returns the value of html property.
-     *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @return          mixed           $this->html
+     * @return string
      */
     public function getHtml() {
         return $this->html;
     }
 
     /**
-     * @name            setModulesOfLayout ()
-     *                  Sets the modules_of_layout property.
-     *                  Updates the data only if stored value and value to be set are different.
+     * @param \BiberLtd\Bundle\ContentManagementBundle\Entity\ModulesOfLayout $modules_of_layout
      *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @use             $this->setModified()
-     *
-     * @param           mixed $modules_of_layout
-     *
-     * @return          object                $this
+     * @return $this
      */
-    public function setModulesOfLayout($modules_of_layout) {
+    public function setModulesOfLayout(\BiberLtd\Bundle\ContentManagementBundle\Entity\ModulesOfLayout $modules_of_layout) {
         if(!$this->setModified('modules_of_layout', $modules_of_layout)->isModified()) {
             return $this;
         }
@@ -243,37 +166,18 @@ class Module extends CoreLocalizableEntity
     }
 
     /**
-     * @name            getModulesOfLayout ()
-     *                  Returns the value of modules_of_layout property.
-     *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @return          mixed           $this->modules_of_layout
+     * @return \BiberLtd\Bundle\ContentManagementBundle\Entity\ModulesOfLayout
      */
     public function getModulesOfLayout() {
         return $this->modules_of_layout;
     }
 
     /**
-     * @name            setSite ()
-     *                  Sets the site property.
-     *                  Updates the data only if stored value and value to be set are different.
+     * @param \BiberLtd\Bundle\SiteManagementBundle\Entity\Site $site
      *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @use             $this->setModified()
-     *
-     * @param           mixed $site
-     *
-     * @return          object                $this
+     * @return $this
      */
-    public function setSite($site) {
+    public function setSite(\BiberLtd\Bundle\SiteManagementBundle\Entity\Site $site) {
         if(!$this->setModified('site', $site)->isModified()) {
             return $this;
         }
@@ -282,37 +186,18 @@ class Module extends CoreLocalizableEntity
     }
 
     /**
-     * @name            getSite ()
-     *                  Returns the value of site property.
-     *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @return          mixed           $this->site
+     * @return \BiberLtd\Bundle\SiteManagementBundle\Entity\Site
      */
     public function getSite() {
         return $this->site;
     }
 
     /**
-     * @name            setTheme ()
-     *                  Sets the theme property.
-     *                  Updates the data only if stored value and value to be set are different.
+     * @param \BiberLtd\Bundle\ContentManagementBundle\Entity\Theme $theme
      *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @use             $this->setModified()
-     *
-     * @param           mixed $theme
-     *
-     * @return          object                $this
+     * @return $this
      */
-    public function setTheme($theme) {
+    public function setTheme(\BiberLtd\Bundle\ContentManagementBundle\Entity\Theme $theme) {
         if(!$this->setModified('theme', $theme)->isModified()) {
             return $this;
         }
@@ -321,37 +206,18 @@ class Module extends CoreLocalizableEntity
     }
 
     /**
-     * @name            getTheme ()
-     *                  Returns the value of theme property.
-     *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @return          mixed           $this->theme
+     * @return \BiberLtd\Bundle\ContentManagementBundle\Entity\Theme
      */
     public function getTheme() {
         return $this->theme;
     }
 
     /**
-     * @name            setBundleFolder ()
-     *                  Sets the bundle_folder property.
-     *                  Updates the data only if stored value and value to be set are different.
+     * @param string $bundle_folder
      *
-     * @author          Can Berkol
-     *
-     * @since           1.0.4
-     * @version         1.0.4
-     *
-     * @use             $this->setModified()
-     *
-     * @param           mixed $bundle_folder
-     *
-     * @return          object                $this
+     * @return $this
      */
-    public function setBundleFolder($bundle_folder) {
+    public function setBundleFolder(\string $bundle_folder) {
         if($this->setModified('bundle_folder', $bundle_folder)->isModified()) {
             $this->bundle_folder = $bundle_folder;
         }
@@ -360,53 +226,10 @@ class Module extends CoreLocalizableEntity
     }
 
     /**
-     * @name            getBundleFolder ()
-     *                  Returns the value of bundle_folder property.
-     *
-     * @author          Can Berkol
-     *
-     * @since           1.0.4
-     * @version         1.0.4
-     *
-     * @return          mixed           $this->bundle_folder
+     * @return string
      */
     public function getBundleFolder() {
         return $this->bundle_folder;
     }
 
 }
-/**
- * Change Log:
- * **************************************
- * v1.0.34                     Can Berkol
- * 29.04.2014
- * **************************************
- * A getBundleFolder()
- * A setBundleFolder()
- *
- * **************************************
- * v1.0.3                     Can Berkol
- * 21.11.2013
- * **************************************
- * A getBundleName()
- * A setBundleName()
- *
- * **************************************
- * v1.0.2                      Murat Ünal
- * 10.10.2013
- * **************************************
- * A getCode()
- * A getHtml()
- * A getId()
- * A getLocalizations()
- * A getModulesOfLayout()
- * A getSite()
- * A getTheme()
- * A setCode()
- * A setHtml()
- * A setLocalizations()
- * A setModulesOfLayout()
- * A setSite()
- * A setTheme()
- *
- */

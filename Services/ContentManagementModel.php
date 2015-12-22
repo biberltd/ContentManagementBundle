@@ -1,21 +1,12 @@
 <?php
 /**
- * ContentManagementModel Class
+ * @author		Can Berkol
  *
- * @vendor      BiberLtd
- * @package     BiberLtd\Bundle\ContentManagementBundle
- * @subpackage  Services
- * @name        ContentManagementBundle
+ * @copyright   Biber Ltd. (http://www.biberltd.com) (C) 2015
+ * @license     GPLv3
  *
- * @author      Can Berkol
- *
- * @copyright   Biber Ltd. (www.biberltd.com)
- *
- * @version     1.3.0
- * @date        09.08.2015
- *
+ * @date        22.12.2015
  */
-
 namespace BiberLtd\Bundle\ContentManagementBundle\Services;
 
 /** Extends CoreModel */
@@ -35,18 +26,13 @@ use BiberLtd\Bundle\CoreBundle\Exceptions as CoreExceptions;
 
 class ContentManagementModel extends CoreModel{
 
-    /**
-     * @name            __construct()
-     *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.2.1
-     *
-     * @param           object $kernel
-     * @param           string $dbConnection Database connection key as set in app/config.yml
-     * @param           string $orm ORM that is used.
-     */
+	/**
+	 * ContentManagementModel constructor.
+	 *
+	 * @param object $kernel
+	 * @param string $dbConnection
+	 * @param string $orm
+	 */
     public function __construct($kernel, $dbConnection = 'default', $orm = 'doctrine')
     {
         parent::__construct($kernel, $dbConnection, $orm);
@@ -74,36 +60,23 @@ class ContentManagementModel extends CoreModel{
         );
     }
 
-    /**
-     * @name            __destruct()
-     *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     */
+	/**
+	 *
+	 */
     public function __destruct()
     {
         foreach ($this as $property => $value) {
             $this->$property = null;
         }
     }
-    /**
-     * @name           addFilesToProduct()
-     *                 Associates files with a given product by creating new row in files_of_product_table.
-     *
-     * @since           1.1.7
-     * @version         1.2.9
-     * @author          Can Berkol
-     *
-     * @use             $this->createException()
-     * @param           array       	$files
-     * @param           mixed       	$page
-     *
-     * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
-     */
-	public function addFilesToPage($files, $page) {
+
+	/**
+	 * @param array $files
+	 * @param mixed $page
+	 *
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+	public function addFilesToPage(array $files, $page) {
 		$timeStamp = time();
 		$response = $this->getPage($page);
 		if($response->error->exist){
@@ -153,37 +126,22 @@ class ContentManagementModel extends CoreModel{
 		}
 		return new ModelResponse(null, 0, 0, null, true, 'E:D:003', 'One or more entities cannot be inserted into database.', $timeStamp, time());
 	}
-    /**
-     * @name            deleteLayout ()
-     *
-     * @since           1.0.1
-     * @version         1.2.1
-     * @author          Can Berkol
-     *
-     * @use             $this->deleteLayouts()
-     *
-     * @param           mixed 			$layout
+
+	/**
+	 * @param mixed $layout
 	 *
-     * @return         \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
-     */
-    public function deleteLayout($layout)    {
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+    public function deleteLayout($layout){
         return $this->deleteLayouts(array($layout));
     }
 
-    /**
-     * @name            deleteLayouts()
-     *
-     * @since           1.0.1
-     * @version         1.2.1
-     * @author          Can Berkol
-     *
-     * @use             $this->createException
-     *
-     * @param           array 			$collection
-     *
-     * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
-     */
-	public function deleteLayouts($collection) {
+	/**
+	 * @param array $collection
+	 *
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+	public function deleteLayouts(array $collection) {
 		$timeStamp = time();
 		if (!is_array($collection)) {
 			return $this->createException('InvalidParameterValueException', 'Invalid parameter value. Parameter must be an array collection', 'E:S:001');
@@ -211,38 +169,21 @@ class ContentManagementModel extends CoreModel{
 		return new ModelResponse(null, 0, 0, null, false, 'S:D:001', 'Selected entries have been successfully removed from database.', $timeStamp, time());
 	}
 
-    /**
-     * @name            deleteModule()
-     *
-     * @since           1.0.0
-     * @version         1.2.1
-     * @author          Can Berkol
-     *
-     * @use             $this->deleteModules()
-     *
-     * @param           mixed 			$module
-     *
-     * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
-     */
+	/**
+	 * @param mixed $module
+	 *
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
     public function deleteModule($module)    {
         return $this->deleteModules(array($module));
     }
 
-    /**
-     * @name            deleteModules()
-     *
-     * @since           1.0.1
-     * @version         1.2.1
-     * @author          Can Berkol
-     *
-     * @use             $this->doesModuleExist()
-     * @use             $this->createException()
-     *
-     * @param           array 			$collection
-     *
-     * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
-     */
-	public function deleteModules($collection) {
+	/**
+	 * @param array $collection
+	 *
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+	public function deleteModules(array $collection) {
 		$timeStamp = time();
 		if (!is_array($collection)) {
 			return $this->createException('InvalidParameterValueException', 'Invalid parameter value. Parameter must be an array collection', 'E:S:001');
@@ -270,38 +211,21 @@ class ContentManagementModel extends CoreModel{
 		return new ModelResponse(null, 0, 0, null, false, 'S:D:001', 'Selected entries have been successfully removed from database.', $timeStamp, time());
 	}
 
-    /**
-     * @name            deleteNavigation()
-     *
-     * @since           1.0.1
-     * @version         1.2.1
-     * @author          Can Berkol
-     *
-     * @use             $this->deleteNavigations()
-     *
-     * @param           mixed 			$navigation
-     *
-     * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
-     */
+	/**
+	 * @param mixed $navigation
+	 *
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
     public function deleteNavigation($navigation){
         return $this->deleteNavigations(array($navigation));
     }
 
 	/**
-	 * @name            deleteNavigations()
+	 * @param array $collection
 	 *
-	 * @since           1.0.1
-	 * @version         1.2.1
-	 * @author          Can Berkol
-	 *
-	 * @use             $this->doesModuleExist()
-	 * @use             $this->createException()
-	 *
-	 * @param           array 			$collection
-	 *
-	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
-	public function deleteNavigations($collection) {
+	public function deleteNavigations(array $collection) {
 		$timeStamp = time();
 		if (!is_array($collection)) {
 			return $this->createException('InvalidParameterValueException', 'Invalid parameter value. Parameter must be an array collection', 'E:S:001');
@@ -329,38 +253,21 @@ class ContentManagementModel extends CoreModel{
 		return new ModelResponse(null, 0, 0, null, false, 'S:D:001', 'Selected entries have been successfully removed from database.', $timeStamp, time());
 	}
 
-    /**
-     * @name            deleteNavigationItem ()
-     *
-     * @since           1.0.1
-     * @version         1.2.1
-     * @author          Can Berkol
-     *
-     * @use             $this->deleteNavigationItems()
-     *
-     * @param           mixed 			$item
-     *
-     * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
-     */
+	/**
+	 * @param mixed $item
+	 *
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
     public function deleteNavigationItem($item) {
         return $this->deleteNavigationItems(array($item));
     }
 
 	/**
-	 * @name            deleteNavigationItems()
+	 * @param array $collection
 	 *
-	 * @since           1.0.1
-	 * @version         1.2.1
-	 * @author          Can Berkol
-	 *
-	 * @use             $this->doesModuleExist()
-	 * @use             $this->createException()
-	 *
-	 * @param           array 			$collection
-	 *
-	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
-	public function deleteNavigationItems($collection) {
+	public function deleteNavigationItems(array $collection) {
 		$timeStamp = time();
 		if (!is_array($collection)) {
 			return $this->createException('InvalidParameterValueException', 'Invalid parameter value. Parameter must be an array collection', 'E:S:001');
@@ -388,53 +295,30 @@ class ContentManagementModel extends CoreModel{
 		return new ModelResponse(null, 0, 0, null, false, 'S:D:001', 'Selected entries have been successfully removed from database.', $timeStamp, time());
 	}
 
-    /**
-     * @name            deletePage()
-     *
-     * @since           1.0.0
-     * @version         1.2.1
-     * @author          Can Berkol
-     *
-     * @use             $this->deletePages()
-     *
-     * @param           mixed 			$page
-     * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
-     */
+	/**
+	 * @param mixed $page
+	 *
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
     public function deletePage($page){
         return $this->deletePages(array($page));
     }
 
 	/**
-	 * @name            deletePageRevision()
+	 * @param mixed $revision
 	 *
-	 * @since           1.1.9
-	 * @version         1.2.1
-	 * @author          Can Berkol
-	 *
-	 * @use             $this->deletePageRevisions()
-	 *
-	 * @param           mixed 			$revision
-	 *
-	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function deletePageRevision($revision){
 		return $this->deletePageRevisions(array($revision));
 	}
 
 	/**
-	 * @name            deletePageRevisions()
+	 * @param array $collection
 	 *
-	 * @since           1.1.9
-	 * @version         1.2.1
-	 * @author          Can Berkol
-	 *
-	 * @use             $this->createException()
-	 *
-	 * @param           array           $collection             Collection consists one of the following: PageRevision
-	 *
-	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
-	public function deletePageRevisions($collection){
+	public function deletePageRevisions(array $collection){
 		$timeStamp = time();
 		if (!is_array($collection)) {
 			return $this->createException('InvalidParameterValueException', 'Invalid parameter value. Parameter must be an array collection', 'E:S:001');
@@ -454,19 +338,12 @@ class ContentManagementModel extends CoreModel{
 		return new ModelResponse(null, 0, 0, null, false, 'S:D:001', 'Selected entries have been successfully removed from database.', $timeStamp, time());
 	}
 
-    /**
-     * @name            deletePages()
-     *
-     * @since           1.0.0
-     * @version         1.2.1
-     *
-     * @use             $this->createException()
-     *
-     * @param           array 			$collection
-     *
-     * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
-     */
-    public function deletePages($collection){
+	/**
+	 * @param array $collection
+	 *
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+    public function deletePages(array $collection){
 		$timeStamp = time();
 		if (!is_array($collection)) {
 			return $this->createException('InvalidParameterValueException', 'Invalid parameter value. Parameter must be an array collection', 'E:S:001');
@@ -493,35 +370,21 @@ class ContentManagementModel extends CoreModel{
 		return new ModelResponse(null, 0, 0, null, false, 'S:D:001', 'Selected entries have been successfully removed from database.', $timeStamp, time());
     }
 
-    /**
-     * @name            deleteTheme ()
-     *
-     * @since           1.0.1
-     * @version         1.2.1
-     * @author          Can Berkol
-     *
-     * @use             $this->deleteThemes()
-     *
-     * @param           mixed 			$theme
-     * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
-     */
+	/**
+	 * @param mixed $theme
+	 *
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
     public function deleteTheme($theme) {
         return $this->deleteThemes(array($theme));
     }
 
 	/**
-	 * @name            deleteThemes()
+	 * @param array $collection
 	 *
-	 * @since           1.0.0
-	 * @version         1.2.1
-	 *
-	 * @use             $this->createException()
-	 *
-	 * @param           array 			$collection
-	 *
-	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
-	public function deleteThemes($collection){
+	public function deleteThemes(array $collection){
 		$timeStamp = time();
 		if (!is_array($collection)) {
 			return $this->createException('InvalidParameterValueException', 'Invalid parameter value. Parameter must be an array collection', 'E:S:001');
@@ -548,22 +411,13 @@ class ContentManagementModel extends CoreModel{
 		return new ModelResponse(null, 0, 0, null, false, 'S:D:001', 'Selected entries have been successfully removed from database.', $timeStamp, time());
 	}
 
-    /**
-     * @name            doesLayoutExist()
-     *
-     * @since           1.0.1
-     * @version         1.2.1
+	/**
+	 * @param mixed $layout
+	 * @param bool $bypass
 	 *
-     * @author          Can Berkol
-     *
-     * @use             $this->getLayout()
-     *
-     * @param           mixed 			$layout
-     * @param           bool 			$bypass 			If set to true does not return response but only the result.
-     *
-     * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
-     */
-	public function doesLayoutExist($layout, $bypass = false) {
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse|bool
+	 */
+	public function doesLayoutExist($layout, \bool $bypass = false) {
 		$timeStamp = time();
 		$exist = false;
 
@@ -585,21 +439,12 @@ class ContentManagementModel extends CoreModel{
 	}
 
 	/**
-	 * @name            doesModuleExist()
+	 * @param mixed $module
+	 * @param bool $bypass
 	 *
-	 * @since           1.0.1
-	 * @version         1.2.1
-	 *
-	 * @author          Can Berkol
-	 *
-	 * @use             $this->getModule()
-	 *
-	 * @param           mixed 			$module
-	 * @param           bool 			$bypass 			If set to true does not return response but only the result.
-	 *
-	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse|bool
 	 */
-	public function doesModuleExist($module, $bypass = false) {
+	public function doesModuleExist($module, \bool $bypass = false) {
 		$timeStamp = time();
 		$exist = false;
 
@@ -621,21 +466,12 @@ class ContentManagementModel extends CoreModel{
 	}
 
 	/**
-	 * @name            doesModuleLayoutEntryExist()
+	 * @param mixed$entry
+	 * @param bool $bypass
 	 *
-	 * @since           1.0.1
-	 * @version         1.2.1
-	 *
-	 * @author          Can Berkol
-	 *
-	 * @use             $this->getModuleLayoutEntry()
-	 *
-	 * @param           mixed 			$entry
-	 * @param           bool 			$bypass 			If set to true does not return response but only the result.
-	 *
-	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse|bool
 	 */
-	public function doesModuleLayoutEntryExist($entry, $bypass = false) {
+	public function doesModuleLayoutEntryExist($entry, \bool $bypass = false) {
 		$timeStamp = time();
 		$exist = false;
 
@@ -657,21 +493,12 @@ class ContentManagementModel extends CoreModel{
 	}
 
 	/**
-	 * @name            doesNavigationExist()
+	 * @param mixed $navigation
+	 * @param bool $bypass
 	 *
-	 * @since           1.0.1
-	 * @version         1.2.1
-	 *
-	 * @author          Can Berkol
-	 *
-	 * @use             $this->getNavigation()
-	 *
-	 * @param           mixed 			$navigation
-	 * @param           bool 			$bypass 			If set to true does not return response but only the result.
-	 *
-	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse|bool
 	 */
-	public function doesNavigationExist($navigation, $bypass = false) {
+	public function doesNavigationExist($navigation, \bool $bypass = false) {
 		$timeStamp = time();
 		$exist = false;
 
@@ -693,21 +520,12 @@ class ContentManagementModel extends CoreModel{
 	}
 
 	/**
-	 * @name            doesNavigationItemExist()
+	 * @param mixed $item
+	 * @param bool $bypass
 	 *
-	 * @since           1.0.1
-	 * @version         1.2.1
-	 *
-	 * @author          Can Berkol
-	 *
-	 * @use             $this->getNavigationItem()
-	 *
-	 * @param           mixed 			$item
-	 * @param           bool 			$bypass 			If set to true does not return response but only the result.
-	 *
-	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse|bool
 	 */
-	public function doesNavigationItemExist($item, $bypass = false) {
+	public function doesNavigationItemExist($item, \bool $bypass = false) {
 		$timeStamp = time();
 		$exist = false;
 
@@ -729,21 +547,12 @@ class ContentManagementModel extends CoreModel{
 	}
 
 	/**
-	 * @name            doesPageExist()
+	 * @param mixed $page
+	 * @param bool $bypass
 	 *
-	 * @since           1.0.1
-	 * @version         1.2.1
-	 *
-	 * @author          Can Berkol
-	 *
-	 * @use             $this->getPage()
-	 *
-	 * @param           mixed 			$page
-	 * @param           bool 			$bypass 			If set to true does not return response but only the result.
-	 *
-	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse|bool
 	 */
-	public function doesPageExist($page, $bypass = false) {
+	public function doesPageExist($page, \bool $bypass = false) {
 		$timeStamp = time();
 		$exist = false;
 
@@ -765,21 +574,12 @@ class ContentManagementModel extends CoreModel{
 	}
 
 	/**
-	 * @name            doesThemeExist()
+	 * @param mixed $theme
+	 * @param bool $bypass
 	 *
-	 * @since           1.0.1
-	 * @version         1.2.1
-	 *
-	 * @author          Can Berkol
-	 *
-	 * @use             $this->getTheme()
-	 *
-	 * @param           mixed 			$theme
-	 * @param           bool 			$bypass 			If set to true does not return response but only the result.
-	 *
-	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse|bool
 	 */
-	public function doesThemeExist($theme, $bypass = false) {
+	public function doesThemeExist($theme, \bool $bypass = false) {
 		$timeStamp = time();
 		$exist = false;
 
@@ -801,15 +601,9 @@ class ContentManagementModel extends CoreModel{
 	}
 
 	/**
-	 * @name            getLastRevisionOfPage()
+	 * @param mixed $page
 	 *
-	 * @since           1.1.9
-	 * @version         1.2.1
-	 *
-	 * @author          Can Berkol
-	 *
-	 * @page			mixed			$page
-	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function getLastRevisionOfPage($page){
 		$timeStamp = time();
@@ -837,15 +631,9 @@ class ContentManagementModel extends CoreModel{
 	}
 
 	/**
-	 * @name 			getLayout()
+	 * @param mixed $layout
 	 *
-	 * @since			1.0.0
-	 * @version         1.2.1
-	 * @author          Can Berkol
-	 *
-	 * @param           mixed           $layout
-	 *
-	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function getLayout($layout) {
 		$timeStamp = time();
@@ -874,22 +662,14 @@ class ContentManagementModel extends CoreModel{
 
 		return new ModelResponse($result, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
 	}
+
 	/**
-	 * @name            getLayoutByUrlKey()
+	 * @param string $urlKey
+	 * @param mixed|null   $language
 	 *
-	 * @since           1.2.1
-	 * @version         1.2.1
-	 * @author          Can Berkol
-	 *
-	 * @use             $this->listLayouts()
-	 * @use             $this->createException()
-	 *
-	 * @param           mixed 			$urlKey
-	 * @param			mixed			$language
-	 *
-	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
-	public function getLayoutByUrlKey($urlKey, $language = null){
+	public function getLayoutByUrlKey(\string $urlKey, $language = null){
 		$timeStamp = time();
 		if(!is_string($urlKey)){
 			return $this->createException('InvalidParameterValueException', '$urlKey must be a string.', 'E:S:007');
@@ -925,20 +705,14 @@ class ContentManagementModel extends CoreModel{
 
 		return $response;
 	}
-    /**
-     * @name            getMaxSortOrderOfFilesOfPage ()
+
+	/**
+	 * @param mixed $page
+	 * @param bool $bypass
 	 *
-     * @since           1.1.7
-     * @version         1.2.1
-     * @author          Can Berkol
-     *
-     *
-     * @param           mixed   			$page
-     * @param           bool    			$bypass     if set to true return bool instead of response
-     *
-     * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
-     */
-    public function getMaxSortOrderOfFilesOfPage($page, $bypass = false){
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+    public function getMaxSortOrderOfFilesOfPage($page, \bool $bypass = false){
         $timeStamp = time();
         $response = $this->getPage($page);
 		if($response->error->exist){
@@ -955,16 +729,11 @@ class ContentManagementModel extends CoreModel{
         }
 		return new ModelResponse($result, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
     }
+
 	/**
-	 * @name 			getModule()
+	 * @param mixed $module
 	 *
-	 * @since			1.0.0
-	 * @version         1.2.1
-	 * @author          Can Berkol
-	 *
-	 * @param           mixed           $module
-	 *
-	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function getModule($module) {
 		$timeStamp = time();
@@ -993,22 +762,14 @@ class ContentManagementModel extends CoreModel{
 
 		return new ModelResponse($result, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
 	}
+
 	/**
-	 * @name            getModuleByUrlKey()
+	 * @param string $urlKey
+	 * @param mixed|null   $language
 	 *
-	 * @since           1.2.1
-	 * @version         1.2.1
-	 * @author          Can Berkol
-	 *
-	 * @use             $this->listModules()
-	 * @use             $this->createException()
-	 *
-	 * @param           mixed 			$urlKey
-	 * @param			mixed			$language
-	 *
-	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
-	public function getModuleByUrlKey($urlKey, $language = null){
+	public function getModuleByUrlKey(\string $urlKey, $language = null){
 		$timeStamp = time();
 		if(!is_string($urlKey)){
 			return $this->createException('InvalidParameterValueException', '$urlKey must be a string.', 'E:S:007');
@@ -1044,16 +805,11 @@ class ContentManagementModel extends CoreModel{
 
 		return $response;
 	}
+
 	/**
-	 * @name 			getModuleLayoutEntry()
+	 * @param mixed $entry
 	 *
-	 * @since			1.0.0
-	 * @version         1.2.1
-	 * @author          Can Berkol
-	 *
-	 * @param           mixed           $entry
-	 *
-	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function getModuleLayoutEntry($entry) {
 		$timeStamp = time();
@@ -1074,15 +830,9 @@ class ContentManagementModel extends CoreModel{
 	}
 
 	/**
-	 * @name 			getNavigation()
+	 * @param mixed $navigation
 	 *
-	 * @since			1.0.0
-	 * @version         1.2.1
-	 * @author          Can Berkol
-	 *
-	 * @param           mixed           $navigation
-	 *
-	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function getNavigation($navigation) {
 		$timeStamp = time();
@@ -1106,15 +856,9 @@ class ContentManagementModel extends CoreModel{
 	}
 
 	/**
-	 * @name 			getNavigationItem()
+	 * @param mixed $item
 	 *
-	 * @since			1.0.0
-	 * @version         1.2.1
-	 * @author          Can Berkol
-	 *
-	 * @param           mixed           $item
-	 *
-	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function getNavigationItem($item) {
 		$timeStamp = time();
@@ -1140,22 +884,14 @@ class ContentManagementModel extends CoreModel{
 
 		return new ModelResponse($result, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
 	}
+
 	/**
-	 * @name            getNavigationItemByUrlKey()
+	 * @param string $urlKey
+	 * @param mixed|null $language
 	 *
-	 * @since           1.2.1
-	 * @version         1.2.1
-	 * @author          Can Berkol
-	 *
-	 * @use             $this->listNavigationItems()
-	 * @use             $this->createException()
-	 *
-	 * @param           mixed 			$urlKey
-	 * @param			mixed			$language
-	 *
-	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
-	public function getNavigationItemByUrlKey($urlKey, $language = null){
+	public function getNavigationItemByUrlKey(\string $urlKey, $language = null){
 		$timeStamp = time();
 		if(!is_string($urlKey)){
 			return $this->createException('InvalidParameterValueException', '$urlKey must be a string.', 'E:S:007');
@@ -1191,16 +927,11 @@ class ContentManagementModel extends CoreModel{
 
 		return $response;
 	}
+
 	/**
-	 * @name 			getPage()
+	 * @param mixed $page
 	 *
-	 * @since			1.0.0
-	 * @version         1.2.1
-	 * @author          Can Berkol
-	 *
-	 * @param           mixed           $page
-	 *
-	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function getPage($page) {
 		$timeStamp = time();
@@ -1229,22 +960,14 @@ class ContentManagementModel extends CoreModel{
 
 		return new ModelResponse($result, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
 	}
-    /**
-     * @name            getPageByUrlKey ()
-     *
-     * @since           1.2.1
-     * @version         1.2.1
-     * @author          Can Berkol
-     *
-     * @use             $this->listPages()
-     * @use             $this->createException()
-     *
-     * @param           mixed 			$urlKey
-	 * @param			mixed			$language
-     *
-     * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
-     */
-    public function getPageByUrlKey($urlKey, $language = null){
+
+	/**
+	 * @param string $urlKey
+	 * @param mixed|null   $language
+	 *
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+    public function getPageByUrlKey(\string $urlKey, $language = null){
         $timeStamp = time();
 		if(!is_string($urlKey)){
 			return $this->createException('InvalidParameterValueException', '$urlKey must be a string.', 'E:S:007');
@@ -1283,23 +1006,13 @@ class ContentManagementModel extends CoreModel{
     }
 
 	/**
-	 * @name            getPageRevision()
+	 * @param string $page
+	 * @param string $language
+	 * @param string $revisionNumber
 	 *
-	 * @since           1.1.9
-	 * @version         1.2.4
-	 *
-	 * @author          Can Berkol
-	 *
-	 * @use             $this->createException()
-	 * @use             $this->listPageRevisions()
-	 *
-	 * @param           mixed           $page
-	 * @param			mixed			$language
-	 * @param			integer			$revisionNumber
-	 *
-	 * @return          mixed           $response
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
-	public function getPageRevision($page, $language, $revisionNumber){
+	public function getPageRevision($page, $language, \string $revisionNumber){
 		$timeStamp = time();
 
 		$response = $this->getPage($page);
@@ -1331,16 +1044,11 @@ class ContentManagementModel extends CoreModel{
 
 		return new ModelResponse($result, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
 	}
+
 	/**
-	 * @name 			getTheme()
+	 * @param mixed $theme
 	 *
-	 * @since			1.2.1
-	 * @version         1.2.1
-	 * @author          Can Berkol
-	 *
-	 * @param           mixed           $theme
-	 *
-	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function getTheme($theme) {
 		$timeStamp = time();
@@ -1360,37 +1068,21 @@ class ContentManagementModel extends CoreModel{
 		return new ModelResponse($result, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
 	}
 
-    /**
-     * @name            insertNavigation()
-     *
-     * @since           1.0.1
-     * @version         1.2.1
-     * @author          Can Berkol
-     *
-     * @use             $this->insertNavigation()
-     *
-     * @param           array 			$navigation
+	/**
+	 * @param mixed $navigation
 	 *
-     * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
-     */
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
     public function insertNavigation($navigation)    {
         return $this->insertNavigations(array($navigation));
     }
 
-    /**
-     * @name            insertNavigationLocalizations ()
-     *
-     * @since           1.1.6
-     * @version         1.2.6
-     * @author          Can Berkol
-     *
-     * @use             $this->createException()
-     *
-     * @param           array 			$collection
-     *
-     * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
-     */
-	public function insertNavigationLocalizations($collection) {
+	/**
+	 * @param array $collection
+	 *
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+	public function insertNavigationLocalizations(array $collection) {
 		$timeStamp = time();
 		if (!is_array($collection)) {
 			return $this->createException('InvalidParameterValueException', 'Invalid parameter value. Parameter must be an array collection', 'E:S:001');
@@ -1440,20 +1132,12 @@ class ContentManagementModel extends CoreModel{
 		return new ModelResponse(null, 0, 0, null, true, 'E:D:003', 'One or more entities cannot be inserted into database.', $timeStamp, time());
 	}
 
-    /**
-     * @name            insertNavigations()
-     *
-     * @since           1.0.1
-     * @version         1.2.1
-     * @author          Can Berkol
-     *
-     * @use             $this->createException()
-     *
-     * @param           array 			$collection
-     *
-     * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
-     */
-	public function insertNavigations($collection)	{
+	/**
+	 * @param array $collection
+	 *
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+	public function insertNavigations(array $collection)	{
 		$timeStamp = time();
 		/** Parameter must be an array */
 		if (!is_array($collection)) {
@@ -1529,38 +1213,21 @@ class ContentManagementModel extends CoreModel{
 		return new ModelResponse(null, 0, 0, null, true, 'E:D:003', 'One or more entities cannot be inserted into database.', $timeStamp, time());
 	}
 
-    /**
-     * @name            insertNavigationItem ()
-     *
-     * @since           1.0.1
-     * @version         1.2.1
+	/**
+	 * @param mixed $item
 	 *
-     * @author          Can Berkol
-     *
-     * @use             $this->insertNavigationItems()
-     *
-     * @param           mixed			$item
-	 *
-     * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
-     */
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
     public function insertNavigationItem($item){
         return $this->insertNavigationItems(array($item));
     }
 
 	/**
-	 * @name            insertNavigationItemLocalizations ()
+	 * @param array $collection
 	 *
-	 * @since           1.1.6
-	 * @version         1.2.6
-	 * @author          Can Berkol
-	 *
-	 * @use             $this->createException()
-	 *
-	 * @param           array 			$collection
-	 *
-	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
-	public function insertNavigationItemLocalizations($collection) {
+	public function insertNavigationItemLocalizations(array $collection) {
 		$timeStamp = time();
 		if (!is_array($collection)) {
 			return $this->createException('InvalidParameterValueException', 'Invalid parameter value. Parameter must be an array collection', 'E:S:001');
@@ -1611,19 +1278,11 @@ class ContentManagementModel extends CoreModel{
 	}
 
 	/**
-	 * @name            insertNavigationItems ()
+	 * @param array $collection
 	 *
-	 * @since           1.0.1
-	 * @version         1.2.1
-	 * @author          Can Berkol
-	 *
-	 * @use             $this->createException()
-	 *
-	 * @param           array 			$collection
-	 *
-	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
-	public function insertNavigationItems($collection)	{
+	public function insertNavigationItems(array $collection)	{
 		$timeStamp = time();
 		/** Parameter must be an array */
 		if (!is_array($collection)) {
@@ -1711,37 +1370,20 @@ class ContentManagementModel extends CoreModel{
 	}
 
 	/**
-	 * @name            insertPage ()
+	 * @param mixed $page
 	 *
-	 * @since           1.0.1
-	 * @version         1.2.1
-	 *
-	 * @author          Can Berkol
-	 *
-	 * @use             $this->insertPages()
-	 *
-	 * @param           mixed			$page
-	 *
-	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function insertPage($page){
 		return $this->insertPages(array($page));
 	}
 
 	/**
-	 * @name            insertPageLocalizations()
+	 * @param array $collection
 	 *
-	 * @since           1.1.6
-	 * @version         1.2.6
-	 * @author          Can Berkol
-	 *
-	 * @use             $this->createException()
-	 *
-	 * @param           array 			$collection
-	 *
-	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
-	public function insertPageLocalizations($collection) {
+	public function insertPageLocalizations(array $collection) {
 		$timeStamp = time();
 		if (!is_array($collection)) {
 			return $this->createException('InvalidParameterValueException', 'Invalid parameter value. Parameter must be an array collection', 'E:S:001');
@@ -1792,36 +1434,20 @@ class ContentManagementModel extends CoreModel{
 	}
 
 	/**
-	 * @name            insertPageRevision()
+	 * @param mixed $revision
 	 *
-	 * @since           1.1.9
-	 * @version         1.1.9
-	 * @author          Can Berkol
-	 *
-	 * @use             $this->insertPageRevisions()
-	 *
-	 * @param           mixed			$revision
-	 *
-	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function insertPageRevision($revision) {
 		return $this->insertPageRevisions(array($revision));
 	}
 
 	/**
-	 * @name            insertPageRevisions()
+	 * @param array $collection
 	 *
-	 * @since           1.1.9
-	 * @version         1.1.9
-	 * @author          Can Berkol
-	 *
-	 * @use             $this->createException()
-	 *
-	 * @param           array 			$collection
-	 *
-	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
-	public function insertPageRevisions($collection) {
+	public function insertPageRevisions(array $collection) {
 		$timeStamp = time();
 		/** Parameter must be an array */
 		if (!is_array($collection)) {
@@ -1877,19 +1503,11 @@ class ContentManagementModel extends CoreModel{
 	}
 
 	/**
-	 * @name            insertPages()
+	 * @param array $collection
 	 *
-	 * @since           1.0.1
-	 * @version         1.2.1
-	 * @author          Can Berkol
-	 *
-	 * @use             $this->createException()
-	 *
-	 * @param           array 			$collection
-	 *
-	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
-	public function insertPages($collection)	{
+	public function insertPages(array $collection)	{
 		$timeStamp = time();
 		/** Parameter must be an array */
 		if (!is_array($collection)) {
@@ -1967,22 +1585,14 @@ class ContentManagementModel extends CoreModel{
 		return new ModelResponse(null, 0, 0, null, true, 'E:D:003', 'One or more entities cannot be inserted into database.', $timeStamp, time());
 	}
 
-    /**
-     * @name            isFileAssociatedWithPage()
-     *
-     * @since           1.1.7
-     * @version         1.2.9
-     * @author          Can Berkol
-     *
-     * @use             $this->createException()
-     *
-     * @param           mixed       $file
-     * @param           mixed       $page
-     * @param           bool        $bypass     true or false
-     *
-     * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
-     */
-    public function isFileAssociatedWithPage($file, $page, $bypass = false){
+	/**
+	 * @param mixed $file
+	 * @param mixed $page
+	 * @param bool $bypass
+	 *
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse|bool
+	 */
+    public function isFileAssociatedWithPage($file, $page, \bool $bypass = false){
         $timeStamp = time();
         $fModel = new FileService\FileManagementModel($this->kernel, $this->dbConnection, $this->orm);
 
@@ -2020,22 +1630,15 @@ class ContentManagementModel extends CoreModel{
 		return new ModelResponse($found, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
     }
 
-    /**
-     * @name            listFilesOfPage ()
-     *
-     * @since           1.0.1
-     * @version         1.2.1
-     * @author          Can Berkol
-     *
-     * @use             $this->createException()
-     *
-     * @param           array 				$filter
-     * @param           array				$sortOrder
-	 * @param           array 				$limit
-     *
-     * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
-     */
-    public function listFilesOfPage($page, $filter = null, $sortOrder = null, $limit = null){
+	/**
+	 * @param mixed $page
+	 * @param array|null $filter
+	 * @param array|null $sortOrder
+	 * @param array|null $limit
+	 *
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+    public function listFilesOfPage($page, array $filter = null, array $sortOrder = null, array $limit = null){
         $timeStamp = time();
 		if(!is_array($sortOrder) && !is_null($sortOrder)){
 			return $this->createException('InvalidSortOrderException', '$sortOrder must be an array with key => value pairs where value can only be "asc" or "desc".', 'E:S:002');
@@ -2091,43 +1694,26 @@ class ContentManagementModel extends CoreModel{
 		return new ModelResponse($result, $totalRows, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
 	}
 
-    /**
-     * @name            listItemsOfNavigation()
-     *
-     * @since           1.0.1
-     * @version         1.2.1
+	/**
+	 * @param mixed $navigation
+	 * @param numeric|null       $level
+	 * @param array|null $sortOrder
+	 * @param array|null $limit
 	 *
-     * @author          Can Berkol
-     *
-     * @use             $this->listNavigationItemsOfNavigation()
-     *
-     * @param           mixed 		$navigation
-     * @param           mixed 		$level
-     * @param           array 		$sortOrder
-     * @param           array 		$limit
-     *
-     * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
-     */
-    public function listItemsOfNavigation($navigation, $level = null, $sortOrder = null, $limit = null){
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+    public function listItemsOfNavigation($navigation, $level = null, array $sortOrder = null, array $limit = null){
         return $this->listNavigationItemsOfNavigation($navigation, $level, $sortOrder, $limit);
     }
 
-    /**
-     * @name            listLayouts ()
-     *
-     * @since           1.0.1
-     * @version         1.2.1
-     * @author          Can Berkol
-     *
-     * @use             $this->createException()
-     *
-     * @param           array 		$filter
-     * @param           array 		$sortOrder
-     * @param           array 		$limit
-     *
-     * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
-     */
-	public function listLayouts($filter = null, $sortOrder = null, $limit = null){
+	/**
+	 * @param array|null $filter
+	 * @param array|null $sortOrder
+	 * @param array|null $limit
+	 *
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+	public function listLayouts(array $filter = null, array $sortOrder = null, array $limit = null){
 		$timeStamp = time();
 		if(!is_array($sortOrder) && !is_null($sortOrder)){
 			return $this->createException('InvalidSortOrderException', '$sortOrder must be an array with key => value pairs where value can only be "asc" or "desc".', 'E:S:002');
@@ -2185,23 +1771,15 @@ class ContentManagementModel extends CoreModel{
 		return new ModelResponse($entities, $totalRows, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
 	}
 
-    /**
-     * @name            listLayoutsOfSite ()
-     *
-     * @since           1.0.1
-     * @version         1.2.1
-     * @author          Can Berkol
-     *
-     * @use             $this->listLayouts()
-     *
-     * @param           mixed 		$site
-     * @param           array 		$filter
-     * @param           array 		$sortOrder
-     * @param           array 		$limit
-     *
-     * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
-     */
-    public function listLayoutsOfSite($site, $filter = null, $sortOrder = null, $limit = null)    {
+	/**
+	 * @param mixed $site
+	 * @param array|null $filter
+	 * @param array|null $sortOrder
+	 * @param array|null $limit
+	 *
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+    public function listLayoutsOfSite($site, array $filter = null, array $sortOrder = null, array $limit = null)    {
         $timeStamp = time();
 		$sModel = $this->kernel->getContainer()->get('sitemanagement.model');
         $response = $sModel->getSite($site);
@@ -2225,23 +1803,15 @@ class ContentManagementModel extends CoreModel{
 		return $response;
     }
 
-    /**
-     * @name            listLayoutsOfTheme()
-     *
-     * @since           1.0.1
-     * @version         1.2.1
-     * @author          Can Berkol
-     *
-     * @use             $this->listLayouts()
-     *
-     * @param           mixed 		$theme
-	 * @param			array		$filter
-     * @param           array 		$sortOrder
-     * @param           array 		$limit
-     *
-	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	/**
+	 * @param mixed $theme
+	 * @param array|null $filter
+	 * @param array|null $sortOrder
+	 * @param array|null $limit
+	 *
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
-	public function listLayoutsOfTheme($theme, $filter = null, $sortOrder = null, $limit = null)    {
+	public function listLayoutsOfTheme($theme, array $filter = null, array $sortOrder = null, array $limit = null)    {
 		$timeStamp = time();
 		$response = $this->getTheme($theme);
 		if($response->error->exist){
@@ -2263,22 +1833,15 @@ class ContentManagementModel extends CoreModel{
 
 		return $response;
 	}
+
 	/**
-	 * @name            listLocalizationsOfPage()
+	 * @param mixed $page
+	 * @param array|null $sortOrder
+	 * @param array|null $limit
 	 *
-	 * @since           1.2.8
-	 * @version         1.2.8
-	 * @author          Can Berkol
-	 *
-	 * @use             $this->createException()
-	 *
-	 * @param           mixed $page
-	 * @param           array $sortOrder
-	 * @param           array $limit
-	 *
-	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
-	public function listLocalizationsOfPage($page, $sortOrder = null, $limit = null){
+	public function listLocalizationsOfPage($page, array $sortOrder = null, array $limit = null){
 		$timeStamp = time();
 		if (!is_array($sortOrder) && !is_null($sortOrder)) {
 			return $this->createException('InvalidSortOrderException', '$sortOrder must be an array with key => value pairs where value can only be "asc" or "desc".', 'E:S:002');
@@ -2325,22 +1888,15 @@ class ContentManagementModel extends CoreModel{
 		}
 		return new ModelResponse($result, $totalRows, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
 	}
-    /**
-     * @name            listModules()
-     *
-     * @since           1.0.1
-     * @version         1.2.1
-     * @author          Can Berkol
-     *
-     * @use             $this->createException
-     *
-     * @param           array 		$filter
-     * @param           array 		$sortOrder
-     * @param           array 		$limit
-     *
-     * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
-     */
-	public function listModules($filter = null, $sortOrder = null, $limit = null){
+
+	/**
+	 * @param array|null       $filter
+	 * @param array|null $sortOrder
+	 * @param array|null $limit
+	 *
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+	public function listModules(array $filter = null, array $sortOrder = null, array $limit = null){
 		$timeStamp = time();
 		if(!is_array($sortOrder) && !is_null($sortOrder)){
 			return $this->createException('InvalidSortOrderException', '$sortOrder must be an array with key => value pairs where value can only be "asc" or "desc".', 'E:S:002');
@@ -2398,22 +1954,14 @@ class ContentManagementModel extends CoreModel{
 		return new ModelResponse($entities, $totalRows, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
 	}
 
-    /**
-     * @name            listModulesOfPageLayouts()
-     *
-     * @since           1.0.1
-     * @version         1.2.5
-     * @author          Can Berkol
-     *
-     * @use             $this->createException()
-     *
-     * @param           array 			$filter
-     * @param           array 			$sortOrder
-     * @param           array 			$limit
-     *
-     * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
-     */
-    public function listModulesOfPageLayouts($filter = null, $sortOrder = null, $limit = null){
+	/**
+	 * @param array|null $filter
+	 * @param array|null $sortOrder
+	 * @param array|null $limit
+	 *
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+    public function listModulesOfPageLayouts(array $filter = null, array $sortOrder = null, array $limit = null){
 		$timeStamp = time();
 		if(!is_array($sortOrder) && !is_null($sortOrder)){
 			return $this->createException('InvalidSortOrderException', '$sortOrder must be an array with key => value pairs where value can only be "asc" or "desc".', 'E:S:002');
@@ -2461,22 +2009,14 @@ class ContentManagementModel extends CoreModel{
 		return new ModelResponse($result, $totalRows, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
 	}
 
-    /**
-     * @name            listModulesOfPageLayoutsGroupedBySection()
+	/**
+	 * @param mixed $page
+	 * @param array|null $sortOrder
+	 * @param array|null $limit
 	 *
-     * @since           1.0.1
-     * @version         1.2.5
-     * @author          Can Berkol
-     *
-     * @use             $this->createException()
-     *
-     * @param           array 		$page
-     * @param           array 		$sortOrder
-     * @param           array 		$limit
-     *
-     * @return          array		$response
-     */
-    public function listModulesOfPageLayoutsGroupedBySection($page, $sortOrder = null, $limit = null){
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+    public function listModulesOfPageLayoutsGroupedBySection($page, array $sortOrder = null, array $limit = null){
         $timeStamp = time();
 		$response = $this->getPage($page);
 		if($response->error->exist){
@@ -2511,23 +2051,15 @@ class ContentManagementModel extends CoreModel{
 		return new ModelResponse($modules, $count, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
 	}
 
-    /**
-     * @name            listModulesOfSite ()
-     *
-     * @since           1.0.1
-     * @version         1.2.1
-     * @author          Can Berkol
-     *
-     * @use             $this->listThemes()
-     *
-     * @param           mixed 		$site
-     * @param           array		$filter
-     * @param           array 		$sortOrder
-     * @param           array 		$limit
-     *
-	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	/**
+	 * @param mixed $site
+	 * @param array|null $filter
+	 * @param array|null $sortOrder
+	 * @param array|null $limit
+	 *
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
-	public function listModulesOfSite($site, $filter = null, $sortOrder = null, $limit = null)    {
+	public function listModulesOfSite($site, array $filter = null, array $sortOrder = null, array $limit = null)    {
 		$timeStamp = time();
 		$sModel = $this->kernel->getContainer()->get('sitemanagement.model');
 		$response = $sModel->getSite($site);
@@ -2552,22 +2084,14 @@ class ContentManagementModel extends CoreModel{
 	}
 
 	/**
-	 * @name            listModulesOfTheme()
+	 * @param string $theme
+	 * @param array|null $filter
+	 * @param array|null $sortOrder
+	 * @param array|null $limit
 	 *
-	 * @since           1.0.1
-	 * @version         1.2.1
-	 * @author          Can Berkol
-	 *
-	 * @use             $this->listLayouts()
-	 *
-	 * @param           mixed 		$theme
-	 * @param			array		$filter
-	 * @param           array 		$sortOrder
-	 * @param           array 		$limit
-	 *
-	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
-	public function listModulesOfTheme($theme, $filter = null, $sortOrder = null, $limit = null)    {
+	public function listModulesOfTheme($theme, array $filter = null, array $sortOrder = null, array $limit = null)    {
 		$timeStamp = time();
 		$response = $this->getTheme($theme);
 		if($response->error->exist){
@@ -2591,22 +2115,13 @@ class ContentManagementModel extends CoreModel{
 	}
 
 	/**
-	 * @name            listNavigationItems()
+	 * @param array|null $filter
+	 * @param array|null $sortOrder
+	 * @param array|null $limit
 	 *
-	 * @since           1.0.1
-	 * @version         1.2.7
-	 * @author          Can Berkol
-	 * @author          Said İmamoğlu
-	 *
-	 * @use             $this->createException
-	 *
-	 * @param           array 		$filter
-	 * @param           array 		$sortOrder
-	 * @param           array 		$limit
-	 *
-	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
-	public function listNavigationItems($filter = null, $sortOrder = null, $limit = null){
+	public function listNavigationItems(array $filter = null, array $sortOrder = null, array $limit = null){
 		$timeStamp = time();
 		if(!is_array($sortOrder) && !is_null($sortOrder)){
 			return $this->createException('InvalidSortOrderException', '$sortOrder must be an array with key => value pairs where value can only be "asc" or "desc".', 'E:S:002');
@@ -2665,23 +2180,15 @@ class ContentManagementModel extends CoreModel{
 		return new ModelResponse($entities, $totalRows, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
 	}
 
-    /**
-     * @name            listNavigationItemsOfNavigation ()
-     *
-     * @since           1.0.1
-     * @version         1.2.1
-     * @author          Can Berkol
-     *
-     * @use             $this->listNavigationItems()
-     *
-     * @param           mixed 		$navigation
-     * @param           mixed 		$level
-     * @param           array 		$sortOrder
-     * @param           array 		$limit
-     *
-     * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
-     */
-    public function listNavigationItemsOfNavigation($navigation, $level = 'top', $sortOrder = null, $limit = null){
+	/**
+	 * @param mixed $navigation
+	 * @param string     $level
+	 * @param array|null $sortOrder
+	 * @param array|null $limit
+	 *
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+    public function listNavigationItemsOfNavigation($navigation, \string $level = 'top', array $sortOrder = null, array $limit = null){
         $timeStamp = time();
 		$response = $this->getNavigation($navigation);
 		if($response->error->exist){
@@ -2722,22 +2229,14 @@ class ContentManagementModel extends CoreModel{
 		return $response;
     }
 
-    /**
-     * @name            listNavigationItemsOfParent()
-     *
-     * @since           1.0.1
-     * @version         1.2.1
-     * @author          Can Berkol
-     *
-     * @use             $this->listNavigationItems()
-     *
-     * @param           mixed 		$parent
-     * @param           array 		$sortOrder
-     * @param           array 		$limit
-     *
-     * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
-     */
-    public function listNavigationItemsOfParent($parent, $sortOrder = null, $limit = null){
+	/**
+	 * @param mixed $parent
+	 * @param array|null $sortOrder
+	 * @param array|null $limit
+	 *
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+    public function listNavigationItemsOfParent($parent, array $sortOrder = null, array $limit = null){
         $timeStamp = time();
 		$response = $this->getNavigationItem($parent);
 		if($response->error->exist){
@@ -2760,22 +2259,14 @@ class ContentManagementModel extends CoreModel{
 		return $response;
     }
 
-    /**
-     * @name            listNavigations()
-     *
-     * @since           1.0.1
-     * @version         1.2.1
-     * @author          Can Berkol
-     *
-     * @use             $this->createException()
-     *
-     * @param           array 			$filter
-     * @param           array 			$sortOrder
-     * @param           array 			$limit
-     *
-     * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
-     */
-	public function listNavigations($filter = null, $sortOrder = null, $limit = null){
+	/**
+	 * @param array|null $filter
+	 * @param array|null $sortOrder
+	 * @param array|null $limit
+	 *
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+	public function listNavigations(array $filter = null, array $sortOrder = null, array $limit = null){
 		$timeStamp = time();
 		if(!is_array($sortOrder) && !is_null($sortOrder)){
 			return $this->createException('InvalidSortOrderException', '$sortOrder must be an array with key => value pairs where value can only be "asc" or "desc".', 'E:S:002');
@@ -2835,21 +2326,13 @@ class ContentManagementModel extends CoreModel{
 	}
 
 	/**
-	 * @name            listPageRevisions()
+	 * @param array|null $filter
+	 * @param array|null $sortOrder
+	 * @param array|null $limit
 	 *
-	 * @since           1.1.9
-	 * @version         1.2.1
-	 * @author          Can Berkol
-	 *
-	 * @use             $this->createException()
-	 *
-	 * @param           array 			$filter
-	 * @param           array 			$sortOrder
-	 * @param           array 			$limit
-	 *
-	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
-	public function listPageRevisions($filter = null, $sortOrder = null, $limit = null){
+	public function listPageRevisions(array $filter = null, array $sortOrder = null, array $limit = null){
 		$timeStamp = time();
 		if(!is_array($sortOrder) && !is_null($sortOrder)){
 			return $this->createException('InvalidSortOrderException', '$sortOrder must be an array with key => value pairs where value can only be "asc" or "desc".', 'E:S:002');
@@ -2896,22 +2379,15 @@ class ContentManagementModel extends CoreModel{
 		}
 		return new ModelResponse($result, $totalRows, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
 	}
-    /**
-     * @name            listPages()
-     *
-     * @since           1.0.0
-     * @version         1.2.4
-     * @author          Can Berkol
-     *
-     * @use             $this->createException()
-     *
-     * @param           array 			$filter
-     * @param           array 			$sortOrder
-     * @param           array 			$limit
-     *
-     * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
-     */
-	public function listPages($filter = null, $sortOrder = null, $limit = null){
+
+	/**
+	 * @param array|null $filter
+	 * @param array|null $sortOrder
+	 * @param array|null $limit
+	 *
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+	public function listPages(array $filter = null, array $sortOrder = null, array $limit = null){
 		$timeStamp = time();
 		if(!is_array($sortOrder) && !is_null($sortOrder)){
 			return $this->createException('InvalidSortOrderException', '$sortOrder must be an array with key => value pairs where value can only be "asc" or "desc".', 'E:S:002');
@@ -2968,23 +2444,14 @@ class ContentManagementModel extends CoreModel{
 		return new ModelResponse($entities, $totalRows, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
 	}
 
-    /**
-     * @name            listPagesOfLayout()
-     *
-     * @since           1.0.1
-     * @version         1.2.1
-     * @author          Can Berkol
-     *
-     * @use             $this->listPages()
-
-     *
-     * @param           mixed 			$layout
-	 * @param           array           $sortOrder
-	 * @param 			array			$limit
+	/**
+	 * @param mixed $layout
+	 * @param array $sortOrder
+	 * @param array $limit
 	 *
-     * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
-     */
-    public function listPagesOfLayout($layout, $sortOrder, $limit) {
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+    public function listPagesOfLayout($layout, array $sortOrder, array $limit) {
         $timeStamp = time();
         $response = $this->getLayout($layout);
 		if($response->error->exist){
@@ -3009,22 +2476,14 @@ class ContentManagementModel extends CoreModel{
 		return $response;
     }
 
-    /**
-     * @name            listPagesOfSite ()
-     *
-     * @since           1.0.1
-     * @version         1.1.2
-     * @author          Can Berkol
-     *
-     * @use             $this->listPages()
-     *
-     * @param           mixed	 	$site
-     * @param           array 		$sortOrder
-     * @param           array 		$limit
-     *
-     * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
-     */
-    public function listPagesOfSite($site = 1, $sortOrder, $limit){
+	/**
+	 * @param mixed $site
+	 * @param array $sortOrder
+	 * @param array $limit
+	 *
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+    public function listPagesOfSite($site = 1, array $sortOrder, array $limit){
 		$timeStamp = time();
 		$sModel = $this->kernel->getContainer()->get('sitemanagement.model');
 		$response = $sModel->getSite($site);
@@ -3051,21 +2510,13 @@ class ContentManagementModel extends CoreModel{
     }
 
 	/**
-	 * @name            listThemes()
+	 * @param array|null $filter
+	 * @param array|null $sortOrder
+	 * @param array|null $limit
 	 *
-	 * @since           1.0.0
-	 * @version         1.2.1
-	 * @author          Can Berkol
-	 *
-	 * @use             $this->createException()
-	 *
-	 * @param           array 			$filter
-	 * @param           array 			$sortOrder
-	 * @param           array 			$limit
-	 *
-	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
-	public function listThemes($filter = null, $sortOrder = null, $limit = null){
+	public function listThemes(array $filter = null, array $sortOrder = null, array $limit = null){
 		$timeStamp = time();
 		if(!is_array($sortOrder) && !is_null($sortOrder)){
 			return $this->createException('InvalidSortOrderException', '$sortOrder must be an array with key => value pairs where value can only be "asc" or "desc".', 'E:S:002');
@@ -3127,21 +2578,13 @@ class ContentManagementModel extends CoreModel{
 	}
 
 	/**
-	 * @name            listThemesOfSite()
+	 * @param mixed   $site
+	 * @param array $sortOrder
+	 * @param array $limit
 	 *
-	 * @since           1.0.1
-	 * @version         1.1.2
-	 * @author          Can Berkol
-	 *
-	 * @use             $this->listPages()
-	 *
-	 * @param           mixed	 	$site
-	 * @param           array 		$sortOrder
-	 * @param           array 		$limit
-	 *
-	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
-	public function listThemesOfSite($site = 1, $sortOrder, $limit){
+	public function listThemesOfSite($site = 1, array $sortOrder, array $limit){
 		$timeStamp = time();
 		$sModel = $this->kernel->getContainer()->get('sitemanagement.model');
 		$response = $sModel->getSite($site);
@@ -3166,21 +2609,13 @@ class ContentManagementModel extends CoreModel{
 
 		return $response;
 	}
+
 	/**
-	 * @name            markPagesAsDeleted()
+	 * @param array $collection
 	 *
-	 * @since           1.2.6
-	 * @version         1.2.6
-	 *
-	 * @author          Can Berkol
-	 *
-	 * @use             $this->createException()
-	 *
-	 * @param           array 			$collection
-	 *
-	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
-	public function markPagesAsDeleted($collection){
+	public function markPagesAsDeleted(array $collection){
 		$timeStamp = time();
 		if (!is_array($collection)) {
 			return $this->createException('InvalidParameterValueException', 'Invalid parameter value. Parameter must be an array collection', 'E:S:001');
@@ -3205,36 +2640,22 @@ class ContentManagementModel extends CoreModel{
 
 		return $response;
 	}
+
 	/**
-	 * @name            updateLayout ()
+	 * @param mixed $layout
 	 *
-	 * @since           1.0.1
-	 * @version         1.2.1
-	 * @author          Can Berkol
-	 *
-	 * @use             $this->updateLayouts()
-	 *
-	 * @param           mixed 			$layout
-	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function updateLayout($layout){
 		return $this->updateLayouts(array($layout));
 	}
 
 	/**
-	 * @name            updateLayouts ()
+	 * @param array $collection
 	 *
-	 * @since           1.0.1
-	 * @version         1.2.4
-	 * @author          Can Berkol
-	 *
-	 * @use             $this->createException()
-	 *
-	 * @param           array 			$collection
-	 *
-	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
-	public function updateLayouts($collection){
+	public function updateLayouts(array $collection){
 		$timeStamp = time();
 		/** Parameter must be an array */
 		if (!is_array($collection)) {
@@ -3331,35 +2752,22 @@ class ContentManagementModel extends CoreModel{
 		}
 		return new ModelResponse(null, 0, 0, null, true, 'E:D:004', 'One or more entities cannot be updated within database.', $timeStamp, time());
 	}
+
 	/**
-	 * @name            updateModule ()
+	 * @param mixed $module
 	 *
-	 * @since           1.0.2
-	 * @version         1.2.1
-	 * @author          Can Berkol
-	 *
-	 * @use             $this->updateModules()
-	 *
-	 * @param           mixed			$module
-	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function updateModule($module){
 		return $this->updateModules(array($module));
 	}
+
 	/**
-	 * @name            updateModules ()
+	 * @param array $collection
 	 *
-	 * @since           1.0.2
-	 * @version         1.2.1
-	 * @author          Can Berkol
-	 *
-	 * @use             $this->createException
-	 *
-	 * @param           array			$collection
-	 *
-	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
-	public function updateModules($collection){
+	public function updateModules(array $collection){
 		$timeStamp = time();
 		/** Parameter must be an array */
 		if (!is_array($collection)) {
@@ -3457,36 +2865,22 @@ class ContentManagementModel extends CoreModel{
 		}
 		return new ModelResponse(null, 0, 0, null, true, 'E:D:004', 'One or more entities cannot be updated within database.', $timeStamp, time());
 	}
+
 	/**
-	 * @name            updateModuleLayoutEntry ()
+	 * @param mixed $entry
 	 *
-	 * @since           1.1.5
-	 * @version         1.2.1
-	 * @author          Can Berkol
-	 *
-	 * @use             $this->updateModuleLayoutEntries()
-	 *
-	 * @param           mixed 			$entry
-	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
-	public function updateModuleLayoutEntry($entry)    {
+	public function updateModuleLayoutEntry($entry){
 		return $this->updateModuleLayoutEntries(array($entry));
 	}
 
 	/**
-	 * @name            updateModuleLayoutEntries()
+	 * @param array $collection
 	 *
-	 * @since           1.1.5
-	 * @version         1.2.1
-	 * @author          Can Berkol
-	 *
-	 * @use             $this->createException()
-	 *
-	 * @param           array 			$collection
-	 *
-	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
-	public function updateModuleLayoutEntries($collection){
+	public function updateModuleLayoutEntries(array $collection){
 		$timeStamp = time();
 		if (!is_array($collection)) {
 			return $this->createException('InvalidParameterValueException', 'Invalid parameter value. Parameter must be an array collection', 'E:S:001');
@@ -3565,36 +2959,22 @@ class ContentManagementModel extends CoreModel{
 		}
 		return new ModelResponse(null, 0, 0, null, true, 'E:D:004', 'One or more entities cannot be updated within database.', $timeStamp, time());
 	}
+
 	/**
-	 * @name            updateNavigation()
+	 * @param mixed $navigation
 	 *
-	 * @since           1.0.1
-	 * @version         1.2.1
-	 * @author          Can Berkol
-	 *
-	 * @use             $this->updateNavigations()
-	 *
-	 * @param           mixed 			$navigation
-	 * @return			\BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function updateNavigation($navigation){
 		return $this->updateNavigations(array($navigation));
 	}
 
 	/**
-	 * @name            updateNavigations ()
+	 * @param array $collection
 	 *
-	 * @since           1.0.1
-	 * @version         1.2.1
-	 * @author          Can Berkol
-	 *
-	 * @use             $his->createException()
-	 *
-	 * @param           array 			$collection
-	 *
-	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
-	public function updateNavigations($collection){
+	public function updateNavigations(array $collection){
 		$timeStamp = time();
 		if (!is_array($collection)) {
 			return $this->createException('InvalidParameterValueException', 'Invalid parameter value. Parameter must be an array collection', 'E:S:001');
@@ -3681,37 +3061,22 @@ class ContentManagementModel extends CoreModel{
 		}
 		return new ModelResponse(null, 0, 0, null, true, 'E:D:004', 'One or more entities cannot be updated within database.', $timeStamp, time());
 	}
+
 	/**
-	 * @name            updateNavigationItem ()
+	 * @param mixed $item
 	 *
-	 * @since           1.0.1
-	 * @version         1.2.1
-	 * @author          Can Berkol
-	 *
-	 * @use             $this->update_themes()
-	 *
-	 * @param           mixed           $item
-	 *
-	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function updateNavigationItem($item){
 		return $this->updateNavigationItems(array($item));
 	}
 
 	/**
-	 * @name            updateNavigationItems ()
+	 * @param array $collection
 	 *
-	 * @since           1.0.1
-	 * @version         1.2.1
-	 * @author          Can Berkol
-	 *
-	 * @use             $this->createException()
-	 *
-	 * @param           array 			$collection
-	 *
-	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
-	public function updateNavigationItems($collection){
+	public function updateNavigationItems(array $collection){
 		$timeStamp = time();
 		/** Parameter must be an array */
 		if (!is_array($collection)) {
@@ -3811,36 +3176,22 @@ class ContentManagementModel extends CoreModel{
 		}
 		return new ModelResponse(null, 0, 0, null, true, 'E:D:004', 'One or more entities cannot be updated within database.', $timeStamp, time());
 	}
-    /**
-     * @name            updatePage ()
-     *
-     * @since           1.0.0
-     * @version         1.2.1
-     * @author          Can Berkol
-     *
-     * @use             $this->updatePages()
-     *
-     * @param           mixed 			$page
+
+	/**
+	 * @param mixed $page
 	 *
-     * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
-     */
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
     public function updatePage($page){
         return $this->updatePages(array($page));
     }
+
 	/**
-	 * @name            updatePageLocalizations()
+	 * @param array $collection
 	 *
-	 * @since           1.2.8
-	 * @version         1.3.0
-	 * @author          Can Berkol
-	 *
-	 * @use             $this->createException()
-	 *
-	 * @param           array 			$collection
-	 *
-	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
-	public function updatePageLocalizations($collection) {
+	public function updatePageLocalizations(array $collection) {
 		$timeStamp = time();
 		/** Parameter must be an array */
 		if (!is_array($collection)) {
@@ -3862,36 +3213,22 @@ class ContentManagementModel extends CoreModel{
 		}
 		return new ModelResponse(null, 0, 0, null, true, 'E:D:004', 'One or more entities cannot be updated within database.', $timeStamp, time());
 	}
+
 	/**
-	 * @name            updatePageRevision()
+	 * @param $revision
 	 *
-	 * @since           1.1.9
-	 * @version         1.2.1
-	 * @author          Can Berkol
-	 *
-	 * @use             $this->updatePageRevisions()
-	 *
-	 * @param           mixed 			$revision
-	 *
-	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function updatePageRevision($revision){
 		return $this->updatePageRevisions(array($revision));
 	}
+
 	/**
-	 * @name            updatePageRevisions()
+	 * @param array $collection
 	 *
-	 * @since           1.1.9
-	 * @version         1.2.2
-	 * @author          Can Berkol
-	 *
-	 * @use             $this->createException()
-	 *
-	 * @param           array 			$collection
-	 *
-	 * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
-	public function updatePageRevisions($collection) {
+	public function updatePageRevisions(array $collection) {
 		$timeStamp = time();
 		/** Parameter must be an array */
 		if (!is_array($collection)) {
@@ -3961,20 +3298,13 @@ class ContentManagementModel extends CoreModel{
 		}
 		return new ModelResponse(null, 0, 0, null, true, 'E:D:004', 'One or more entities cannot be updated within database.', $timeStamp, time());
 	}
-    /**
-     * @name            updatePages()
-     *
-     * @since           1.0.0
-     * @version         1.2.1
-     * @author          Can Berkol
-     *
-     * @use             $this->createException()
-     *
-     * @param           array 			$collection
-     *
-     * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
-     */
-    public function updatePages($collection){
+
+	/**
+	 * @param array $collection
+	 *
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+    public function updatePages(array $collection){
 		$timeStamp = time();
 		if (!is_array($collection)) {
 			return $this->createException('InvalidParameterValueException', 'Invalid parameter value. Parameter must be an array collection', 'E:S:001');
@@ -4059,37 +3389,22 @@ class ContentManagementModel extends CoreModel{
 		}
 		return new ModelResponse(null, 0, 0, null, true, 'E:D:004', 'One or more entities cannot be updated within database.', $timeStamp, time());
 	}
-    /**
-     * @name            updateTheme()
-     *
-     * @since           1.0.1
-     * @version         1.2.1
-     * @author          Can Berkol
-     *
-     * @use             $this->updateThemes()
-     *
-     * @param           mixed			$theme
-     * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
-     */
+
+	/**
+	 * @param mixed $theme
+	 *
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
     public function updateTheme($theme){
         return $this->updateThemes(array($theme));
     }
 
-    /**
-     * @name            updateThemes()
-     *
-     * @since           1.0.1
-     * @version         1.2.1
-     *
-     * @author          Can Berkol
-     *
-     * @use             $this->createException()
-     *
-     * @param           array 			$collection
-     *
-     * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
-     */
-    public function updateThemes($collection){
+	/**
+	 * @param array $collection
+	 *
+	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+	 */
+    public function updateThemes(array $collection){
         $timeStamp = time();
 		if (!is_array($collection)) {
 			return $this->createException('InvalidParameterValueException', 'Invalid parameter value. Parameter must be an array collection', 'E:S:001');
@@ -4185,149 +3500,3 @@ class ContentManagementModel extends CoreModel{
 		return new ModelResponse(null, 0, 0, null, true, 'E:D:004', 'One or more entities cannot be updated within database.', $timeStamp, time());
 	}
 }
-/**
- * Change Log
- * **************************************
- * v1.3.0                      09.08.2015
- * Can Berkol
- * **************************************
- * BF :: name of method fixed. udateProductLocalizations > updateProductLocalizations.
- * **************************************
- * v1.2.9                      30.07.2015
- * Can Berkol
- * **************************************
- * BF :: addFilesToPage() has been fixed.
- * BF :: isFileAssociatedWithPage() has been fixed.
- *
- * **************************************
- * v1.2.8                      29.07.2015
- * Can Berkol
- * **************************************
- * FR :: listLocalizationsOfPage() added.
- * FR :: updatePageLocalizations() added.
- *
- * **************************************
- * v1.2.7                      26.06.2015
- * Said İmamoğlu
- * **************************************
- * BF :: listNavigationItems() updated.
- *
- * **************************************
- * v1.2.6                      12.06.2015
- * Can Berkol
- * **************************************
- * BF :: insertNavigationLovalizations() rewritten.
- * BF :: insertNavigationItemLovalizations() rewritten.
- * BF :: insertPageLocalizations() rewritten.
- * FR :: markPagesAsDeleted() implemented.
- *
- * **************************************
- * v1.2.5                      04.06.2015
- * Can Berkol
- * **************************************
- * BF :: listModulesOFLayout & listModulesOfPageLayoutsGroupedBySection methods have been fixed.
- *
- * **************************************
- * v1.2.4                      26.05.2015
- * Can Berkol
- * **************************************
- * BF :: Deprecated use of $this->resetResponse() is removed.
- * BF :: listPagesMethod() was trying to associate page_localization to navigation. Association now points to page.
- * BF :: Use header added for ModelResponse.
- * BF :: Entity definition access kets fixed.
- *
- * **************************************
- * v1.2.3                      25.05.2015
- * Can Berkol
- * **************************************
- * BF :: db_connection is replaced with dbConnection
- *
- * **************************************
- * v1.2.2                      10.05.2015
- * Can Berkol
- * **************************************
- * BF :: Old style method calls fixed.
- *
- * **************************************
- * v1.2.1                     03.05.2015
- * Can Berkol
- * **************************************
- * CR :: Made compatible with CoreBundle v3.3.
- *
- * **************************************
- * v1.1.9                      29.04.2015
- * TW #
- * Can Berkol
- * **************************************
- * U listModulesOfPageLayoutsGroupedBySection()
- *
- * **************************************
- * v1.1.9                      24.04.2015
- * TW #3568871
- * Can Berkol
- * **************************************
- * A deleteNvigations()
- * A deletePageRevision()
- * A deletePageRevisions()
- * A getLastRevisionOfPage()
- * A getPageRevision()
- * A insertPageRevision()
- * A insertPageRevisions()
- * A listPageRevisions()
- * A listRevisionsOfPage()
- * A updatePageRevision()
- * A updatePageRevisions()
- * D deletNavigations()
- *
- * **************************************
- * v1.1.8                      Can Berkol
- * 29.03.2014
- * **************************************
- * U updateNavigationItemLocalization()
- * **************************************
- * v1.1.7                      Can Berkol
- * 07.03.2014
- * **************************************
- * A addFilesToPage()
- * A getMaxSortOrderOfPageFile()
- * A isFileAssociatedWithPage()
- *
- * **************************************
- * v1.1.6                      Can Berkol
- * 24.02.2014
- * **************************************
- * A insertNavigationItemLocalizations()
- * A insertNavigationLocalizations()
- * A insertPageLocalizations()
- * U insertNavigation()
- * U insertNavigationItem()
- * U insertNavigationıtems()
- * U insertNavigations()
- * U insertPage()
- * U insertPages()
- * U updateLayouts()
- * U updateModuleLayoutEntries()
- * U updateModules()
- * U updateNavigationItems()
- * U updateNavigations()
- * U updatePages()
- * U update Themes()
- *
- * **************************************
- * v1.1.5                      Can Berkol
- * 24.01.2014
- * **************************************
- * A doesPageExist()
- * A getModuleLayoutEntry()
- * A updateModuleLayoutEntry()
- * A updateModuleLayoutEntries()
- * U updatePages()
- *
- * **************************************
- * v1.1.4                      Can Berkol
- * 06.01.2014
- * **************************************
- * B listItemsOfNavigation() bug fixes.
- * U listNavigationItemsOfNavigation() Now accepts string, integer or object for $navigation parameter.
- *
- */

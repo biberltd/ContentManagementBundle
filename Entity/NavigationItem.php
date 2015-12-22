@@ -1,19 +1,11 @@
 <?php
-
 /**
- * @name        NavigationItem
- * @package		BiberLtd\Core\ContentManagementBundle
- *
  * @author		Can Berkol
  *
- * @version     1.0.3
- * @date        24.04.2015
+ * @copyright   Biber Ltd. (http://www.biberltd.com) (C) 2015
+ * @license     GPLv3
  *
- * @copyright   Biber Ltd. (http://www.biberltd.com)
- * @license     GPL v3.0
- *
- * @description Model / Entity class.
- *
+ * @date        22.12.2015
  */
 namespace BiberLtd\Bundle\ContentManagementBundle\Entity;
 use Doctrine\ORM\Mapping AS ORM;
@@ -32,36 +24,43 @@ class NavigationItem extends CoreLocalizableEntity
      * @ORM\Id
      * @ORM\Column(type="integer", length=10)
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @var int
      */
     private $id;
 
     /**
      * @ORM\Column(type="text", nullable=false)
+     * @var string
      */
     private $url;
 
     /**
      * @ORM\Column(type="string", length=1, nullable=false, options={"default":"b"})
+     * @var string
      */
     private $target;
 
     /**
      * @ORM\Column(type="integer", length=10, nullable=false, options={"default":1})
+     * @var int
      */
     private $sort_order;
 
     /**
      * @ORM\Column(type="string", length=1, nullable=false, options={"default":"n"})
+     * @var string
      */
     private $is_child;
 
     /** 
      * @ORM\Column(type="string", nullable=true)
+     * @var string
      */
     private $icon;
 
     /**
      * @ORM\OneToMany(targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\NavigationItem", mappedBy="parent")
+     * @var array
      */
     private $navigation_items;
 
@@ -70,6 +69,7 @@ class NavigationItem extends CoreLocalizableEntity
      *     targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\NavigationItemLocalization",
      *     mappedBy="navigation_item"
      * )
+     * @var array
      */
     protected $localizations;
 
@@ -79,6 +79,7 @@ class NavigationItem extends CoreLocalizableEntity
      *     inversedBy="navigation_items"
      * )
      * @ORM\JoinColumn(name="page", referencedColumnName="id", onDelete="RESTRICT")
+     * @var \BiberLtd\Bundle\ContentManagementBundle\Entity\Page
      */
     private $page;
 
@@ -89,6 +90,7 @@ class NavigationItem extends CoreLocalizableEntity
      *     inversedBy="navigation_items"
      * )
      * @ORM\JoinColumn(name="parent", referencedColumnName="id", onDelete="CASCADE")
+     * @var \BiberLtd\Bundle\ContentManagementBundle\Entity\NavigationItem
      */
     private $parent;
 
@@ -96,43 +98,23 @@ class NavigationItem extends CoreLocalizableEntity
     /**
      * @ORM\ManyToOne(targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\Navigation", inversedBy="items")
      * @ORM\JoinColumn(name="navigation", referencedColumnName="id", nullable=false, onDelete="CASCADE")
+     * @var \BiberLtd\Bundle\ContentManagementBundle\Entity\NavigationItem
      */
     private $navigation;
-    /******************************************************************
-     * PUBLIC SET AND GET FUNCTIONS                                   *
-     ******************************************************************/
 
     /**
-     * @name            getId()
-     *  				Gets $id property.
-     * .
-     * @author          Can Berkol
-     * @since			1.0.0
-     * @version         1.0.0
-     *
-     * @return          string          $this->id
+     * @return mixed
      */
     public function getId(){
         return $this->id;
     }
 
     /**
-     * @name            setIsChild()
-     *                  Sets the is_child property.
-     *                  Updates the data only if stored value and value to be set are different.
+     * @param string $is_child
      *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @use             $this->setModified()
-     *
-     * @param           string $is_child
-     *
-     * @return          object                $this
+     * @return $this
      */
-    public function setIsChild($is_child) {
+    public function setIsChild(\string $is_child) {
         if($this->setModified('is_child', $is_child)->isModified()) {
             $this->is_child = $is_child;
         }
@@ -140,52 +122,25 @@ class NavigationItem extends CoreLocalizableEntity
     }
 
     /**
-     * @name            getIsChild()
-     *                  Returns the value of is_child property.
-     *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @return          bool
+     * @return string
      */
     public function getIsChild() {
         return $this->is_child;
     }
 
     /**
-     * @name            isChild()
-     *                  Alias of getIsChild()
-     *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @return          bool
+     * @return string
      */
     public function isChild() {
         return $this->is_child;
     }
 
     /**
-     * @name            setNavigation ()
-     *                  Sets the navigation property.
-     *                  Updates the data only if stored value and value to be set are different.
+     * @param \BiberLtd\Bundle\ContentManagementBundle\Entity\Navigation $navigation
      *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @use             $this->setModified()
-     *
-     * @param           mixed $navigation
-     *
-     * @return          object                $this
+     * @return $this
      */
-    public function setNavigation($navigation) {
+    public function setNavigation(\BiberLtd\Bundle\ContentManagementBundle\Entity\Navigation $navigation) {
         if($this->setModified('navigation', $navigation)->isModified()) {
             $this->navigation = $navigation;
         }
@@ -193,37 +148,18 @@ class NavigationItem extends CoreLocalizableEntity
     }
 
     /**
-     * @name            getNavigation ()
-     *                  Returns the value of navigation property.
-     *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @return          mixed           $this->navigation
+     * @return \BiberLtd\Bundle\ContentManagementBundle\Entity\NavigationItem
      */
     public function getNavigation() {
         return $this->navigation;
     }
 
     /**
-     * @name            setParent()
-     *                  Sets the navigation_item property.
-     *                  Updates the data only if stored value and value to be set are different.
+     * @param \BiberLtd\Bundle\ContentManagementBundle\Entity\NavigationItem $navigation_item
      *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @use             $this->setModified()
-     *
-     * @param           mixed $parent
-     *
-     * @return          object                $this
+     * @return $this
      */
-    public function setParent($navigation_item) {
+    public function setParent(\BiberLtd\Bundle\ContentManagementBundle\Entity\NavigationItem $navigation_item) {
         if($this->setModified('parent', $parent)->isModified()) {
             $this->parent = $parent;
         }
@@ -231,37 +167,18 @@ class NavigationItem extends CoreLocalizableEntity
     }
 
     /**
-     * @name            getParent()
-     *                  Returns the value of navigation_item property.
-     *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @return          mixed           $this->navigation_item
+     * @return \BiberLtd\Bundle\ContentManagementBundle\Entity\NavigationItem
      */
     public function getParent() {
         return $this->parent;
     }
 
     /**
-     * @name            setNavigationItems()
-     *                  Sets the navigation_items property.
-     *                  Updates the data only if stored value and value to be set are different.
+     * @param array $navigation_items
      *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @use             $this->setModified()
-     *
-     * @param           mixed $navigation_items
-     *
-     * @return          object                $this
+     * @return $this
      */
-    public function setNavigationItems($navigation_items) {
+    public function setNavigationItems(array $navigation_items) {
         if($this->setModified('navigation_items', $navigation_items)->isModified()) {
             $this->navigation_items = $navigation_items;
         }
@@ -269,37 +186,18 @@ class NavigationItem extends CoreLocalizableEntity
     }
 
     /**
-     * @name            getNavigationItems()
-     *                  Returns the value of navigation_items property.
-     *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @return          mixed           $this->navigation_items
+     * @return array
      */
     public function getNavigationItems() {
         return $this->navigation_items;
     }
 
     /**
-     * @name            setPage ()
-     *                  Sets the page property.
-     *                  Updates the data only if stored value and value to be set are different.
+     * @param \BiberLtd\Bundle\ContentManagementBundle\Entity\Page $page
      *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @use             $this->setModified()
-     *
-     * @param           mixed $page
-     *
-     * @return          object                $this
+     * @return $this
      */
-    public function setPage($page) {
+    public function setPage(\BiberLtd\Bundle\ContentManagementBundle\Entity\Page $page) {
         if($this->setModified('page', $page)->isModified()) {
             $this->page = $page;
         }
@@ -307,37 +205,18 @@ class NavigationItem extends CoreLocalizableEntity
     }
 
     /**
-     * @name            getPage ()
-     *                  Returns the value of page property.
-     *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @return          mixed           $this->page
+     * @return \BiberLtd\Bundle\ContentManagementBundle\Entity\Page
      */
     public function getPage() {
         return $this->page;
     }
 
     /**
-     * @name            setSortOrder ()
-     *                  Sets the sort_order property.
-     *                  Updates the data only if stored value and value to be set are different.
+     * @param int $sort_order
      *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @use             $this->setModified()
-     *
-     * @param           integer $sort_order
-     *
-     * @return          object                $this
+     * @return $this
      */
-    public function setSortOrder($sort_order) {
+    public function setSortOrder(\integer $sort_order) {
         if($this->setModified('sort_order', $sort_order)->isModified()) {
             $this->sort_order = $sort_order;
         }
@@ -345,37 +224,18 @@ class NavigationItem extends CoreLocalizableEntity
     }
 
     /**
-     * @name            getSortOrder ()
-     *                               Returns the value of sort_order property.
-     *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @return          integer           $this->sort_order
+     * @return int
      */
     public function getSortOrder() {
         return $this->sort_order;
     }
 
     /**
-     * @name                  setTarget ()
-     *                                  Sets the target property.
-     *                                  Updates the data only if stored value and value to be set are different.
+     * @param string $target
      *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @use             $this->setModified()
-     *
-     * @param           string                $target
-     *
-     * @return          object                $this
+     * @return $this
      */
-    public function setTarget($target) {
+    public function setTarget(\string $target) {
         if($this->setModified('target', $target)->isModified()) {
             $this->target = $target;
         }
@@ -383,37 +243,18 @@ class NavigationItem extends CoreLocalizableEntity
     }
 
     /**
-     * @name            getTarget ()
-     *                  Returns the value of target property.
-     *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @return          string           $this->target
+     * @return string
      */
     public function getTarget() {
         return $this->target;
     }
 
     /**
-     * @name            setUrl ()
-     *                  Sets the url property.
-     *                  Updates the data only if stored value and value to be set are different.
+     * @param string $url
      *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @use             $this->setModified()
-     *
-     * @param           string                  $url
-     *
-     * @return          object                  $this
+     * @return $this
      */
-    public function setUrl($url) {
+    public function setUrl(\string $url) {
         if($this->setModified('url', $url)->isModified()) {
             $this->url = $url;
         }
@@ -421,37 +262,18 @@ class NavigationItem extends CoreLocalizableEntity
     }
 
     /**
-     * @name            getUrl ()
-     *                         Returns the value of url property.
-     *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @return          mixed           $this->url
+     * @return string
      */
     public function getUrl() {
         return $this->url;
     }
 
     /**
-     * @name            setIcon()
-     *                  Sets the icon property.
-     *                  Updates the data only if stored value and value to be set are different.
+     * @param string $icon
      *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @use             $this->setModified()
-     *
-     * @param           mixed $icon
-     *
-     * @return          object                $this
+     * @return $this
      */
-    public function setIcon($icon) {
+    public function setIcon(\string $icon) {
         if($this->setModified('icon', $icon)->isModified()) {
             $this->icon = $icon;
         }
@@ -460,69 +282,10 @@ class NavigationItem extends CoreLocalizableEntity
     }
 
     /**
-     * @name            getIcon()
-     *                  Returns the value of icon property.
-     *
-     * @author          Can Berkol
-     *
-     * @since           1.0.1
-     * @version         1.0.1
-     *
-     * @return          mixed           $this->icon
+     * @return string
      */
     public function getIcon() {
         return $this->icon;
     }
 
 }
-/**
- * Change Log:
- * **************************************
- * v1.0.3					   24.04.2015
- * TW #3568871
- * Can Berkol
- * **************************************
- * A getParent()
- *
- * **************************************
- * v1.0.2                      Can Berkol
- * 06.01.2014
- * **************************************
- * A getParent()
- * A setParent()
- * D getNavigationItem()
- * D setNavigationItem()
- *
- * **************************************
- * v1.0.1                      Can Berkol
- * 05.01.2014
- * **************************************
- * A getIcon()
- * A isChild()
- * A setIcon()
- *
- * **************************************
- * v1.0.0                      Can Berkol
- * 24.09.2013
- * **************************************
- * A getId()
- * A getIsChild()
- * A getLocalizations()
- * A getNavigation()
- * A getNavigationItem()
- * A getNavigationItems()
- * A getPage()
- * A getSortOrder()
- * A getTarget()
- * A getUrl()
- * A setIsChild()
- * A setLocalizations()
- * A setNavigation()
- * A setNavigationItem()
- * A setNavigationItems()
- * A setPage()
- * A setSortOrder()
- * A setTarget()
- * A setUrl()
- *
- */

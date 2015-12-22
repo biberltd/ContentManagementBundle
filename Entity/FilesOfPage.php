@@ -1,5 +1,12 @@
 <?php
-
+/**
+ * @author		Can Berkol
+ *
+ * @copyright   Biber Ltd. (http://www.biberltd.com) (C) 2015
+ * @license     GPLv3
+ *
+ * @date        22.12.2015
+ */
 namespace BiberLtd\Bundle\ContentManagementBundle\Entity;
 /**
  * @name        FilesOfPage
@@ -34,26 +41,31 @@ class FilesOfPage extends CoreEntity
 {
 	/**
 	 * @ORM\Column(type="datetime", nullable=false)
+	 * @var \DateTime
 	 */
 	public $date_added;
 
 	/**
 	 * @ORM\Column(type="integer", length=10, nullable=false, options={"default":0})
+	 * @var int
 	 */
 	private $count_view;
 
 	/**
 	 * @ORM\Column(type="integer", length=10, nullable=false, options={"default":1})
+	 * @var int
 	 */
 	private $sort_order;
 
 	/**
 	 * @ORM\Column(type="datetime", nullable=false)
+	 * @var \DateTime
 	 */
 	public $date_updated;
 
 	/**
 	 * @ORM\Column(type="datetime", nullable=true)
+	 * @var \DateTime
 	 */
 	public $date_removed;
 
@@ -61,12 +73,14 @@ class FilesOfPage extends CoreEntity
 	 * @ORM\Id
 	 * @ORM\ManyToOne(targetEntity="BiberLtd\Bundle\FileManagementBundle\Entity\File")
 	 * @ORM\JoinColumn(name="file", referencedColumnName="id", nullable=false, onDelete="CASCADE")
+	 * @var \BiberLtd\Bundle\FileManagementBundle\Entity\File
 	 */
 	private $file;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity="BiberLtd\Bundle\MultiLanguageSupportBundle\Entity\Language")
 	 * @ORM\JoinColumn(name="language", referencedColumnName="id", onDelete="CASCADE")
+	 * @var \BiberLtd\Bundle\MultiLanguageSupportBundle\Entity\Language
 	 */
 	private $language;
 
@@ -74,26 +88,16 @@ class FilesOfPage extends CoreEntity
 	 * @ORM\Id
 	 * @ORM\ManyToOne(targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\Page")
 	 * @ORM\JoinColumn(name="page", referencedColumnName="id", nullable=false, onDelete="CASCADE")
+	 * @var \BiberLtd\Bundle\ContentManagementBundle\Entity\Page
 	 */
 	private $page;
 
 	/**
-	 * @name            setCountView ()
-	 *                  Sets the count_view property.
-	 *                  Updates the data only if stored value and value to be set are different.
+	 * @param int $count_view
 	 *
-	 * @author          Can Berkol
-	 *
-	 * @since           1.0.0
-	 * @version         1.0.0
-	 *
-	 * @use             $this->setModified()
-	 *
-	 * @param           mixed $count_view
-	 *
-	 * @return          object                $this
+	 * @return $this
 	 */
-	public function setCountView($count_view) {
+	public function setCountView(\integer $count_view) {
 		if(!$this->setModified('count_view', $count_view)->isModified()) {
 			return $this;
 		}
@@ -102,37 +106,18 @@ class FilesOfPage extends CoreEntity
 	}
 
 	/**
-	 * @name            getCountView ()
-	 *                  Returns the value of count_view property.
-	 *
-	 * @author          Can Berkol
-	 *
-	 * @since           1.0.0
-	 * @version         1.0.0
-	 *
-	 * @return          mixed           $this->count_view
+	 * @return int
 	 */
 	public function getCountView() {
 		return $this->count_view;
 	}
 
-    /**
-     * @name                  setFile ()
-     *                                Sets the file property.
-     *                                Updates the data only if stored value and value to be set are different.
-     *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @use             $this->setModified()
-     *
-     * @param           mixed $file
-     *
-     * @return          object                $this
-     */
-    public function setFile($file) {
+	/**
+	 * @param \BiberLtd\Bundle\FileManagementBundle\Entity\File $file
+	 *
+	 * @return $this
+	 */
+    public function setFile(\BiberLtd\Bundle\FileManagementBundle\Entity\File $file) {
         if(!$this->setModified('file', $file)->isModified()) {
             return $this;
         }
@@ -140,38 +125,19 @@ class FilesOfPage extends CoreEntity
 		return $this;
     }
 
-    /**
-     * @name            getFile ()
-     *                          Returns the value of file property.
-     *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @return          mixed           $this->file
-     */
+	/**
+	 * @return \BiberLtd\Bundle\FileManagementBundle\Entity\File
+	 */
     public function getFile() {
         return $this->file;
     }
 
-    /**
-     * @name                  setLanguage ()
-     *                                    Sets the language property.
-     *                                    Updates the data only if stored value and value to be set are different.
-     *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @use             $this->setModified()
-     *
-     * @param           mixed $language
-     *
-     * @return          object                $this
-     */
-    public function setLanguage($language) {
+	/**
+	 * @param \BiberLtd\Bundle\MultiLanguageSupportBundle\Entity\Language $language
+	 *
+	 * @return $this
+	 */
+    public function setLanguage(\BiberLtd\Bundle\MultiLanguageSupportBundle\Entity\Language $language) {
         if(!$this->setModified('language', $language)->isModified()) {
             return $this;
         }
@@ -179,38 +145,19 @@ class FilesOfPage extends CoreEntity
 		return $this;
     }
 
-    /**
-     * @name            getLanguage ()
-     *                              Returns the value of language property.
-     *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @return          mixed           $this->language
-     */
+	/**
+	 * @return \BiberLtd\Bundle\MultiLanguageSupportBundle\Entity\Language
+	 */
     public function getLanguage() {
         return $this->language;
     }
 
-    /**
-     * @name                  setPage ()
-     *                                Sets the page property.
-     *                                Updates the data only if stored value and value to be set are different.
-     *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @use             $this->setModified()
-     *
-     * @param           mixed $page
-     *
-     * @return          object                $this
-     */
-    public function setPage($page) {
+	/**
+	 * @param \BiberLtd\Bundle\ContentManagementBundle\Entity\Page $page
+	 *
+	 * @return $this
+	 */
+    public function setPage(\BiberLtd\Bundle\ContentManagementBundle\Entity\Page $page) {
         if(!$this->setModified('page', $page)->isModified()) {
             return $this;
         }
@@ -218,38 +165,19 @@ class FilesOfPage extends CoreEntity
 		return $this;
     }
 
-    /**
-     * @name            getPage ()
-     *                          Returns the value of page property.
-     *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @return          mixed           $this->page
-     */
+	/**
+	 * @return \BiberLtd\Bundle\ContentManagementBundle\Entity\Page
+	 */
     public function getPage() {
         return $this->page;
     }
 
-    /**
-     * @name                  setSortOrder ()
-     *                                     Sets the sort_order property.
-     *                                     Updates the data only if stored value and value to be set are different.
-     *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @use             $this->setModified()
-     *
-     * @param           mixed $sort_order
-     *
-     * @return          object                $this
-     */
-    public function setSortOrder($sort_order) {
+	/**
+	 * @param int $sort_order
+	 *
+	 * @return $this
+	 */
+    public function setSortOrder(\integer $sort_order) {
         if(!$this->setModified('sort_order', $sort_order)->isModified()) {
             return $this;
         }
@@ -257,51 +185,10 @@ class FilesOfPage extends CoreEntity
 		return $this;
     }
 
-    /**
-     * @name            getSortOrder ()
-     *                               Returns the value of sort_order property.
-     *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @return          mixed           $this->sort_order
-     */
+	/**
+	 * @return int
+	 */
     public function getSortOrder() {
         return $this->sort_order;
     }
 }
-/**
- * Change Log:
- * **************************************
- * v1.0.5                      26.05.2015
- * Can Berkol
- * **************************************
- * BF :: Entity name spaces in annotations have been fixed.
- *
- * **************************************
- * v1.0.4					   24.04.2015
- * TW #
- * Can Berkol
- * **************************************
- * date_updated & date_Removed properties added.
- *
- * **************************************
- * v1.0.3                     Murat Ünal
- * 10.10.2013
- * **************************************
- * A getCountView()
- * A setCountView()
- * A getDateAdded()
- * A setDateAdded()
- * A getFile()
- * A setFile()
- * A getLanguage()
- * A setLanguage()
- * A getPage()
- * A setPage()
- * A getSortOrder()
- * A setSortOrder()
- *
- */

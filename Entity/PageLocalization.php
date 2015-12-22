@@ -1,19 +1,11 @@
 <?php
-
 /**
- * @name        PageLocalization
- * @package		BiberLtd\Bundle\CoreBundle\ContentManagementBundle
+ * @author		Can Berkol
  *
- * @author		Murat Ünal
+ * @copyright   Biber Ltd. (http://www.biberltd.com) (C) 2015
+ * @license     GPLv3
  *
- * @version     1.0.0
- * @date        24.09.2013
- *
- * @copyright   Biber Ltd. (http://www.biberltd.com)
- * @license     GPL v3.0
- *
- * @description Model / Entity class.
- *
+ * @date        22.12.2015
  */
 namespace BiberLtd\Bundle\ContentManagementBundle\Entity;
 use BiberLtd\Bundle\CoreBundle\CoreLocalizableEntity;
@@ -34,31 +26,37 @@ class PageLocalization extends CoreEntity
 {
     /** 
      * @ORM\Column(type="string", length=155, nullable=false)
+     * @var string
      */
     private $title;
 
     /** 
      * @ORM\Column(type="string", length=255, nullable=false)
+     * @var string
      */
     private $url_key;
 
     /** 
      * @ORM\Column(type="text", nullable=true)
+     * @var string
      */
     private $content;
 
     /** 
      * @ORM\Column(type="string", length=155, nullable=true)
+     * @var string
      */
     private $meta_title;
 
     /** 
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @var string
      */
     private $meta_description;
 
     /** 
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @var string
      */
     private $meta_keywords;
 
@@ -66,6 +64,7 @@ class PageLocalization extends CoreEntity
      * @ORM\Id
      * @ORM\ManyToOne(targetEntity="BiberLtd\Bundle\MultiLanguageSupportBundle\Entity\Language")
      * @ORM\JoinColumn(name="language", referencedColumnName="id", nullable=false, onDelete="CASCADE")
+     * @var \BiberLtd\Bundle\MultiLanguageSupportBundle\Entity\Language
      */
     private $language;
 
@@ -73,26 +72,16 @@ class PageLocalization extends CoreEntity
      * @ORM\Id
      * @ORM\ManyToOne(targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\Page", inversedBy="localizations")
      * @ORM\JoinColumn(name="page", referencedColumnName="id", nullable=false, onDelete="CASCADE")
+     * @var \BiberLtd\Bundle\ContentManagementBundle\Entity\Page
      */
     private $page;
 
     /**
-     * @name                  setContent ()
-     *                                   Sets the content property.
-     *                                   Updates the data only if stored value and value to be set are different.
+     * @param string $content
      *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @use             $this->setModified()
-     *
-     * @param           mixed $content
-     *
-     * @return          object                $this
+     * @return $this
      */
-    public function setContent($content) {
+    public function setContent(\string $content) {
         if(!$this->setModified('content', $content)->isModified()) {
             return $this;
         }
@@ -101,37 +90,18 @@ class PageLocalization extends CoreEntity
     }
 
     /**
-     * @name            getContent ()
-     *                             Returns the value of content property.
-     *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @return          mixed           $this->content
+     * @return string
      */
     public function getContent() {
         return $this->content;
     }
 
     /**
-     * @name                  setLanguage ()
-     *                                    Sets the language property.
-     *                                    Updates the data only if stored value and value to be set are different.
+     * @param \BiberLtd\Bundle\MultiLanguageSupportBundle\Entity\Language $language
      *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @use             $this->setModified()
-     *
-     * @param           mixed $language
-     *
-     * @return          object                $this
+     * @return $this
      */
-    public function setLanguage($language) {
+    public function setLanguage(\BiberLtd\Bundle\MultiLanguageSupportBundle\Entity\Language $language) {
         if(!$this->setModified('language', $language)->isModified()) {
             return $this;
         }
@@ -140,37 +110,18 @@ class PageLocalization extends CoreEntity
     }
 
     /**
-     * @name            getLanguage ()
-     *                              Returns the value of language property.
-     *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @return          mixed           $this->language
+     * @return \BiberLtd\Bundle\MultiLanguageSupportBundle\Entity\Language
      */
     public function getLanguage() {
         return $this->language;
     }
 
     /**
-     * @name                  setMetaDescription ()
-     *                                           Sets the meta_description property.
-     *                                           Updates the data only if stored value and value to be set are different.
+     * @param string $meta_description
      *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @use             $this->setModified()
-     *
-     * @param           mixed $meta_description
-     *
-     * @return          object                $this
+     * @return $this
      */
-    public function setMetaDescription($meta_description) {
+    public function setMetaDescription(\string $meta_description) {
         if(!$this->setModified('meta_description', $meta_description)->isModified()) {
             return $this;
         }
@@ -179,37 +130,18 @@ class PageLocalization extends CoreEntity
     }
 
     /**
-     * @name            getMetaDescription ()
-     *                                     Returns the value of meta_description property.
-     *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @return          mixed           $this->meta_description
+     * @return string
      */
     public function getMetaDescription() {
         return $this->meta_description;
     }
 
     /**
-     * @name                  setMetaKeywords ()
-     *                                        Sets the meta_keywords property.
-     *                                        Updates the data only if stored value and value to be set are different.
+     * @param string $meta_keywords
      *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @use             $this->setModified()
-     *
-     * @param           mixed $meta_keywords
-     *
-     * @return          object                $this
+     * @return $this
      */
-    public function setMetaKeywords($meta_keywords) {
+    public function setMetaKeywords(\string $meta_keywords) {
         if(!$this->setModified('meta_keywords', $meta_keywords)->isModified()) {
             return $this;
         }
@@ -218,37 +150,18 @@ class PageLocalization extends CoreEntity
     }
 
     /**
-     * @name            getMetaKeywords ()
-     *                                  Returns the value of meta_keywords property.
-     *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @return          mixed           $this->meta_keywords
+     * @return string
      */
     public function getMetaKeywords() {
         return $this->meta_keywords;
     }
 
     /**
-     * @name                  setMetaTitle ()
-     *                                     Sets the meta_title property.
-     *                                     Updates the data only if stored value and value to be set are different.
+     * @param string $meta_title
      *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @use             $this->setModified()
-     *
-     * @param           mixed $meta_title
-     *
-     * @return          object                $this
+     * @return $this
      */
-    public function setMetaTitle($meta_title) {
+    public function setMetaTitle(\string $meta_title) {
         if(!$this->setModified('meta_title', $meta_title)->isModified()) {
             return $this;
         }
@@ -257,37 +170,18 @@ class PageLocalization extends CoreEntity
     }
 
     /**
-     * @name            getMetaTitle ()
-     *                               Returns the value of meta_title property.
-     *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @return          mixed           $this->meta_title
+     * @return string
      */
     public function getMetaTitle() {
         return $this->meta_title;
     }
 
     /**
-     * @name                  setPage ()
-     *                                Sets the page property.
-     *                                Updates the data only if stored value and value to be set are different.
+     * @param \BiberLtd\Bundle\ContentManagementBundle\Entity\Page $page
      *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @use             $this->setModified()
-     *
-     * @param           mixed $page
-     *
-     * @return          object                $this
+     * @return $this
      */
-    public function setPage($page) {
+    public function setPage(\BiberLtd\Bundle\ContentManagementBundle\Entity\Page $page) {
         if(!$this->setModified('page', $page)->isModified()) {
             return $this;
         }
@@ -296,37 +190,18 @@ class PageLocalization extends CoreEntity
     }
 
     /**
-     * @name            getPage ()
-     *                          Returns the value of page property.
-     *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @return          mixed           $this->page
+     * @return \BiberLtd\Bundle\ContentManagementBundle\Entity\Page
      */
     public function getPage() {
         return $this->page;
     }
 
     /**
-     * @name                  setTitle ()
-     *                                 Sets the title property.
-     *                                 Updates the data only if stored value and value to be set are different.
+     * @param string $title
      *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @use             $this->setModified()
-     *
-     * @param           mixed $title
-     *
-     * @return          object                $this
+     * @return $this
      */
-    public function setTitle($title) {
+    public function setTitle(\string $title) {
         if(!$this->setModified('title', $title)->isModified()) {
             return $this;
         }
@@ -335,37 +210,18 @@ class PageLocalization extends CoreEntity
     }
 
     /**
-     * @name            getTitle ()
-     *                           Returns the value of title property.
-     *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @return          mixed           $this->title
+     * @return string
      */
     public function getTitle() {
         return $this->title;
     }
 
     /**
-     * @name                  setUrlKey ()
-     *                                  Sets the url_key property.
-     *                                  Updates the data only if stored value and value to be set are different.
+     * @param string $url_key
      *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @use             $this->setModified()
-     *
-     * @param           mixed $url_key
-     *
-     * @return          object                $this
+     * @return $this
      */
-    public function setUrlKey($url_key) {
+    public function setUrlKey(\string $url_key) {
         if(!$this->setModified('url_key', $url_key)->isModified()) {
             return $this;
         }
@@ -374,46 +230,9 @@ class PageLocalization extends CoreEntity
     }
 
     /**
-     * @name            getUrlKey ()
-     *                            Returns the value of url_key property.
-     *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @return          mixed           $this->url_key
+     * @return string
      */
     public function getUrlKey() {
         return $this->url_key;
     }
-    /******************************************************************
-     * PUBLIC SET AND GET FUNCTIONS                                   *
-     ******************************************************************/
-
 }
-/**
- * Change Log:
- * **************************************
- * v1.0.0                      Murat Ünal
- * 24.09.2013
- * **************************************
- * A getContent()
- * A getLanguage()
- * A getMetaDescription()
- * A getMetaKeywords()
- * A getMetaTitle()
- * A getPage()
- * A getTitle()
- * A getUrlKey()
- *
- * A setContent()
- * A setLanguage()
- * A setMetaDescription()
- * A setMetaKeywords()
- * A setMetaTitle()
- * A setPage()
- * A setTitle()
- * A setUrlKey()
- *
- */

@@ -1,19 +1,11 @@
 <?php
-
 /**
- * @name        Theme
- * @package		BiberLtd\Bundle\CoreBundle\ContentManagementBundle
+ * @author		Can Berkol
  *
- * @author		Murat Ünal
+ * @copyright   Biber Ltd. (http://www.biberltd.com) (C) 2015
+ * @license     GPLv3
  *
- * @version     1.0.1
- * @date        10.10.2013
- *
- * @copyright   Biber Ltd. (http://www.biberltd.com)
- * @license     GPL v3.0
- *
- * @description Model / Entity class.
- *
+ * @date        22.12.2015
  */
 namespace BiberLtd\Bundle\ContentManagementBundle\Entity;
 use Doctrine\ORM\Mapping AS ORM;
@@ -40,46 +32,55 @@ class Theme extends CoreLocalizableEntity
      * @ORM\Id
      * @ORM\Column(type="integer", length=10)
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @var int
      */
     private $id;
 
     /** 
      * @ORM\Column(type="string", length=45, nullable=false)
+     * @var string
      */
     private $folder;
 
     /** 
      * @ORM\Column(type="string", length=1, nullable=false, options={"default":"f"})
+     * @var string
      */
     private $type;
 
     /** 
      * @ORM\Column(type="datetime", nullable=false)
+     * @var \DateTime
      */
     public $date_added;
 
     /** 
      * @ORM\Column(type="datetime", nullable=false)
+     * @var \DateTime
      */
     public $date_updated;
 
     /** 
      * @ORM\Column(type="integer", nullable=false, options={"default":0})
+     * @var int
      */
     private $count_modules;
 
     /** 
      * @ORM\Column(type="integer", nullable=true, options={"default":0})
+     * @var int
      */
     private $count_layouts;
 
 	/**
 	 * @ORM\Column(type="datetime", nullable=true)
+     * @var \DateTime
 	 */
 	public $date_removed;
 
     /** 
      * @ORM\OneToMany(targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\Layout", mappedBy="theme")
+     * @var array
      */
     private $layouts;
 
@@ -88,54 +89,36 @@ class Theme extends CoreLocalizableEntity
      *     targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\ThemeLocalization",
      *     mappedBy="theme"
      * )
+     * @var array
      */
     protected $localizations;
 
     /** 
      * @ORM\OneToMany(targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\Module", mappedBy="theme")
+     * @var array
      */
     private $modules;
 
     /** 
      * @ORM\ManyToOne(targetEntity="BiberLtd\Bundle\SiteManagementBundle\Entity\Site")
      * @ORM\JoinColumn(name="site", referencedColumnName="id", onDelete="CASCADE")
+     * @var \BiberLtd\Bundle\SiteManagementBundle\Entity\Site
      */
     private $site;
-    /******************************************************************
-     * PUBLIC SET AND GET FUNCTIONS                                   *
-     ******************************************************************/
 
     /**
-     * @name            getId()
-     *                  Gets $id property.
-     * .
-     * @author          Murat Ünal
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @return          integer          $this->id
+     * @return mixed
      */
     public function getId(){
         return $this->id;
     }
 
     /**
-     * @name                  setCountLayouts ()
-     *                                        Sets the count_layouts property.
-     *                                        Updates the data only if stored value and value to be set are different.
+     * @param int $count_layouts
      *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @use             $this->setModified()
-     *
-     * @param           mixed $count_layouts
-     *
-     * @return          object                $this
+     * @return $this
      */
-    public function setCountLayouts($count_layouts) {
+    public function setCountLayouts(\int $count_layouts) {
         if(!$this->setModified('count_layouts', $count_layouts)->isModified()) {
             return $this;
         }
@@ -144,37 +127,18 @@ class Theme extends CoreLocalizableEntity
     }
 
     /**
-     * @name            getCountLayouts ()
-     *                                  Returns the value of count_layouts property.
-     *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @return          mixed           $this->count_layouts
+     * @return mixed
      */
     public function getCountLayouts() {
         return $this->count_layouts;
     }
 
     /**
-     * @name                  setCountModules ()
-     *                                        Sets the count_modules property.
-     *                                        Updates the data only if stored value and value to be set are different.
+     * @param int $count_modules
      *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @use             $this->setModified()
-     *
-     * @param           mixed $count_modules
-     *
-     * @return          object                $this
+     * @return $this
      */
-    public function setCountModules($count_modules) {
+    public function setCountModules(\integer $count_modules) {
         if(!$this->setModified('count_modules', $count_modules)->isModified()) {
             return $this;
         }
@@ -183,37 +147,18 @@ class Theme extends CoreLocalizableEntity
     }
 
     /**
-     * @name            getCountModules ()
-     *                                  Returns the value of count_modules property.
-     *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @return          mixed           $this->count_modules
+     * @return int
      */
     public function getCountModules() {
         return $this->count_modules;
     }
 
     /**
-     * @name                  setFolder ()
-     *                                  Sets the folder property.
-     *                                  Updates the data only if stored value and value to be set are different.
+     * @param string $folder
      *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @use             $this->setModified()
-     *
-     * @param           mixed $folder
-     *
-     * @return          object                $this
+     * @return $this
      */
-    public function setFolder($folder) {
+    public function setFolder(\string $folder) {
         if(!$this->setModified('folder', $folder)->isModified()) {
             return $this;
         }
@@ -222,37 +167,18 @@ class Theme extends CoreLocalizableEntity
     }
 
     /**
-     * @name            getFolder ()
-     *                            Returns the value of folder property.
-     *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @return          mixed           $this->folder
+     * @return string
      */
     public function getFolder() {
         return $this->folder;
     }
 
     /**
-     * @name                  setLayouts ()
-     *                                   Sets the layouts property.
-     *                                   Updates the data only if stored value and value to be set are different.
+     * @param array $layouts
      *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @use             $this->setModified()
-     *
-     * @param           mixed $layouts
-     *
-     * @return          object                $this
+     * @return $this
      */
-    public function setLayouts($layouts) {
+    public function setLayouts(array $layouts) {
         if(!$this->setModified('layouts', $layouts)->isModified()) {
             return $this;
         }
@@ -261,37 +187,18 @@ class Theme extends CoreLocalizableEntity
     }
 
     /**
-     * @name            getLayouts ()
-     *                             Returns the value of layouts property.
-     *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @return          mixed           $this->layouts
+     * @return array
      */
     public function getLayouts() {
         return $this->layouts;
     }
 
     /**
-     * @name                  setModules ()
-     *                                   Sets the modules property.
-     *                                   Updates the data only if stored value and value to be set are different.
+     * @param array $modules
      *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @use             $this->setModified()
-     *
-     * @param           mixed $modules
-     *
-     * @return          object                $this
+     * @return $this
      */
-    public function setModules($modules) {
+    public function setModules(array $modules) {
         if(!$this->setModified('modules', $modules)->isModified()) {
             return $this;
         }
@@ -300,37 +207,18 @@ class Theme extends CoreLocalizableEntity
     }
 
     /**
-     * @name            getModules ()
-     *                             Returns the value of modules property.
-     *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @return          mixed           $this->modules
+     * @return array
      */
     public function getModules() {
         return $this->modules;
     }
 
     /**
-     * @name                  setSite ()
-     *                                Sets the site property.
-     *                                Updates the data only if stored value and value to be set are different.
+     * @param \BiberLtd\Bundle\SiteManagementBundle\Entity\Site $site
      *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @use             $this->setModified()
-     *
-     * @param           mixed $site
-     *
-     * @return          object                $this
+     * @return $this
      */
-    public function setSite($site) {
+    public function setSite(\BiberLtd\Bundle\SiteManagementBundle\Entity\Site $site) {
         if(!$this->setModified('site', $site)->isModified()) {
             return $this;
         }
@@ -354,22 +242,11 @@ class Theme extends CoreLocalizableEntity
     }
 
     /**
-     * @name                  setType ()
-     *                                Sets the type property.
-     *                                Updates the data only if stored value and value to be set are different.
+     * @param string $type
      *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @use             $this->setModified()
-     *
-     * @param           mixed $type
-     *
-     * @return          object                $this
+     * @return $this
      */
-    public function setType($type) {
+    public function setType(\string $type) {
         if(!$this->setModified('type', $type)->isModified()) {
             return $this;
         }
@@ -393,33 +270,3 @@ class Theme extends CoreLocalizableEntity
     }
 
 }
-/**
- * Change Log:
- * **************************************
- * v1.0.1                     Murat Ünal
- * 10.10.2013
- * **************************************
- * A getCountLayouts()
- * A getCountModules()
- * A getDateAdded()
- * A getDateUpdated()
- * A getFolder()
- * A getId()
- * A getLayout()
- * A getLocalizations()
- * A getModules()
- * A getSite()
- * A getType()
- *
- * A setCountLayouts()
- * A setCountModules()
- * A set_date_added()
- * A setDateUpdated()
- * A setFolder()
- * A setLayout()
- * A setLocalizations()
- * A setModules()
- * A setSite()
- * A setType()
- *
- */

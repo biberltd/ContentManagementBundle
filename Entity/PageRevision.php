@@ -1,18 +1,12 @@
 <?php
-
 /**
- * @name        PageRevision
- * @package		BiberLtd\ContentManagementBundle
- *
  * @author		Can Berkol
- * @version     1.0.1
- * @date        16.06.2015
  *
- * @copyright   Biber Ltd. (http://www.biberltd.com)
- * @license     GPL v3.0
+ * @copyright   Biber Ltd. (http://www.biberltd.com) (C) 2015
+ * @license     GPLv3
  *
+ * @date        22.12.2015
  */
-
 namespace BiberLtd\Bundle\ContentManagementBundle\Entity;
 use BiberLtd\Bundle\CoreBundle\CoreEntity;
 use Doctrine\ORM\Mapping AS ORM;
@@ -29,56 +23,67 @@ class PageRevision extends CoreEntity
 {
 	/**
 	 * @ORM\Column(type="string", length=155, nullable=false)
+	 * @var string
 	 */
 	private $title;
 
 	/**
 	 * @ORM\Column(type="string", length=255, nullable=false)
+	 * @var string
 	 */
 	private $url_key;
 
 	/**
 	 * @ORM\Column(type="text", nullable=true)
+	 * @var string
 	 */
 	private $content;
 
 	/**
 	 * @ORM\Column(type="string", length=155, nullable=true)
+	 * @var string
 	 */
 	private $meta_tilte;
 
 	/**
 	 * @ORM\Column(type="string", length=255, nullable=true)
+	 * @var string
 	 */
 	private $meta_description;
 
 	/**
 	 * @ORM\Column(type="text", nullable=true)
+	 * @var string
 	 */
 	private $meta_keywords;
 
 	/**
 	 * @ORM\Column(type="integer", nullable=true)
+	 * @var string
 	 */
 	private $revision_number;
 
 	/**
 	 * @ORM\Column(type="datetime", nullable=false)
+	 * @var \DateTime
 	 */
 	public $date_added;
 
 	/**
 	 * @ORM\Column(type="datetime", nullable=false)
+	 * @var \DateTime
 	 */
 	public $date_updated;
 
 	/**
 	 * @ORM\Column(type="datetime", nullable=true)
+	 * @var \DateTime
 	 */
 	public $date_removed;
 
 	/**
 	 * @ORM\Column(type="string", length=1, nullable=true, options={"default":"w"})
+	 * @var \string
 	 */
 	private $status;
 
@@ -86,6 +91,7 @@ class PageRevision extends CoreEntity
 	 * @ORM\Id
 	 * @ORM\ManyToOne(targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\Page")
 	 * @ORM\JoinColumn(name="page", referencedColumnName="id", nullable=false, onDelete="CASCADE")
+	 * @var \BiberLtd\Bundle\ContentManagementBundle\Entity\Page
 	 */
 	private $page;
 
@@ -93,36 +99,23 @@ class PageRevision extends CoreEntity
 	 * @ORM\Id
 	 * @ORM\ManyToOne(targetEntity="BiberLtd\Bundle\MultiLanguageSupportBundle\Entity\Language")
 	 * @ORM\JoinColumn(name="language", referencedColumnName="id", nullable=false, onDelete="CASCADE")
+	 * @var \BiberLtd\Bundle\MultiLanguageSupportBundle\Entity\Language
 	 */
 	private $language;
 
 	/**
-	 * @name    getContent ()
-	 *
-	 * @author  Can Berkol
-	 *
-	 * @since   1.0.0
-	 * @version 1.0.0
-	 *
-	 * @return  mixed
+	 * @return string
 	 */
 	public function getContent() {
 		return $this->content;
 	}
 
 	/**
-	 * @name    setContent ()
-	 *
-	 * @author  Can Berkol
-	 *
-	 * @since   1.0.0
-	 * @version 1.0.0
-	 *
-	 * @param mixed $content
+	 * @param string $content
 	 *
 	 * @return $this
 	 */
-	public function setContent($content) {
+	public function setContent(\string $content) {
 		if (!$this->setModified('content', $content)->isModified()) {
 			return $this;
 		}
@@ -132,32 +125,18 @@ class PageRevision extends CoreEntity
 	}
 
 	/**
-	 * @name    getLanguage ()
-	 *
-	 * @author  Can Berkol
-	 *
-	 * @since   1.0.0
-	 * @version 1.0.0
-	 *
-	 * @return  mixed
+	 * @return \BiberLtd\Bundle\MultiLanguageSupportBundle\Entity\Language
 	 */
 	public function getLanguage() {
 		return $this->language;
 	}
 
 	/**
-	 * @name    setLanguage ()
-	 *
-	 * @author  Can Berkol
-	 *
-	 * @since   1.0.0
-	 * @version 1.0.0
-	 *
-	 * @param mixed $language
+	 * @param \BiberLtd\Bundle\MultiLanguageSupportBundle\Entity\Language $language
 	 *
 	 * @return $this
 	 */
-	public function setLanguage($language) {
+	public function setLanguage(\BiberLtd\Bundle\MultiLanguageSupportBundle\Entity\Language $language) {
 		if (!$this->setModified('language', $language)->isModified()) {
 			return $this;
 		}
@@ -167,32 +146,18 @@ class PageRevision extends CoreEntity
 	}
 
 	/**
-	 * @name    getMetaDescription ()
-	 *
-	 * @author  Can Berkol
-	 *
-	 * @since   1.0.0
-	 * @version 1.0.0
-	 *
-	 * @return  mixed
+	 * @return string
 	 */
 	public function getMetaDescription() {
 		return $this->meta_description;
 	}
 
 	/**
-	 * @name    setMetaDescription ()
-	 *
-	 * @author  Can Berkol
-	 *
-	 * @since   1.0.0
-	 * @version 1.0.0
-	 *
-	 * @param mixed $meta_description
+	 * @param string $meta_description
 	 *
 	 * @return $this
 	 */
-	public function setMetaDescription($meta_description) {
+	public function setMetaDescription(\string $meta_description) {
 		if (!$this->setModified('meta_description', $meta_description)->isModified()) {
 			return $this;
 		}
@@ -202,32 +167,18 @@ class PageRevision extends CoreEntity
 	}
 
 	/**
-	 * @name    getMetaKeywords ()
-	 *
-	 * @author  Can Berkol
-	 *
-	 * @since   1.0.0
-	 * @version 1.0.0
-	 *
-	 * @return  mixed
+	 * @return string
 	 */
 	public function getMetaKeywords() {
 		return $this->meta_keywords;
 	}
 
 	/**
-	 * @name    setMetaKeywords ()
-	 *
-	 * @author  Can Berkol
-	 *
-	 * @since   1.0.0
-	 * @version 1.0.0
-	 *
-	 * @param mixed $meta_keywords
+	 * @param string $meta_keywords
 	 *
 	 * @return $this
 	 */
-	public function setMetaKeywords($meta_keywords) {
+	public function setMetaKeywords(\string $meta_keywords) {
 		if (!$this->setModified('meta_keywords', $meta_keywords)->isModified()) {
 			return $this;
 		}
@@ -237,32 +188,18 @@ class PageRevision extends CoreEntity
 	}
 
 	/**
-	 * @name    getMetaTilte ()
-	 *
-	 * @author  Can Berkol
-	 *
-	 * @since   1.0.0
-	 * @version 1.0.0
-	 *
-	 * @return  mixed
+	 * @return string
 	 */
 	public function getMetaTilte() {
 		return $this->meta_tilte;
 	}
 
 	/**
-	 * @name    setMetaTilte ()
-	 *
-	 * @author  Can Berkol
-	 *
-	 * @since   1.0.0
-	 * @version 1.0.0
-	 *
-	 * @param mixed $meta_tilte
+	 * @param string $meta_tilte
 	 *
 	 * @return $this
 	 */
-	public function setMetaTilte($meta_tilte) {
+	public function setMetaTilte(\string $meta_tilte) {
 		if (!$this->setModified('meta_tilte', $meta_tilte)->isModified()) {
 			return $this;
 		}
@@ -271,33 +208,16 @@ class PageRevision extends CoreEntity
 		return $this;
 	}
 
-	/**
-	 * @name    getPage ()
-	 *
-	 * @author  Can Berkol
-	 *
-	 * @since   1.0.0
-	 * @version 1.0.0
-	 *
-	 * @return  mixed
-	 */
 	public function getPage() {
 		return $this->page;
 	}
 
 	/**
-	 * @name    setPage ()
-	 *
-	 * @author  Can Berkol
-	 *
-	 * @since   1.0.0
-	 * @version 1.0.0
-	 *
-	 * @param mixed $page
+	 * @param \BiberLtd\Bundle\ContentManagementBundle\Entity\Page $page
 	 *
 	 * @return $this
 	 */
-	public function setPage($page) {
+	public function setPage(\BiberLtd\Bundle\ContentManagementBundle\Entity\Page $page) {
 		if (!$this->setModified('page', $page)->isModified()) {
 			return $this;
 		}
@@ -307,32 +227,18 @@ class PageRevision extends CoreEntity
 	}
 
 	/**
-	 * @name    getRevisionNumber ()
-	 *
-	 * @author  Can Berkol
-	 *
-	 * @since   1.0.0
-	 * @version 1.0.0
-	 *
-	 * @return  mixed
+	 * @return string
 	 */
 	public function getRevisionNumber() {
 		return $this->revision_number;
 	}
 
 	/**
-	 * @name    setRevisionNumber ()
-	 *
-	 * @author  Can Berkol
-	 *
-	 * @since   1.0.0
-	 * @version 1.0.0
-	 *
-	 * @param 	mixed $revision_number
+	 * @param string $revision_number
 	 *
 	 * @return $this
 	 */
-	public function setRevisionNumber($revision_number) {
+	public function setRevisionNumber(\string $revision_number) {
 		if (!$this->setModified('revision_number', $revision_number)->isModified()) {
 			return $this;
 		}
@@ -342,32 +248,18 @@ class PageRevision extends CoreEntity
 	}
 
 	/**
-	 * @name    getTitle ()
-	 *
-	 * @author  Can Berkol
-	 *
-	 * @since   1.0.0
-	 * @version 1.0.0
-	 *
-	 * @return  mixed
+	 * @return string
 	 */
 	public function getTitle() {
 		return $this->title;
 	}
 
 	/**
-	 * @name    setTitle ()
+	 * @param string $title
 	 *
-	 * @author  Can Berkol
-	 *
-	 * @since   1.0.0
-	 * @version 1.0.0
-	 *
-	 * @param 	mixed $title
-	 *
-	 * @return 	$this
+	 * @return $this
 	 */
-	public function setTitle($title) {
+	public function setTitle(\string $title) {
 		if (!$this->setModified('title', $title)->isModified()) {
 			return $this;
 		}
@@ -377,32 +269,18 @@ class PageRevision extends CoreEntity
 	}
 
 	/**
-	 * @name    getUrlKey ()
-	 *
-	 * @author  Can Berkol
-	 *
-	 * @since   1.0.0
-	 * @version 1.0.0
-	 *
-	 * @return  mixed
+	 * @return string
 	 */
 	public function getUrlKey() {
 		return $this->url_key;
 	}
 
 	/**
-	 * @name    setUrlKey ()
-	 *
-	 * @author  Can Berkol
-	 *
-	 * @since   1.0.0
-	 * @version 1.0.0
-	 *
-	 * @param mixed $url_key
+	 * @param string $url_key
 	 *
 	 * @return $this
 	 */
-	public function setUrlKey($url_key) {
+	public function setUrlKey(\string $url_key) {
 		if (!$this->setModified('url_key', $url_key)->isModified()) {
 			return $this;
 		}
@@ -412,32 +290,18 @@ class PageRevision extends CoreEntity
 	}
 
 	/**
-	 * @name        getStatus ()
-	 *
-	 * @author      Can Berkol
-	 *
-	 * @since       1.0.1
-	 * @version     1.0.1
-	 *
-	 * @return      mixed
+	 * @return string
 	 */
 	public function getStatus() {
 		return $this->status;
 	}
 
 	/**
-	 * @name        setStatus ()
+	 * @param string $status
 	 *
-	 * @author      Can Berkol
-	 *
-	 * @since       1.0.1
-	 * @version     1.0.1
-	 *
-	 * @param       mixed $status
-	 *
-	 * @return      $this
+	 * @return $this
 	 */
-	public function setStatus($status) {
+	public function setStatus(\string $status) {
 		if (!$this->setModified('status', $status)->isModified()) {
 			return $this;
 		}
@@ -447,36 +311,3 @@ class PageRevision extends CoreEntity
 	}
 
 }
-/**
- * Change Log:
- * **************************************
- * v1.0.1                      16.06.2015
- * Can Berkol
- * **************************************
- * FR :: status property added.
- *
- * **************************************
- * v1.0.0                      24.04.2015
- * TW #3568843
- * Can Berkol
- * **************************************
- * A getLanguage()
- * A getPage()
- * A getTitle()
- * A getUrlKey()
- * A getContent()
- * A getMetaDescription()
- * A getMetaKeywords()
- * A getMetaTitle()
- * A getRevisionNumber()
- * A setLanguage()
- * A setPage()
- * A setTitle()
- * A setUrlKey()
- * A setContent()
- * A setMetaDescription()
- * A setMetaKeywords()
- * A setMetaTitle()
- * A setRevisionNumber()
- *
- */

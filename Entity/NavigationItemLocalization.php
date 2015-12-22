@@ -1,19 +1,11 @@
 <?php
-
 /**
- * @name        NavigationItemLocalization
- * @package		BiberLtd\Bundle\CoreBundle\ContentManagementBundle
- *
  * @author		Can Berkol
  *
- * @version     1.2.0
- * @date        19.12.2013
+ * @copyright   Biber Ltd. (http://www.biberltd.com) (C) 2015
+ * @license     GPLv3
  *
- * @copyright   Biber Ltd. (http://www.biberltd.com)
- * @license     GPL v3.0
- *
- * @description Model / Entity class.
- *
+ * @date        22.12.2015
  */
 namespace BiberLtd\Bundle\ContentManagementBundle\Entity;
 use Doctrine\ORM\Mapping AS ORM;
@@ -33,16 +25,19 @@ class NavigationItemLocalization extends CoreEntity
 {
     /**
      * @ORM\Column(type="string", length=45, nullable=false)
+     * @var string
      */
     private $title;
 
     /**
      * @ORM\Column(type="string", length=55, nullable=false)
+     * @var string
      */
     private $url_key;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @var string
      */
     private $description;
 
@@ -50,6 +45,7 @@ class NavigationItemLocalization extends CoreEntity
      * @ORM\Id
      * @ORM\ManyToOne(targetEntity="BiberLtd\Bundle\MultiLanguageSupportBundle\Entity\Language")
      * @ORM\JoinColumn(name="language", referencedColumnName="id", nullable=false, onDelete="CASCADE")
+     * @var \BiberLtd\Bundle\MultiLanguageSupportBundle\Entity\Language
      */
     private $language;
 
@@ -60,26 +56,16 @@ class NavigationItemLocalization extends CoreEntity
      *     inversedBy="localizations"
      * )
      * @ORM\JoinColumn(name="navigation_item", referencedColumnName="id", nullable=false, onDelete="CASCADE")
+     * @var \BiberLtd\Bundle\ContentManagementBundle\Entity\NavigationItem
      */
     private $navigation_item;
 
     /**
-     * @name            setDescription ()
-     *                  Sets the description property.
-     *                  Updates the data only if stored value and value to be set are different.
+     * @param string $description
      *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.2.0
-     *
-     * @use             $this->setModified()
-     *
-     * @param           string                  $description
-     *
-     * @return          object                  $this
+     * @return $this
      */
-    public function setDescription($description) {
+    public function setDescription(\string $description) {
         if(!$this->setModified('description', $description)->isModified()) {
             return $this;
         }
@@ -88,37 +74,18 @@ class NavigationItemLocalization extends CoreEntity
     }
 
     /**
-     * @name            getDescription ()
-     *                  Returns the value of description property.
-     *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.2.0
-     *
-     * @return          string           $this->description
+     * @return string
      */
     public function getDescription() {
         return $this->description;
     }
 
     /**
-     * @name            setLanguage ()
-     *                  Sets the language property.
-     *                  Updates the data only if stored value and value to be set are different.
+     * @param \BiberLtd\Bundle\MultiLanguageSupportBundle\Entity\Language $language
      *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.2.0
-     *
-     * @use             $this->setModified()
-     *
-     * @param           BiberLtd\Bundle\MultiLanguageSupportBundle\Entity\Language                   $language
-     *
-     * @return          object                  $this
+     * @return $this
      */
-    public function setLanguage($language) {
+    public function setLanguage(\BiberLtd\Bundle\MultiLanguageSupportBundle\Entity\Language $language) {
         if(!$this->setModified('language', $language)->isModified()) {
             return $this;
         }
@@ -127,37 +94,18 @@ class NavigationItemLocalization extends CoreEntity
     }
 
     /**
-     * @name            getLanguage ()
-     *                  Returns the value of language property.
-     *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.2.0
-     *
-     * @return          BiberLtd\Bundle\MultiLanguageSupportBundle\Entity\Language           $this->language
+     * @return \BiberLtd\Bundle\MultiLanguageSupportBundle\Entity\Language
      */
     public function getLanguage() {
         return $this->language;
     }
 
     /**
-     * @name            setNavigationItem()
-     *                  Sets the navigation_item property.
-     *                  Updates the data only if stored value and value to be set are different.
+     * @param \BiberLtd\Bundle\ContentManagementBundle\Entity\NavigationItem $navigation_item
      *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @use             $this->setModified()
-     *
-     * @param           mixed $navigation_item
-     *
-     * @return          BiberLtd\Bundle\ContentManagementBundle\Entity\NavigationItem                $this
+     * @return $this
      */
-    public function setNavigationItem($navigation_item) {
+    public function setNavigationItem(\BiberLtd\Bundle\ContentManagementBundle\Entity\NavigationItem $navigation_item) {
         if(!$this->setModified('navigation_item', $navigation_item)->isModified()) {
             return $this;
         }
@@ -166,37 +114,18 @@ class NavigationItemLocalization extends CoreEntity
     }
 
     /**
-     * @name            getNavigationItem()
-     *                  Returns the value of navigation_item property.
-     *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @return          BiberLtd\Bundle\ContentManagementBundle\Entity\NavigationItem           $this->navigation_item
+     * @return \BiberLtd\Bundle\ContentManagementBundle\Entity\NavigationItem
      */
     public function getNavigationItem() {
         return $this->navigation_item;
     }
 
     /**
-     * @name            setTitle ()
-     *                  Sets the title property.
-     *                  Updates the data only if stored value and value to be set are different.
+     * @param string $title
      *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @use             $this->setModified()
-     *
-     * @param           string                  $title
-     *
-     * @return          object                  $this
+     * @return $this
      */
-    public function setTitle($title) {
+    public function setTitle(\string $title) {
         if(!$this->setModified('title', $title)->isModified()) {
             return $this;
         }
@@ -205,37 +134,18 @@ class NavigationItemLocalization extends CoreEntity
     }
 
     /**
-     * @name            getTitle ()
-     *                  Returns the value of title property.
-     *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @return          string           $this->title
+     * @return string
      */
     public function getTitle() {
         return $this->title;
     }
 
     /**
-     * @name            setUrlKey ()
-     *                  Sets the url_key property.
-     *                  Updates the data only if stored value and value to be set are different.
+     * @param string $url_key
      *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.2.0
-     *
-     * @use             $this->setModified()
-     *
-     * @param           string                $url_key
-     *
-     * @return          object                $this
+     * @return $this
      */
-    public function setUrlKey($url_key) {
+    public function setUrlKey(\string $url_key) {
         if(!$this->setModified('url_key', $url_key)->isModified()) {
             return $this;
         }
@@ -244,29 +154,10 @@ class NavigationItemLocalization extends CoreEntity
     }
 
     /**
-     * @name            getUrlKey ()
-     *                  Returns the value of url_key property.
-     *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @return          string           $this->url_key
+     * @return string
      */
     public function getUrlKey() {
         return $this->url_key;
     }
-    /******************************************************************
-     * PUBLIC SET AND GET FUNCTIONS                                   *
-     ******************************************************************/
 
 }
-/**
- * Change Log:
- * **************************************
- * v1.2.0                      Can Berkol
- * 19.12.2013
- * **************************************
- * File resetted.
- */

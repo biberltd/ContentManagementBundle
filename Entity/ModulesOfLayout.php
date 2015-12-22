@@ -1,20 +1,11 @@
 <?php
-
 /**
- * @name        ModulesOfLayout
- * @package		BiberLtd\Bundle\CoreBundle\ContentManagementBundle
+ * @author		Can Berkol
  *
- * @author		cAN bERKOL
- * @author		Murat Ünal
+ * @copyright   Biber Ltd. (http://www.biberltd.com) (C) 2015
+ * @license     GPLv3
  *
- * @version     1.0.1
- * @date        26.05.2015
- *
- * @copyright   Biber Ltd. (http://www.biberltd.com)
- * @license     GPL v3.0
- *
- * @description Model / Entity class.
- *
+ * @date        22.12.2015
  */
 namespace BiberLtd\Bundle\ContentManagementBundle\Entity;
 use Doctrine\ORM\Mapping AS ORM;
@@ -37,21 +28,25 @@ class ModulesOfLayout extends CoreLocalizableEntity
 	 * @ORM\Id
 	 * @ORM\Column(type="integer", length=10)
 	 * @ORM\GeneratedValue(strategy="AUTO")
+	 * @var int
 	 */
 	private $id;
 
 	/**
 	 * @ORM\Column(type="string", length=45, nullable=true)
+	 * @var string
 	 */
 	private $section;
 
 	/**
 	 * @ORM\Column(type="integer", length=10, nullable=true, options={"default":1})
+	 * @var int
 	 */
 	private $sort_order;
 
 	/**
 	 * @ORM\Column(type="string", length=45, nullable=true)
+	 * @var string
 	 */
 	private $style;
 
@@ -61,6 +56,7 @@ class ModulesOfLayout extends CoreLocalizableEntity
 	 *     inversedBy="modules_of_layout"
 	 * )
 	 * @ORM\JoinColumn(name="layout", referencedColumnName="id", nullable=false, onDelete="CASCADE")
+	 * @var \BiberLtd\Bundle\ContentManagementBundle\Entity\Layout
 	 */
 	private $layout;
 
@@ -70,6 +66,7 @@ class ModulesOfLayout extends CoreLocalizableEntity
 	 *     inversedBy="modules_of_layout"
 	 * )
 	 * @ORM\JoinColumn(name="page", referencedColumnName="id", nullable=false, onDelete="CASCADE")
+	 * @var \BiberLtd\Bundle\ContentManagementBundle\Entity\Page
 	 */
 	private $page;
 
@@ -79,41 +76,23 @@ class ModulesOfLayout extends CoreLocalizableEntity
 	 *     inversedBy="modules_of_layout"
 	 * )
 	 * @ORM\JoinColumn(name="module", referencedColumnName="id", nullable=false, onDelete="CASCADE")
+	 * @var \BiberLtd\Bundle\ContentManagementBundle\Entity\Module
 	 */
 	private $module;
-    /******************************************************************
-     * PUBLIC SET AND GET FUNCTIONS                                   *
-     ******************************************************************/
 
-    /**
-     * @name            getId()
-     * .
-     * @author          Murat Ünal
-     * @since			1.0.0
-     * @version         1.0.0
-     *
-     * @return          string          $this->id
-     */
+	/**
+	 * @return mixed
+	 */
     public function getId(){
         return $this->id;
     }
 
-
-    /**
-     * @name            setLayout ()
-     *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @use             $this->setModified()
-     *
-     * @param           mixed $layout
-     *
-     * @return          object                $this
-     */
-    public function setLayout($layout) {
+	/**
+	 * @param \BiberLtd\Bundle\ContentManagementBundle\Entity\Layout $layout
+	 *
+	 * @return $this
+	 */
+    public function setLayout(\BiberLtd\Bundle\ContentManagementBundle\Entity\Layout $layout) {
         if(!$this->setModified('layout', $layout)->isModified()) {
             return $this;
         }
@@ -121,35 +100,19 @@ class ModulesOfLayout extends CoreLocalizableEntity
 		return $this;
     }
 
-    /**
-     * @name            getLayout ()
-     *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @return          mixed           $this->layout
-     */
+	/**
+	 * @return \BiberLtd\Bundle\ContentManagementBundle\Entity\Layout
+	 */
     public function getLayout() {
         return $this->layout;
     }
 
-    /**
-     * @name            setModule ()
-     *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @use             $this->setModified()
-     *
-     * @param           mixed $module
-     *
-     * @return          object                $this
-     */
-    public function setModule($module) {
+	/**
+	 * @param \BiberLtd\Bundle\ContentManagementBundle\Entity\Module $module
+	 *
+	 * @return $this
+	 */
+    public function setModule(\BiberLtd\Bundle\ContentManagementBundle\Entity\Module $module) {
         if(!$this->setModified('module', $module)->isModified()) {
             return $this;
         }
@@ -157,35 +120,19 @@ class ModulesOfLayout extends CoreLocalizableEntity
 		return $this;
     }
 
-    /**
-     * @name            getModule ()
-     *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @return          mixed           $this->module
-     */
+	/**
+	 * @return \BiberLtd\Bundle\ContentManagementBundle\Entity\Module
+	 */
     public function getModule() {
         return $this->module;
     }
 
-    /**
-     * @name            setPage ()
-     *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @use             $this->setModified()
-     *
-     * @param           mixed $page
-     *
-     * @return          object                $this
-     */
-    public function setPage($page) {
+	/**
+	 * @param \BiberLtd\Bundle\ContentManagementBundle\Entity\Page $page
+	 *
+	 * @return $this
+	 */
+    public function setPage(\BiberLtd\Bundle\ContentManagementBundle\Entity\Page $page) {
         if(!$this->setModified('page', $page)->isModified()) {
             return $this;
         }
@@ -193,35 +140,19 @@ class ModulesOfLayout extends CoreLocalizableEntity
 		return $this;
     }
 
-    /**
-     * @name            getPage ()
-     *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @return          mixed           $this->page
-     */
+	/**
+	 * @return \BiberLtd\Bundle\ContentManagementBundle\Entity\Page
+	 */
     public function getPage() {
         return $this->page;
     }
 
-    /**
-     * @name            setSection ()
+	/**
+	 * @param string $section
 	 *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @use             $this->setModified()
-     *
-     * @param           mixed $section
-     *
-     * @return          object                $this
-     */
-    public function setSection($section) {
+	 * @return $this
+	 */
+    public function setSection(\string $section) {
         if(!$this->setModified('section', $section)->isModified()) {
             return $this;
         }
@@ -229,35 +160,19 @@ class ModulesOfLayout extends CoreLocalizableEntity
 		return $this;
     }
 
-    /**
-     * @name            getSection ()
-     *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @return          mixed           $this->section
-     */
+	/**
+	 * @return string
+	 */
     public function getSection() {
         return $this->section;
     }
 
-    /**
-     * @name            setSortOrder ()
-     *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @use             $this->setModified()
-     *
-     * @param           mixed $sort_order
-     *
-     * @return          object                $this
-     */
-    public function setSortOrder($sort_order) {
+	/**
+	 * @param int $sort_order
+	 *
+	 * @return $this
+	 */
+    public function setSortOrder(\integer $sort_order) {
         if(!$this->setModified('sort_order', $sort_order)->isModified()) {
             return $this;
         }
@@ -265,35 +180,19 @@ class ModulesOfLayout extends CoreLocalizableEntity
 		return $this;
     }
 
-    /**
-     * @name            getSortOrder ()
-     *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @return          mixed           $this->sort_order
-     */
+	/**
+	 * @return int
+	 */
     public function getSortOrder() {
         return $this->sort_order;
     }
 
-    /**
-     * @name            setStyle ()
-     *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @use             $this->setModified()
-     *
-     * @param           mixed $style
-     *
-     * @return          object                $this
-     */
-    public function setStyle($style) {
+	/**
+	 * @param string $style
+	 *
+	 * @return $this
+	 */
+    public function setStyle(\string $style) {
         if(!$this->setModified('style', $style)->isModified()) {
             return $this;
         }
@@ -301,47 +200,10 @@ class ModulesOfLayout extends CoreLocalizableEntity
 		return $this;
     }
 
-    /**
-     * @name            getStyle ()
-     *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.0.0
-     *
-     * @return          mixed           $this->style
-     */
+	/**
+	 * @return string
+	 */
     public function getStyle() {
         return $this->style;
     }
 }
-/**
- * Change Log:
- * **************************************
- * v1.0.1                      26.05.2015
- * Can Berkol
- * **************************************
- * BF :: Entity name spaces in annotations have been fixed.
- *
- * **************************************
- * v1.0.0                      Murat Ünal
- * 24.09.2013
- * **************************************
- * A getId()
- * A getLayout()
- * A getLocalizations()
- * A getModule()
- * A getPage()
- * A getSection()
- * A getSortOrder()
- * A getStyle()
- *
- * A setLayout()
- * A setLocalizations()
- * A setModule()
- * A setPage()
- * A setSection()
- * A setSortOrder()
- * A setStyle()
- *
- */

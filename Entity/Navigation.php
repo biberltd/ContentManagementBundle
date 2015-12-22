@@ -1,19 +1,15 @@
 <?php
-
+/**
+ * @author		Can Berkol
+ *
+ * @copyright   Biber Ltd. (http://www.biberltd.com) (C) 2015
+ * @license     GPLv3
+ *
+ * @date        22.12.2015
+ */
 namespace BiberLtd\Bundle\ContentManagementBundle\Entity;
 use Doctrine\ORM\Mapping AS ORM;
-/**
- * @name        Navigation
- * @package		BiberLtd\Core\ContentManagementBundle
- *
- * @author		Can Berkol
- * @version     1.2.1
- * @date        24.05.2015
- *
- * @copyright   Biber Ltd. (http://www.biberltd.com)
- * @license     GPL v3.0
- *
- */
+
 use BiberLtd\Bundle\CoreBundle\CoreLocalizableEntity;
 /**
  * @ORM\Entity
@@ -37,26 +33,31 @@ class Navigation extends CoreLocalizableEntity
      * @ORM\Id
      * @ORM\Column(type="integer", length=10)
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @var int
      */
     private $id;
 
     /** 
      * @ORM\Column(type="string", length=45, nullable=false)
+     * @var string
      */
     private $code;
 
     /** 
      * @ORM\Column(type="datetime", nullable=false)
+     * @var \DateTime
      */
     public $date_added;
 
 	/**
 	 * @ORM\Column(type="datetime", nullable=true)
+	 * @var \DateTime
 	 */
 	public $date_removed;
 
 	/**
 	 * @ORM\Column(type="datetime", nullable=false)
+	 * @var \DateTime
 	 */
 	public $date_updated;
 
@@ -65,6 +66,7 @@ class Navigation extends CoreLocalizableEntity
      *     targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\NavigationLocalization",
      *     mappedBy="navigation"
      * )
+     * @var array
      */
     protected $localizations;
 
@@ -73,170 +75,94 @@ class Navigation extends CoreLocalizableEntity
      *     targetEntity="BiberLtd\Bundle\ContentManagementBundle\Entity\NavigationItem",
      *     mappedBy="navigation"
      * )
+     * @var array
      */
     private $items;
 
     /** 
      * @ORM\ManyToOne(targetEntity="BiberLtd\Bundle\SiteManagementBundle\Entity\Site")
      * @ORM\JoinColumn(name="site", referencedColumnName="id", onDelete="CASCADE")
+     * @var \BiberLtd\Bundle\SiteManagementBundle\Entity\Site
      */
     private $site;
 
-    /**
-     * @name            getId()
-     *  				Gets $id property.
-     * .
-     * @author          Can Berkol
-     * @since			1.0.0
-     * @version         1.2.0
-     *
-     * @return          string          $this->id
-     */
+	/**
+	 * @return mixed
+	 */
     public function getId(){
         return $this->id;
     }
 
-    /**
-     * @name            setCode ()
-     *                  Sets the code property.
-     *                  Updates the data only if stored value and value to be set are different.
-     *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.2.0
-     *
-     * @use             $this->setModified()
-     *
-     * @param           mixed $code
-     *
-     * @return          object                $this
-     */
-    public function setCode($code) {
+	/**
+	 * @param string $code
+	 *
+	 * @return $this
+	 */
+    public function setCode(\string $code) {
         if($this->setModified('code', $code)->isModified()) {
             $this->code = $code;
         }
         return $this;
     }
 
-    /**
-     * @name            getCode ()
-     *                  Returns the value of code property.
-     *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.2.0
-     *
-     * @return          mixed           $this->code
-     */
+	/**
+	 * @return string
+	 */
     public function getCode() {
         return $this->code;
     }
 
-    /**
-     * @name            setNavigationItems()
-     *                  Sets the navigation_items property.
-     *                  Updates the data only if stored value and value to be set are different.
-     *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.2.0
-     *
-     * @use             $this->setModified()
-     *
-     * @param           mixed $navigation_items
-     *
-     * @return          object                $this
-     */
-    public function setNavigationItems($navigation_items) {
+	/**
+	 * @param \BiberLtd\Bundle\ContentManagementBundle\Entity\NavigationItem $navigation_items
+	 *
+	 * @return $this
+	 */
+    public function setNavigationItems(\BiberLtd\Bundle\ContentManagementBundle\Entity\NavigationItem $navigation_items) {
         if($this->setModified('navigation_items', $navigation_items)->isModified()) {
             $this->navigation_items = $navigation_items;
         }
         return $this;
     }
 
-    /**
-     * @name            getNavigationItems()
-     *                  Returns the value of navigation_items property.
-     *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.2.0
-     *
-     * @return          mixed           $this->navigation_items
-     */
+	/**
+	 * @return mixed
+	 */
     public function getNavigationItems() {
         return $this->navigation_items;
     }
 
-    /**
-     * @name            setSite ()
-     *                  Sets the site property.
-     *                  Updates the data only if stored value and value to be set are different.
-     *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.2.0
-     *
-     * @use             $this->setModified()
-     *
-     * @param           mixed $site
-     *
-     * @return          object                $this
-     */
-    public function setSite($site) {
+	/**
+	 * @param \BiberLtd\Bundle\SiteManagementBundle\Entity\Site $site
+	 *
+	 * @return $this
+	 */
+    public function setSite(\BiberLtd\Bundle\SiteManagementBundle\Entity\Site $site) {
         if($this->setModified('site', $site)->isModified()) {
             $this->site = $site;
         }
         return $this;
     }
 
-    /**
-     * @name            getSite ()
-     *                  Returns the value of site property.
-     *
-     * @author          Can Berkol
-     *
-     * @since           1.0.0
-     * @version         1.2.0
-     *
-     * @return          mixed           $this->site
-     */
+	/**
+	 * @return \BiberLtd\Bundle\SiteManagementBundle\Entity\Site
+	 */
     public function getSite() {
         return $this->site;
     }
 
 	/**
-	 * @name    	getItems ()
-	 *
-	 * @author  Can Berkol
-	 *
-	 * @since   1.0.0
-	 * @version 1.0.0
-	 *
-	 * @return  mixed
+	 * @return array
 	 */
 	public function getItems() {
 		return $this->items;
 	}
 
 	/**
-	 * @name        setItems ()
-	 *
-	 * @author  Can Berkol
-	 *
-	 * @since   1.0.0
-	 * @version 1.0.0
-	 *
-	 * @param mixed $items
+	 * @param array $items
 	 *
 	 * @return $this
 	 */
-	public function setItems($items) {
+	public function setItems(array $items) {
 		if (!$this->setModified('items', $items)->isModified()) {
 			return $this;
 		}
@@ -245,20 +171,3 @@ class Navigation extends CoreLocalizableEntity
 		return $this;
 	}
 }
-/**
- * Change Log:
- * **************************************
- * v1.2.1                      24.04.2015
- * TW #3568843,
- * Can Berkol
- * **************************************
- * A getItems()
- * A setItems()
- *
- * **************************************
- * v1.2.0                      Can Berkol
- * 19.12.2013
- * **************************************
- * File resetted.
- *
- */
