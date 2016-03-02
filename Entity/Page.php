@@ -95,7 +95,7 @@ class Page extends CoreLocalizableEntity
      *
      * @return $this
      */
-    public function setBundleName(\string $bundle_name) {
+    public function setBundleName(string $bundle_name) {
         if(!$this->setModified('bundle_name', $bundle_name)->isModified()) {
             return $this;
         }
@@ -115,7 +115,7 @@ class Page extends CoreLocalizableEntity
      *
      * @return $this
      */
-    public function setCode(\string $code) {
+    public function setCode(string $code) {
         if(!$this->setModified('code', $code)->isModified()) {
             return $this;
         }
@@ -216,7 +216,7 @@ class Page extends CoreLocalizableEntity
      *
      * @return $this
      */
-    public function setStatus(\string $status) {
+    public function setStatus(string $status) {
         if(!$this->setModified('status', $status)->isModified()) {
             return $this;
         }

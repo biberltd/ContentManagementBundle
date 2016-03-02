@@ -91,7 +91,7 @@ class Layout extends CoreLocalizableEntity
      *
      * @return $this
      */
-    public function setCode(\string $code) {
+    public function setCode(string $code) {
         if(!$this->setModified('code', $code)->isModified()) {
             return $this;
         }
@@ -111,7 +111,7 @@ class Layout extends CoreLocalizableEntity
      *
      * @return $this
      */
-    public function setHtml(\string $html) {
+    public function setHtml(string $html) {
         if(!$this->setModified('html', $html)->isModified()) {
             return $this;
         }

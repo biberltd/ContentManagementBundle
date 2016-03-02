@@ -97,7 +97,7 @@ class Module extends CoreLocalizableEntity
      *
      * @return $this
      */
-    public function setBundleName(\string $bundle_name) {
+    public function setBundleName(string $bundle_name) {
         if(!$this->setModified('bundle_name', $bundle_name)->isModified()) {
             return $this;
         }
@@ -117,7 +117,7 @@ class Module extends CoreLocalizableEntity
      *
      * @return $this
      */
-    public function setCode(\string $code) {
+    public function setCode(string $code) {
         if(!$this->setModified('code', $code)->isModified()) {
             return $this;
         }
@@ -137,7 +137,7 @@ class Module extends CoreLocalizableEntity
      *
      * @return $this
      */
-    public function setHtml(\string $html) {
+    public function setHtml(string $html) {
         if(!$this->setModified('html', $html)->isModified()) {
             return $this;
         }
@@ -217,7 +217,7 @@ class Module extends CoreLocalizableEntity
      *
      * @return $this
      */
-    public function setBundleFolder(\string $bundle_folder) {
+    public function setBundleFolder(string $bundle_folder) {
         if($this->setModified('bundle_folder', $bundle_folder)->isModified()) {
             $this->bundle_folder = $bundle_folder;
         }

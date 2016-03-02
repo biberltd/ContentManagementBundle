@@ -22,7 +22,7 @@ class ThemeLocalization extends CoreEntity
 {
     /** 
      * @ORM\Column(type="string", length=45, nullable=false)
-     * @var \string
+     * @var string
      */
     private $name;
 
@@ -67,7 +67,7 @@ class ThemeLocalization extends CoreEntity
      *
      * @return $this
      */
-    public function setName(\string $name) {
+    public function setName(string $name) {
         if(!$this->setModified('name', $name)->isModified()) {
             return $this;
         }
@@ -87,7 +87,7 @@ class ThemeLocalization extends CoreEntity
      *
      * @return $this
      */
-    public function setTheme(\string $theme) {
+    public function setTheme(string $theme) {
         if(!$this->setModified('theme', $theme)->isModified()) {
             return $this;
         }

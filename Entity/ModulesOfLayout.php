@@ -152,7 +152,7 @@ class ModulesOfLayout extends CoreLocalizableEntity
 	 *
 	 * @return $this
 	 */
-    public function setSection(\string $section) {
+    public function setSection(string $section) {
         if(!$this->setModified('section', $section)->isModified()) {
             return $this;
         }
@@ -172,7 +172,7 @@ class ModulesOfLayout extends CoreLocalizableEntity
 	 *
 	 * @return $this
 	 */
-    public function setSortOrder(\integer $sort_order) {
+    public function setSortOrder(int $sort_order) {
         if(!$this->setModified('sort_order', $sort_order)->isModified()) {
             return $this;
         }
@@ -192,7 +192,7 @@ class ModulesOfLayout extends CoreLocalizableEntity
 	 *
 	 * @return $this
 	 */
-    public function setStyle(\string $style) {
+    public function setStyle(string $style) {
         if(!$this->setModified('style', $style)->isModified()) {
             return $this;
         }

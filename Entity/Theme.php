@@ -138,7 +138,7 @@ class Theme extends CoreLocalizableEntity
      *
      * @return $this
      */
-    public function setCountModules(\integer $count_modules) {
+    public function setCountModules(int $count_modules) {
         if(!$this->setModified('count_modules', $count_modules)->isModified()) {
             return $this;
         }
@@ -158,7 +158,7 @@ class Theme extends CoreLocalizableEntity
      *
      * @return $this
      */
-    public function setFolder(\string $folder) {
+    public function setFolder(string $folder) {
         if(!$this->setModified('folder', $folder)->isModified()) {
             return $this;
         }
@@ -246,7 +246,7 @@ class Theme extends CoreLocalizableEntity
      *
      * @return $this
      */
-    public function setType(\string $type) {
+    public function setType(string $type) {
         if(!$this->setModified('type', $type)->isModified()) {
             return $this;
         }

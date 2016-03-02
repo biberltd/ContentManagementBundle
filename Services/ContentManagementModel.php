@@ -77,7 +77,7 @@ class ContentManagementModel extends CoreModel{
 	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function addFilesToPage(array $files, $page) {
-		$timeStamp = time();
+		$timeStamp = microtime(true);
 		$response = $this->getPage($page);
 		if($response->error->exist){
 			return $response;
@@ -86,7 +86,7 @@ class ContentManagementModel extends CoreModel{
 		if (!is_array($files)) {
 			return $this->createException('InvalidParameterValueException', 'Invalid parameter value. $groups parameter must be an array collection', 'E:S:001');
 		}
-		$toAdd = array();
+		$toAdd = [];
 		$fModel = $this->kernel->getContainer()->get('filemanagement.model');
 		$i = 0;
 		foreach ($files as $file) {
@@ -109,7 +109,7 @@ class ContentManagementModel extends CoreModel{
 			}
 		}
 		$now = new \DateTime('now', new \DateTimezone($this->kernel->getContainer()->getParameter('app_timezone')));
-		$insertedItems = array();
+		$insertedItems = [];
 		foreach ($toAdd as $file) {
 			$entity = new BundleEntity\FilesOfPage();
 			$entity->setFile($file['file'])->setPage($page)->setDateAdded($now);
@@ -122,9 +122,9 @@ class ContentManagementModel extends CoreModel{
 		$countInserts = count($toAdd);
 		if($countInserts > 0){
 			$this->em->flush();
-			return new ModelResponse($insertedItems, $countInserts, 0, null, false, 'S:D:003', 'Selected entries have been successfully inserted into database.', $timeStamp, time());
+			return new ModelResponse($insertedItems, $countInserts, 0, null, false, 'S:D:003', 'Selected entries have been successfully inserted into database.', $timeStamp, microtime(true));
 		}
-		return new ModelResponse(null, 0, 0, null, true, 'E:D:003', 'One or more entities cannot be inserted into database.', $timeStamp, time());
+		return new ModelResponse(null, 0, 0, null, true, 'E:D:003', 'One or more entities cannot be inserted into database.', $timeStamp, microtime(true));
 	}
 
 	/**
@@ -142,7 +142,7 @@ class ContentManagementModel extends CoreModel{
 	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function deleteLayouts(array $collection) {
-		$timeStamp = time();
+		$timeStamp = microtime(true);
 		if (!is_array($collection)) {
 			return $this->createException('InvalidParameterValueException', 'Invalid parameter value. Parameter must be an array collection', 'E:S:001');
 		}
@@ -162,11 +162,11 @@ class ContentManagementModel extends CoreModel{
 			}
 		}
 		if($countDeleted < 0){
-			return new ModelResponse(null, 0, 0, null, true, 'E:E:001', 'Unable to delete all or some of the selected entries.', $timeStamp, time());
+			return new ModelResponse(null, 0, 0, null, true, 'E:E:001', 'Unable to delete all or some of the selected entries.', $timeStamp, microtime(true));
 		}
 		$this->em->flush();
 
-		return new ModelResponse(null, 0, 0, null, false, 'S:D:001', 'Selected entries have been successfully removed from database.', $timeStamp, time());
+		return new ModelResponse(null, 0, 0, null, false, 'S:D:001', 'Selected entries have been successfully removed from database.', $timeStamp, microtime(true));
 	}
 
 	/**
@@ -184,7 +184,7 @@ class ContentManagementModel extends CoreModel{
 	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function deleteModules(array $collection) {
-		$timeStamp = time();
+		$timeStamp = microtime(true);
 		if (!is_array($collection)) {
 			return $this->createException('InvalidParameterValueException', 'Invalid parameter value. Parameter must be an array collection', 'E:S:001');
 		}
@@ -204,11 +204,11 @@ class ContentManagementModel extends CoreModel{
 			}
 		}
 		if($countDeleted < 0){
-			return new ModelResponse(null, 0, 0, null, true, 'E:E:001', 'Unable to delete all or some of the selected entries.', $timeStamp, time());
+			return new ModelResponse(null, 0, 0, null, true, 'E:E:001', 'Unable to delete all or some of the selected entries.', $timeStamp, microtime(true));
 		}
 		$this->em->flush();
 
-		return new ModelResponse(null, 0, 0, null, false, 'S:D:001', 'Selected entries have been successfully removed from database.', $timeStamp, time());
+		return new ModelResponse(null, 0, 0, null, false, 'S:D:001', 'Selected entries have been successfully removed from database.', $timeStamp, microtime(true));
 	}
 
 	/**
@@ -226,7 +226,7 @@ class ContentManagementModel extends CoreModel{
 	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function deleteNavigations(array $collection) {
-		$timeStamp = time();
+		$timeStamp = microtime(true);
 		if (!is_array($collection)) {
 			return $this->createException('InvalidParameterValueException', 'Invalid parameter value. Parameter must be an array collection', 'E:S:001');
 		}
@@ -246,11 +246,11 @@ class ContentManagementModel extends CoreModel{
 			}
 		}
 		if($countDeleted < 0){
-			return new ModelResponse(null, 0, 0, null, true, 'E:E:001', 'Unable to delete all or some of the selected entries.', $timeStamp, time());
+			return new ModelResponse(null, 0, 0, null, true, 'E:E:001', 'Unable to delete all or some of the selected entries.', $timeStamp, microtime(true));
 		}
 		$this->em->flush();
 
-		return new ModelResponse(null, 0, 0, null, false, 'S:D:001', 'Selected entries have been successfully removed from database.', $timeStamp, time());
+		return new ModelResponse(null, 0, 0, null, false, 'S:D:001', 'Selected entries have been successfully removed from database.', $timeStamp, microtime(true));
 	}
 
 	/**
@@ -268,7 +268,7 @@ class ContentManagementModel extends CoreModel{
 	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function deleteNavigationItems(array $collection) {
-		$timeStamp = time();
+		$timeStamp = microtime(true);
 		if (!is_array($collection)) {
 			return $this->createException('InvalidParameterValueException', 'Invalid parameter value. Parameter must be an array collection', 'E:S:001');
 		}
@@ -288,11 +288,11 @@ class ContentManagementModel extends CoreModel{
 			}
 		}
 		if($countDeleted < 0){
-			return new ModelResponse(null, 0, 0, null, true, 'E:E:001', 'Unable to delete all or some of the selected entries.', $timeStamp, time());
+			return new ModelResponse(null, 0, 0, null, true, 'E:E:001', 'Unable to delete all or some of the selected entries.', $timeStamp, microtime(true));
 		}
 		$this->em->flush();
 
-		return new ModelResponse(null, 0, 0, null, false, 'S:D:001', 'Selected entries have been successfully removed from database.', $timeStamp, time());
+		return new ModelResponse(null, 0, 0, null, false, 'S:D:001', 'Selected entries have been successfully removed from database.', $timeStamp, microtime(true));
 	}
 
 	/**
@@ -319,7 +319,7 @@ class ContentManagementModel extends CoreModel{
 	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function deletePageRevisions(array $collection){
-		$timeStamp = time();
+		$timeStamp = microtime(true);
 		if (!is_array($collection)) {
 			return $this->createException('InvalidParameterValueException', 'Invalid parameter value. Parameter must be an array collection', 'E:S:001');
 		}
@@ -331,11 +331,11 @@ class ContentManagementModel extends CoreModel{
 			}
 		}
 		if($countDeleted < 0){
-			return new ModelResponse(null, 0, 0, null, true, 'E:E:001', 'Unable to delete all or some of the selected entries.', $timeStamp, time());
+			return new ModelResponse(null, 0, 0, null, true, 'E:E:001', 'Unable to delete all or some of the selected entries.', $timeStamp, microtime(true));
 		}
 		$this->em->flush();
 
-		return new ModelResponse(null, 0, 0, null, false, 'S:D:001', 'Selected entries have been successfully removed from database.', $timeStamp, time());
+		return new ModelResponse(null, 0, 0, null, false, 'S:D:001', 'Selected entries have been successfully removed from database.', $timeStamp, microtime(true));
 	}
 
 	/**
@@ -344,7 +344,7 @@ class ContentManagementModel extends CoreModel{
 	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
     public function deletePages(array $collection){
-		$timeStamp = time();
+		$timeStamp = microtime(true);
 		if (!is_array($collection)) {
 			return $this->createException('InvalidParameterValueException', 'Invalid parameter value. Parameter must be an array collection', 'E:S:001');
 		}
@@ -363,11 +363,11 @@ class ContentManagementModel extends CoreModel{
 			}
 		}
 		if($countDeleted < 0){
-			return new ModelResponse(null, 0, 0, null, true, 'E:E:001', 'Unable to delete all or some of the selected entries.', $timeStamp, time());
+			return new ModelResponse(null, 0, 0, null, true, 'E:E:001', 'Unable to delete all or some of the selected entries.', $timeStamp, microtime(true));
 		}
 		$this->em->flush();
 
-		return new ModelResponse(null, 0, 0, null, false, 'S:D:001', 'Selected entries have been successfully removed from database.', $timeStamp, time());
+		return new ModelResponse(null, 0, 0, null, false, 'S:D:001', 'Selected entries have been successfully removed from database.', $timeStamp, microtime(true));
     }
 
 	/**
@@ -385,7 +385,7 @@ class ContentManagementModel extends CoreModel{
 	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function deleteThemes(array $collection){
-		$timeStamp = time();
+		$timeStamp = microtime(true);
 		if (!is_array($collection)) {
 			return $this->createException('InvalidParameterValueException', 'Invalid parameter value. Parameter must be an array collection', 'E:S:001');
 		}
@@ -404,11 +404,11 @@ class ContentManagementModel extends CoreModel{
 			}
 		}
 		if($countDeleted < 0){
-			return new ModelResponse(null, 0, 0, null, true, 'E:E:001', 'Unable to delete all or some of the selected entries.', $timeStamp, time());
+			return new ModelResponse(null, 0, 0, null, true, 'E:E:001', 'Unable to delete all or some of the selected entries.', $timeStamp, microtime(true));
 		}
 		$this->em->flush();
 
-		return new ModelResponse(null, 0, 0, null, false, 'S:D:001', 'Selected entries have been successfully removed from database.', $timeStamp, time());
+		return new ModelResponse(null, 0, 0, null, false, 'S:D:001', 'Selected entries have been successfully removed from database.', $timeStamp, microtime(true));
 	}
 
 	/**
@@ -417,8 +417,8 @@ class ContentManagementModel extends CoreModel{
 	 *
 	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse|bool
 	 */
-	public function doesLayoutExist($layout, \bool $bypass = false) {
-		$timeStamp = time();
+	public function doesLayoutExist($layout, bool $bypass = false) {
+		$timeStamp = microtime(true);
 		$exist = false;
 
 		$response = $this->getLayout($layout);
@@ -435,7 +435,7 @@ class ContentManagementModel extends CoreModel{
 			return $exist;
 		}
 
-		return new ModelResponse($exist, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+		return new ModelResponse($exist, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, microtime(true));
 	}
 
 	/**
@@ -444,8 +444,8 @@ class ContentManagementModel extends CoreModel{
 	 *
 	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse|bool
 	 */
-	public function doesModuleExist($module, \bool $bypass = false) {
-		$timeStamp = time();
+	public function doesModuleExist($module, bool $bypass = false) {
+		$timeStamp = microtime(true);
 		$exist = false;
 
 		$response = $this->getModule($module);
@@ -462,7 +462,7 @@ class ContentManagementModel extends CoreModel{
 			return $exist;
 		}
 
-		return new ModelResponse($exist, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+		return new ModelResponse($exist, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, microtime(true));
 	}
 
 	/**
@@ -471,8 +471,8 @@ class ContentManagementModel extends CoreModel{
 	 *
 	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse|bool
 	 */
-	public function doesModuleLayoutEntryExist($entry, \bool $bypass = false) {
-		$timeStamp = time();
+	public function doesModuleLayoutEntryExist($entry, bool $bypass = false) {
+		$timeStamp = microtime(true);
 		$exist = false;
 
 		$response = $this->getModuleLayoutEntry($entry);
@@ -489,7 +489,7 @@ class ContentManagementModel extends CoreModel{
 			return $exist;
 		}
 
-		return new ModelResponse($exist, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+		return new ModelResponse($exist, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, microtime(true));
 	}
 
 	/**
@@ -498,8 +498,8 @@ class ContentManagementModel extends CoreModel{
 	 *
 	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse|bool
 	 */
-	public function doesNavigationExist($navigation, \bool $bypass = false) {
-		$timeStamp = time();
+	public function doesNavigationExist($navigation, bool $bypass = false) {
+		$timeStamp = microtime(true);
 		$exist = false;
 
 		$response = $this->getNavigation($navigation);
@@ -516,7 +516,7 @@ class ContentManagementModel extends CoreModel{
 			return $exist;
 		}
 
-		return new ModelResponse($exist, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+		return new ModelResponse($exist, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, microtime(true));
 	}
 
 	/**
@@ -525,8 +525,8 @@ class ContentManagementModel extends CoreModel{
 	 *
 	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse|bool
 	 */
-	public function doesNavigationItemExist($item, \bool $bypass = false) {
-		$timeStamp = time();
+	public function doesNavigationItemExist($item, bool $bypass = false) {
+		$timeStamp = microtime(true);
 		$exist = false;
 
 		$response = $this->getNavigationItem($item);
@@ -543,7 +543,7 @@ class ContentManagementModel extends CoreModel{
 			return $exist;
 		}
 
-		return new ModelResponse($exist, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+		return new ModelResponse($exist, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, microtime(true));
 	}
 
 	/**
@@ -552,8 +552,8 @@ class ContentManagementModel extends CoreModel{
 	 *
 	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse|bool
 	 */
-	public function doesPageExist($page, \bool $bypass = false) {
-		$timeStamp = time();
+	public function doesPageExist($page, bool $bypass = false) {
+		$timeStamp = microtime(true);
 		$exist = false;
 
 		$response = $this->getPage($page);
@@ -570,7 +570,7 @@ class ContentManagementModel extends CoreModel{
 			return $exist;
 		}
 
-		return new ModelResponse($exist, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+		return new ModelResponse($exist, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, microtime(true));
 	}
 
 	/**
@@ -579,8 +579,8 @@ class ContentManagementModel extends CoreModel{
 	 *
 	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse|bool
 	 */
-	public function doesThemeExist($theme, \bool $bypass = false) {
-		$timeStamp = time();
+	public function doesThemeExist($theme, bool $bypass = false) {
+		$timeStamp = microtime(true);
 		$exist = false;
 
 		$response = $this->getTheme($theme);
@@ -597,7 +597,7 @@ class ContentManagementModel extends CoreModel{
 			return $exist;
 		}
 
-		return new ModelResponse($exist, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+		return new ModelResponse($exist, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, microtime(true));
 	}
 
 	/**
@@ -606,7 +606,7 @@ class ContentManagementModel extends CoreModel{
 	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function getLastRevisionOfPage($page){
-		$timeStamp = time();
+		$timeStamp = microtime(true);
 		$response = $this->getPage($page);
 		if($response->error->exist){
 			return $response;
@@ -625,7 +625,7 @@ class ContentManagementModel extends CoreModel{
 		$response = $this->listPageRevisions($filter, array('date_added' => 'desc'), array('start' => 0, 'count' => 1));
 
 		$response->stats->execution->start = $timeStamp;
-		$response->stats->execution->end = time();
+		$response->stats->execution->end = microtime(true);
 
 		return $response;
 	}
@@ -636,9 +636,9 @@ class ContentManagementModel extends CoreModel{
 	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function getLayout($layout) {
-		$timeStamp = time();
+		$timeStamp = microtime(true);
 		if($layout instanceof BundleEntity\Layout){
-			return new ModelResponse($layout, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+			return new ModelResponse($layout, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, microtime(true));
 		}
 		$result = null;
 		switch($layout){
@@ -657,10 +657,10 @@ class ContentManagementModel extends CoreModel{
 				break;
 		}
 		if(is_null($result)){
-			return new ModelResponse($result, 0, 0, null, true, 'E:D:002', 'Unable to find request entry in database.', $timeStamp, time());
+			return new ModelResponse($result, 0, 0, null, true, 'E:D:002', 'Unable to find request entry in database.', $timeStamp, microtime(true));
 		}
 
-		return new ModelResponse($result, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+		return new ModelResponse($result, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, microtime(true));
 	}
 
 	/**
@@ -669,8 +669,8 @@ class ContentManagementModel extends CoreModel{
 	 *
 	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
-	public function getLayoutByUrlKey(\string $urlKey, $language = null){
-		$timeStamp = time();
+	public function getLayoutByUrlKey(string $urlKey, $language = null){
+		$timeStamp = microtime(true);
 		if(!is_string($urlKey)){
 			return $this->createException('InvalidParameterValueException', '$urlKey must be a string.', 'E:S:007');
 		}
@@ -701,7 +701,7 @@ class ContentManagementModel extends CoreModel{
 		$response = $this->listLayouts($filter, null, array('start' => 0, 'count' => 1));
 
 		$response->stats->execution->start = $timeStamp;
-		$response->stats->execution->end = time();
+		$response->stats->execution->end = microtime(true);
 
 		return $response;
 	}
@@ -712,8 +712,8 @@ class ContentManagementModel extends CoreModel{
 	 *
 	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
-    public function getMaxSortOrderOfFilesOfPage($page, \bool $bypass = false){
-        $timeStamp = time();
+    public function getMaxSortOrderOfFilesOfPage($page, bool $bypass = false){
+        $timeStamp = microtime(true);
         $response = $this->getPage($page);
 		if($response->error->exist){
 			return $response;
@@ -727,7 +727,7 @@ class ContentManagementModel extends CoreModel{
         if ($bypass) {
             return $result;
         }
-		return new ModelResponse($result, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+		return new ModelResponse($result, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, microtime(true));
     }
 
 	/**
@@ -736,9 +736,9 @@ class ContentManagementModel extends CoreModel{
 	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function getModule($module) {
-		$timeStamp = time();
+		$timeStamp = microtime(true);
 		if($module instanceof BundleEntity\Module){
-			return new ModelResponse($module, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+			return new ModelResponse($module, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, microtime(true));
 		}
 		$result = null;
 		switch($module){
@@ -757,10 +757,10 @@ class ContentManagementModel extends CoreModel{
 				break;
 		}
 		if(is_null($result)){
-			return new ModelResponse($result, 0, 0, null, true, 'E:D:002', 'Unable to find request entry in database.', $timeStamp, time());
+			return new ModelResponse($result, 0, 0, null, true, 'E:D:002', 'Unable to find request entry in database.', $timeStamp, microtime(true));
 		}
 
-		return new ModelResponse($result, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+		return new ModelResponse($result, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, microtime(true));
 	}
 
 	/**
@@ -769,8 +769,8 @@ class ContentManagementModel extends CoreModel{
 	 *
 	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
-	public function getModuleByUrlKey(\string $urlKey, $language = null){
-		$timeStamp = time();
+	public function getModuleByUrlKey(string $urlKey, $language = null){
+		$timeStamp = microtime(true);
 		if(!is_string($urlKey)){
 			return $this->createException('InvalidParameterValueException', '$urlKey must be a string.', 'E:S:007');
 		}
@@ -801,7 +801,7 @@ class ContentManagementModel extends CoreModel{
 		$response = $this->listModules($filter, null, array('start' => 0, 'count' => 1));
 
 		$response->stats->execution->start = $timeStamp;
-		$response->stats->execution->end = time();
+		$response->stats->execution->end = microtime(true);
 
 		return $response;
 	}
@@ -812,9 +812,9 @@ class ContentManagementModel extends CoreModel{
 	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function getModuleLayoutEntry($entry) {
-		$timeStamp = time();
+		$timeStamp = microtime(true);
 		if($entry instanceof BundleEntity\ModulesOfLayout){
-			return new ModelResponse($entry, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+			return new ModelResponse($entry, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, microtime(true));
 		}
 		$result = null;
 		switch($entry){
@@ -823,10 +823,10 @@ class ContentManagementModel extends CoreModel{
 				break;
 		}
 		if(is_null($result)){
-			return new ModelResponse($result, 0, 0, null, true, 'E:D:002', 'Unable to find request entry in database.', $timeStamp, time());
+			return new ModelResponse($result, 0, 0, null, true, 'E:D:002', 'Unable to find request entry in database.', $timeStamp, microtime(true));
 		}
 
-		return new ModelResponse($result, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+		return new ModelResponse($result, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, microtime(true));
 	}
 
 	/**
@@ -835,9 +835,9 @@ class ContentManagementModel extends CoreModel{
 	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function getNavigation($navigation) {
-		$timeStamp = time();
+		$timeStamp = microtime(true);
 		if($navigation instanceof BundleEntity\Navigation){
-			return new ModelResponse($navigation, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+			return new ModelResponse($navigation, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, microtime(true));
 		}
 		$result = null;
 		switch($navigation){
@@ -849,10 +849,10 @@ class ContentManagementModel extends CoreModel{
 				break;
 		}
 		if(is_null($result)){
-			return new ModelResponse($result, 0, 0, null, true, 'E:D:002', 'Unable to find request entry in database.', $timeStamp, time());
+			return new ModelResponse($result, 0, 0, null, true, 'E:D:002', 'Unable to find request entry in database.', $timeStamp, microtime(true));
 		}
 
-		return new ModelResponse($result, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+		return new ModelResponse($result, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, microtime(true));
 	}
 
 	/**
@@ -861,9 +861,9 @@ class ContentManagementModel extends CoreModel{
 	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function getNavigationItem($item) {
-		$timeStamp = time();
+		$timeStamp = microtime(true);
 		if($item instanceof BundleEntity\NavigationItem){
-			return new ModelResponse($item, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+			return new ModelResponse($item, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, microtime(true));
 		}
 		$result = null;
 		switch($item){
@@ -879,10 +879,10 @@ class ContentManagementModel extends CoreModel{
 				break;
 		}
 		if(is_null($result)){
-			return new ModelResponse($result, 0, 0, null, true, 'E:D:002', 'Unable to find request entry in database.', $timeStamp, time());
+			return new ModelResponse($result, 0, 0, null, true, 'E:D:002', 'Unable to find request entry in database.', $timeStamp, microtime(true));
 		}
 
-		return new ModelResponse($result, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+		return new ModelResponse($result, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, microtime(true));
 	}
 
 	/**
@@ -891,8 +891,8 @@ class ContentManagementModel extends CoreModel{
 	 *
 	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
-	public function getNavigationItemByUrlKey(\string $urlKey, $language = null){
-		$timeStamp = time();
+	public function getNavigationItemByUrlKey(string $urlKey, $language = null){
+		$timeStamp = microtime(true);
 		if(!is_string($urlKey)){
 			return $this->createException('InvalidParameterValueException', '$urlKey must be a string.', 'E:S:007');
 		}
@@ -923,7 +923,7 @@ class ContentManagementModel extends CoreModel{
 		$response = $this->listNavigationItems($filter, null, array('start' => 0, 'count' => 1));
 
 		$response->stats->execution->start = $timeStamp;
-		$response->stats->execution->end = time();
+		$response->stats->execution->end = microtime(true);
 
 		return $response;
 	}
@@ -934,9 +934,9 @@ class ContentManagementModel extends CoreModel{
 	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function getPage($page) {
-		$timeStamp = time();
+		$timeStamp = microtime(true);
 		if($page instanceof BundleEntity\Page){
-			return new ModelResponse($page, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+			return new ModelResponse($page, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, microtime(true));
 		}
 		$result = null;
 		switch($page){
@@ -955,10 +955,10 @@ class ContentManagementModel extends CoreModel{
 				break;
 		}
 		if(is_null($result)){
-			return new ModelResponse($result, 0, 0, null, true, 'E:D:002', 'Unable to find request entry in database.', $timeStamp, time());
+			return new ModelResponse($result, 0, 0, null, true, 'E:D:002', 'Unable to find request entry in database.', $timeStamp, microtime(true));
 		}
 
-		return new ModelResponse($result, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+		return new ModelResponse($result, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, microtime(true));
 	}
 
 	/**
@@ -967,8 +967,8 @@ class ContentManagementModel extends CoreModel{
 	 *
 	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
-    public function getPageByUrlKey(\string $urlKey, $language = null){
-        $timeStamp = time();
+    public function getPageByUrlKey(string $urlKey, $language = null){
+        $timeStamp = microtime(true);
 		if(!is_string($urlKey)){
 			return $this->createException('InvalidParameterValueException', '$urlKey must be a string.', 'E:S:007');
 		}
@@ -999,7 +999,7 @@ class ContentManagementModel extends CoreModel{
         $response = $this->listPages($filter, null, array('start' => 0, 'count' => 1));
 
 		$response->stats->execution->start = $timeStamp;
-		$response->stats->execution->end = time();
+		$response->stats->execution->end = microtime(true);
 		$response->result->set = $response->result->set[0];
 
 		return $response;
@@ -1012,8 +1012,8 @@ class ContentManagementModel extends CoreModel{
 	 *
 	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
-	public function getPageRevision($page, $language, \string $revisionNumber){
-		$timeStamp = time();
+	public function getPageRevision($page, $language, string $revisionNumber){
+		$timeStamp = microtime(true);
 
 		$response = $this->getPage($page);
 		if($response->error->exist){
@@ -1039,10 +1039,10 @@ class ContentManagementModel extends CoreModel{
 		$result = $q->getResult();
 
 		if(is_null($result)){
-			return new ModelResponse($result, 0, 0, null, true, 'E:D:002', 'Unable to find request entry in database.', $timeStamp, time());
+			return new ModelResponse($result, 0, 0, null, true, 'E:D:002', 'Unable to find request entry in database.', $timeStamp, microtime(true));
 		}
 
-		return new ModelResponse($result, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+		return new ModelResponse($result, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, microtime(true));
 	}
 
 	/**
@@ -1051,9 +1051,9 @@ class ContentManagementModel extends CoreModel{
 	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function getTheme($theme) {
-		$timeStamp = time();
+		$timeStamp = microtime(true);
 		if($theme instanceof BundleEntity\Theme){
-			return new ModelResponse($theme, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+			return new ModelResponse($theme, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, microtime(true));
 		}
 		$result = null;
 		switch($theme){
@@ -1062,10 +1062,10 @@ class ContentManagementModel extends CoreModel{
 				break;
 		}
 		if(is_null($result)){
-			return new ModelResponse($result, 0, 0, null, true, 'E:D:002', 'Unable to find request entry in database.', $timeStamp, time());
+			return new ModelResponse($result, 0, 0, null, true, 'E:D:002', 'Unable to find request entry in database.', $timeStamp, microtime(true));
 		}
 
-		return new ModelResponse($result, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+		return new ModelResponse($result, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, microtime(true));
 	}
 
 	/**
@@ -1083,12 +1083,12 @@ class ContentManagementModel extends CoreModel{
 	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function insertNavigationLocalizations(array $collection) {
-		$timeStamp = time();
+		$timeStamp = microtime(true);
 		if (!is_array($collection)) {
 			return $this->createException('InvalidParameterValueException', 'Invalid parameter value. Parameter must be an array collection', 'E:S:001');
 		}
 		$countInserts = 0;
-		$insertedItems = array();
+		$insertedItems = [];
 		foreach($collection as $data){
 			if($data instanceof BundleEntity\NavigationLocalization){
 				$entity = $data;
@@ -1127,9 +1127,9 @@ class ContentManagementModel extends CoreModel{
 		}
 		if($countInserts > 0){
 			$this->em->flush();
-			return new ModelResponse($insertedItems, $countInserts, 0, null, false, 'S:D:003', 'Selected entries have been successfully inserted into database.', $timeStamp, time());
+			return new ModelResponse($insertedItems, $countInserts, 0, null, false, 'S:D:003', 'Selected entries have been successfully inserted into database.', $timeStamp, microtime(true));
 		}
-		return new ModelResponse(null, 0, 0, null, true, 'E:D:003', 'One or more entities cannot be inserted into database.', $timeStamp, time());
+		return new ModelResponse(null, 0, 0, null, true, 'E:D:003', 'One or more entities cannot be inserted into database.', $timeStamp, microtime(true));
 	}
 
 	/**
@@ -1138,15 +1138,15 @@ class ContentManagementModel extends CoreModel{
 	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function insertNavigations(array $collection)	{
-		$timeStamp = time();
+		$timeStamp = microtime(true);
 		/** Parameter must be an array */
 		if (!is_array($collection)) {
 			return $this->createException('InvalidParameterValueException', 'Invalid parameter value. Parameter must be an array collection', 'E:S:001');
 		}
 		$countInserts = 0;
 		$countLocalizations = 0;
-		$insertedItems = array();
-		$localizations = array();
+		$insertedItems = [];
+		$localizations = [];
 		foreach ($collection as $data) {
 			if ($data instanceof BundleEntity\Navigation) {
 				$entity = $data;
@@ -1208,9 +1208,9 @@ class ContentManagementModel extends CoreModel{
 		}
 		if($countInserts > 0){
 			$this->em->flush();
-			return new ModelResponse($insertedItems, $countInserts, 0, null, false, 'S:D:003', 'Selected entries have been successfully inserted into database.', $timeStamp, time());
+			return new ModelResponse($insertedItems, $countInserts, 0, null, false, 'S:D:003', 'Selected entries have been successfully inserted into database.', $timeStamp, microtime(true));
 		}
-		return new ModelResponse(null, 0, 0, null, true, 'E:D:003', 'One or more entities cannot be inserted into database.', $timeStamp, time());
+		return new ModelResponse(null, 0, 0, null, true, 'E:D:003', 'One or more entities cannot be inserted into database.', $timeStamp, microtime(true));
 	}
 
 	/**
@@ -1228,12 +1228,12 @@ class ContentManagementModel extends CoreModel{
 	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function insertNavigationItemLocalizations(array $collection) {
-		$timeStamp = time();
+		$timeStamp = microtime(true);
 		if (!is_array($collection)) {
 			return $this->createException('InvalidParameterValueException', 'Invalid parameter value. Parameter must be an array collection', 'E:S:001');
 		}
 		$countInserts = 0;
-		$insertedItems = array();
+		$insertedItems = [];
 		foreach($collection as $data){
 			if($data instanceof BundleEntity\NavigationItemLocalization){
 				$entity = $data;
@@ -1272,9 +1272,9 @@ class ContentManagementModel extends CoreModel{
 		}
 		if($countInserts > 0){
 			$this->em->flush();
-			return new ModelResponse($insertedItems, $countInserts, 0, null, false, 'S:D:003', 'Selected entries have been successfully inserted into database.', $timeStamp, time());
+			return new ModelResponse($insertedItems, $countInserts, 0, null, false, 'S:D:003', 'Selected entries have been successfully inserted into database.', $timeStamp, microtime(true));
 		}
-		return new ModelResponse(null, 0, 0, null, true, 'E:D:003', 'One or more entities cannot be inserted into database.', $timeStamp, time());
+		return new ModelResponse(null, 0, 0, null, true, 'E:D:003', 'One or more entities cannot be inserted into database.', $timeStamp, microtime(true));
 	}
 
 	/**
@@ -1283,15 +1283,15 @@ class ContentManagementModel extends CoreModel{
 	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function insertNavigationItems(array $collection)	{
-		$timeStamp = time();
+		$timeStamp = microtime(true);
 		/** Parameter must be an array */
 		if (!is_array($collection)) {
 			return $this->createException('InvalidParameterValueException', 'Invalid parameter value. Parameter must be an array collection', 'E:S:001');
 		}
 		$countInserts = 0;
 		$countLocalizations = 0;
-		$insertedItems = array();
-		$localizations = array();
+		$insertedItems = [];
+		$localizations = [];
 		foreach ($collection as $data) {
 			if ($data instanceof BundleEntity\NavigationItem) {
 				$entity = $data;
@@ -1364,9 +1364,9 @@ class ContentManagementModel extends CoreModel{
 		}
 		if($countInserts > 0){
 			$this->em->flush();
-			return new ModelResponse($insertedItems, $countInserts, 0, null, false, 'S:D:003', 'Selected entries have been successfully inserted into database.', $timeStamp, time());
+			return new ModelResponse($insertedItems, $countInserts, 0, null, false, 'S:D:003', 'Selected entries have been successfully inserted into database.', $timeStamp, microtime(true));
 		}
-		return new ModelResponse(null, 0, 0, null, true, 'E:D:003', 'One or more entities cannot be inserted into database.', $timeStamp, time());
+		return new ModelResponse(null, 0, 0, null, true, 'E:D:003', 'One or more entities cannot be inserted into database.', $timeStamp, microtime(true));
 	}
 
 	/**
@@ -1384,12 +1384,12 @@ class ContentManagementModel extends CoreModel{
 	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function insertPageLocalizations(array $collection) {
-		$timeStamp = time();
+		$timeStamp = microtime(true);
 		if (!is_array($collection)) {
 			return $this->createException('InvalidParameterValueException', 'Invalid parameter value. Parameter must be an array collection', 'E:S:001');
 		}
 		$countInserts = 0;
-		$insertedItems = array();
+		$insertedItems = [];
 		foreach($collection as $data){
 			if($data instanceof BundleEntity\PageLocalization){
 				$entity = $data;
@@ -1428,9 +1428,9 @@ class ContentManagementModel extends CoreModel{
 		}
 		if($countInserts > 0){
 			$this->em->flush();
-			return new ModelResponse($insertedItems, $countInserts, 0, null, false, 'S:D:003', 'Selected entries have been successfully inserted into database.', $timeStamp, time());
+			return new ModelResponse($insertedItems, $countInserts, 0, null, false, 'S:D:003', 'Selected entries have been successfully inserted into database.', $timeStamp, microtime(true));
 		}
-		return new ModelResponse(null, 0, 0, null, true, 'E:D:003', 'One or more entities cannot be inserted into database.', $timeStamp, time());
+		return new ModelResponse(null, 0, 0, null, true, 'E:D:003', 'One or more entities cannot be inserted into database.', $timeStamp, microtime(true));
 	}
 
 	/**
@@ -1448,13 +1448,13 @@ class ContentManagementModel extends CoreModel{
 	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function insertPageRevisions(array $collection) {
-		$timeStamp = time();
+		$timeStamp = microtime(true);
 		/** Parameter must be an array */
 		if (!is_array($collection)) {
 			return $this->createException('InvalidParameterValueException', 'Invalid parameter value. Parameter must be an array collection', 'E:S:001');
 		}
 		$countInserts = 0;
-		$insertedItems = array();
+		$insertedItems = [];
 		foreach ($collection as $data) {
 			if ($data instanceof BundleEntity\PageRevision) {
 				$entity = $data;
@@ -1497,9 +1497,9 @@ class ContentManagementModel extends CoreModel{
 		}
 		if($countInserts > 0){
 			$this->em->flush();
-			return new ModelResponse($insertedItems, $countInserts, 0, null, false, 'S:D:003', 'Selected entries have been successfully inserted into database.', $timeStamp, time());
+			return new ModelResponse($insertedItems, $countInserts, 0, null, false, 'S:D:003', 'Selected entries have been successfully inserted into database.', $timeStamp, microtime(true));
 		}
-		return new ModelResponse(null, 0, 0, null, true, 'E:D:003', 'One or more entities cannot be inserted into database.', $timeStamp, time());
+		return new ModelResponse(null, 0, 0, null, true, 'E:D:003', 'One or more entities cannot be inserted into database.', $timeStamp, microtime(true));
 	}
 
 	/**
@@ -1508,15 +1508,15 @@ class ContentManagementModel extends CoreModel{
 	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function insertPages(array $collection)	{
-		$timeStamp = time();
+		$timeStamp = microtime(true);
 		/** Parameter must be an array */
 		if (!is_array($collection)) {
 			return $this->createException('InvalidParameterValueException', 'Invalid parameter value. Parameter must be an array collection', 'E:S:001');
 		}
 		$countInserts = 0;
 		$countLocalizations = 0;
-		$insertedItems = array();
-		$localizations = array();
+		$insertedItems = [];
+		$localizations = [];
 		foreach ($collection as $data) {
 			if ($data instanceof BundleEntity\Page) {
 				$entity = $data;
@@ -1580,9 +1580,9 @@ class ContentManagementModel extends CoreModel{
 		}
 		if($countInserts > 0){
 			$this->em->flush();
-			return new ModelResponse($insertedItems, $countInserts, 0, null, false, 'S:D:003', 'Selected entries have been successfully inserted into database.', $timeStamp, time());
+			return new ModelResponse($insertedItems, $countInserts, 0, null, false, 'S:D:003', 'Selected entries have been successfully inserted into database.', $timeStamp, microtime(true));
 		}
-		return new ModelResponse(null, 0, 0, null, true, 'E:D:003', 'One or more entities cannot be inserted into database.', $timeStamp, time());
+		return new ModelResponse(null, 0, 0, null, true, 'E:D:003', 'One or more entities cannot be inserted into database.', $timeStamp, microtime(true));
 	}
 
 	/**
@@ -1592,8 +1592,8 @@ class ContentManagementModel extends CoreModel{
 	 *
 	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse|bool
 	 */
-    public function isFileAssociatedWithPage($file, $page, \bool $bypass = false){
-        $timeStamp = time();
+    public function isFileAssociatedWithPage($file, $page, bool $bypass = false){
+        $timeStamp = microtime(true);
         $fModel = new FileService\FileManagementModel($this->kernel, $this->dbConnection, $this->orm);
 
 		$response = $fModel->getFile($file);
@@ -1627,7 +1627,7 @@ class ContentManagementModel extends CoreModel{
             return $found;
         }
 
-		return new ModelResponse($found, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+		return new ModelResponse($found, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, microtime(true));
     }
 
 	/**
@@ -1639,7 +1639,7 @@ class ContentManagementModel extends CoreModel{
 	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
     public function listFilesOfPage($page, array $filter = null, array $sortOrder = null, array $limit = null){
-        $timeStamp = time();
+        $timeStamp = microtime(true);
 		if(!is_array($sortOrder) && !is_null($sortOrder)){
 			return $this->createException('InvalidSortOrderException', '$sortOrder must be an array with key => value pairs where value can only be "asc" or "desc".', 'E:S:002');
 		}
@@ -1689,9 +1689,9 @@ class ContentManagementModel extends CoreModel{
 
 		$totalRows = count($result);
 		if ($totalRows < 1) {
-			return new ModelResponse(null, 0, 0, null, true, 'E:D:002', 'No entries found in database that matches to your criterion.', $timeStamp, time());
+			return new ModelResponse(null, 0, 0, null, true, 'E:D:002', 'No entries found in database that matches to your criterion.', $timeStamp, microtime(true));
 		}
-		return new ModelResponse($result, $totalRows, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+		return new ModelResponse($result, $totalRows, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, microtime(true));
 	}
 
 	/**
@@ -1714,7 +1714,7 @@ class ContentManagementModel extends CoreModel{
 	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function listLayouts(array $filter = null, array $sortOrder = null, array $limit = null){
-		$timeStamp = time();
+		$timeStamp = microtime(true);
 		if(!is_array($sortOrder) && !is_null($sortOrder)){
 			return $this->createException('InvalidSortOrderException', '$sortOrder must be an array with key => value pairs where value can only be "asc" or "desc".', 'E:S:002');
 		}
@@ -1756,7 +1756,7 @@ class ContentManagementModel extends CoreModel{
 
 		$result = $q->getResult();
 
-		$entities = array();
+		$entities = [];
 		foreach($result as $entry){
 			$id = $entry->getLayout()->getId();
 			if(!isset($unique[$id])){
@@ -1766,9 +1766,9 @@ class ContentManagementModel extends CoreModel{
 		}
 		$totalRows = count($entities);
 		if ($totalRows < 1) {
-			return new ModelResponse(null, 0, 0, null, true, 'E:D:002', 'No entries found in database that matches to your criterion.', $timeStamp, time());
+			return new ModelResponse(null, 0, 0, null, true, 'E:D:002', 'No entries found in database that matches to your criterion.', $timeStamp, microtime(true));
 		}
-		return new ModelResponse($entities, $totalRows, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+		return new ModelResponse($entities, $totalRows, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, microtime(true));
 	}
 
 	/**
@@ -1780,7 +1780,7 @@ class ContentManagementModel extends CoreModel{
 	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
     public function listLayoutsOfSite($site, array $filter = null, array $sortOrder = null, array $limit = null)    {
-        $timeStamp = time();
+        $timeStamp = microtime(true);
 		$sModel = $this->kernel->getContainer()->get('sitemanagement.model');
         $response = $sModel->getSite($site);
 		if($response->error->exist){
@@ -1798,7 +1798,7 @@ class ContentManagementModel extends CoreModel{
 		);
         $response = $this->listLayouts($filter, $sortOrder, $limit);
  		$response->stats->execution->start = $timeStamp;
- 		$response->stats->execution->end = time();
+ 		$response->stats->execution->end = microtime(true);
 
 		return $response;
     }
@@ -1812,7 +1812,7 @@ class ContentManagementModel extends CoreModel{
 	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function listLayoutsOfTheme($theme, array $filter = null, array $sortOrder = null, array $limit = null)    {
-		$timeStamp = time();
+		$timeStamp = microtime(true);
 		$response = $this->getTheme($theme);
 		if($response->error->exist){
 			return $response;
@@ -1829,7 +1829,7 @@ class ContentManagementModel extends CoreModel{
 		);
 		$response = $this->listLayouts($filter, $sortOrder, $limit);
 		$response->stats->execution->start = $timeStamp;
-		$response->stats->execution->end = time();
+		$response->stats->execution->end = microtime(true);
 
 		return $response;
 	}
@@ -1842,7 +1842,7 @@ class ContentManagementModel extends CoreModel{
 	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function listLocalizationsOfPage($page, array $sortOrder = null, array $limit = null){
-		$timeStamp = time();
+		$timeStamp = microtime(true);
 		if (!is_array($sortOrder) && !is_null($sortOrder)) {
 			return $this->createException('InvalidSortOrderException', '$sortOrder must be an array with key => value pairs where value can only be "asc" or "desc".', 'E:S:002');
 		}
@@ -1884,9 +1884,9 @@ class ContentManagementModel extends CoreModel{
 
 		$totalRows = count($result);
 		if ($totalRows < 1) {
-			return new ModelResponse(null, 0, 0, null, true, 'E:D:002', 'No entries found in database that matches to your criterion.', $timeStamp, time());
+			return new ModelResponse(null, 0, 0, null, true, 'E:D:002', 'No entries found in database that matches to your criterion.', $timeStamp, microtime(true));
 		}
-		return new ModelResponse($result, $totalRows, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+		return new ModelResponse($result, $totalRows, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, microtime(true));
 	}
 
 	/**
@@ -1897,7 +1897,7 @@ class ContentManagementModel extends CoreModel{
 	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function listModules(array $filter = null, array $sortOrder = null, array $limit = null){
-		$timeStamp = time();
+		$timeStamp = microtime(true);
 		if(!is_array($sortOrder) && !is_null($sortOrder)){
 			return $this->createException('InvalidSortOrderException', '$sortOrder must be an array with key => value pairs where value can only be "asc" or "desc".', 'E:S:002');
 		}
@@ -1939,7 +1939,7 @@ class ContentManagementModel extends CoreModel{
 
 		$result = $q->getResult();
 
-		$entities = array();
+		$entities = [];
 		foreach($result as $entry){
 			$id = $entry->getModule()->getId();
 			if(!isset($unique[$id])){
@@ -1949,9 +1949,9 @@ class ContentManagementModel extends CoreModel{
 		}
 		$totalRows = count($entities);
 		if ($totalRows < 1) {
-			return new ModelResponse(null, 0, 0, null, true, 'E:D:002', 'No entries found in database that matches to your criterion.', $timeStamp, time());
+			return new ModelResponse(null, 0, 0, null, true, 'E:D:002', 'No entries found in database that matches to your criterion.', $timeStamp, microtime(true));
 		}
-		return new ModelResponse($entities, $totalRows, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+		return new ModelResponse($entities, $totalRows, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, microtime(true));
 	}
 
 	/**
@@ -1962,7 +1962,7 @@ class ContentManagementModel extends CoreModel{
 	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
     public function listModulesOfPageLayouts(array $filter = null, array $sortOrder = null, array $limit = null){
-		$timeStamp = time();
+		$timeStamp = microtime(true);
 		if(!is_array($sortOrder) && !is_null($sortOrder)){
 			return $this->createException('InvalidSortOrderException', '$sortOrder must be an array with key => value pairs where value can only be "asc" or "desc".', 'E:S:002');
 		}
@@ -2004,9 +2004,9 @@ class ContentManagementModel extends CoreModel{
 
 		$totalRows = count($result);
 		if ($totalRows < 1) {
-			return new ModelResponse(null, 0, 0, null, true, 'E:D:002', 'No entries found in database that matches to your criterion.', $timeStamp, time());
+			return new ModelResponse(null, 0, 0, null, true, 'E:D:002', 'No entries found in database that matches to your criterion.', $timeStamp, microtime(true));
 		}
-		return new ModelResponse($result, $totalRows, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+		return new ModelResponse($result, $totalRows, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, microtime(true));
 	}
 
 	/**
@@ -2017,7 +2017,7 @@ class ContentManagementModel extends CoreModel{
 	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
     public function listModulesOfPageLayoutsGroupedBySection($page, array $sortOrder = null, array $limit = null){
-        $timeStamp = time();
+        $timeStamp = microtime(true);
 		$response = $this->getPage($page);
 		if($response->error->exist){
 			return $response;
@@ -2037,7 +2037,7 @@ class ContentManagementModel extends CoreModel{
             return $response;
         }
         $mops = $response->result->set;
-        $modules = array();
+        $modules = [];
         $count = 0;
         foreach ($mops as $mop) {
             $modules[$mop->getSection()][$count]['entity'] = $mop->getModule();
@@ -2046,9 +2046,9 @@ class ContentManagementModel extends CoreModel{
         }
 
 		if ($count < 1) {
-			return new ModelResponse(null, 0, 0, null, true, 'E:D:002', 'No entries found in database that matches to your criterion.', $timeStamp, time());
+			return new ModelResponse(null, 0, 0, null, true, 'E:D:002', 'No entries found in database that matches to your criterion.', $timeStamp, microtime(true));
 		}
-		return new ModelResponse($modules, $count, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+		return new ModelResponse($modules, $count, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, microtime(true));
 	}
 
 	/**
@@ -2060,7 +2060,7 @@ class ContentManagementModel extends CoreModel{
 	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function listModulesOfSite($site, array $filter = null, array $sortOrder = null, array $limit = null)    {
-		$timeStamp = time();
+		$timeStamp = microtime(true);
 		$sModel = $this->kernel->getContainer()->get('sitemanagement.model');
 		$response = $sModel->getSite($site);
 		if($response->error->exist){
@@ -2078,7 +2078,7 @@ class ContentManagementModel extends CoreModel{
 		);
 		$response = $this->listModules($filter, $sortOrder, $limit);
 		$response->stats->execution->start = $timeStamp;
-		$response->stats->execution->end = time();
+		$response->stats->execution->end = microtime(true);
 
 		return $response;
 	}
@@ -2092,7 +2092,7 @@ class ContentManagementModel extends CoreModel{
 	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function listModulesOfTheme($theme, array $filter = null, array $sortOrder = null, array $limit = null)    {
-		$timeStamp = time();
+		$timeStamp = microtime(true);
 		$response = $this->getTheme($theme);
 		if($response->error->exist){
 			return $response;
@@ -2109,7 +2109,7 @@ class ContentManagementModel extends CoreModel{
 		);
 		$response = $this->listModules($filter, $sortOrder, $limit);
 		$response->stats->execution->start = $timeStamp;
-		$response->stats->execution->end = time();
+		$response->stats->execution->end = microtime(true);
 
 		return $response;
 	}
@@ -2122,7 +2122,7 @@ class ContentManagementModel extends CoreModel{
 	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function listNavigationItems(array $filter = null, array $sortOrder = null, array $limit = null){
-		$timeStamp = time();
+		$timeStamp = microtime(true);
 		if(!is_array($sortOrder) && !is_null($sortOrder)){
 			return $this->createException('InvalidSortOrderException', '$sortOrder must be an array with key => value pairs where value can only be "asc" or "desc".', 'E:S:002');
 		}
@@ -2165,7 +2165,7 @@ class ContentManagementModel extends CoreModel{
 
 		$result = $q->getResult();
 
-		$entities = array();
+		$entities = [];
 		foreach($result as $entry){
 			$id = $entry->getNavigationItem()->getId();
 			if(!isset($unique[$id])){
@@ -2175,9 +2175,9 @@ class ContentManagementModel extends CoreModel{
 		}
 		$totalRows = count($entities);
 		if ($totalRows < 1) {
-			return new ModelResponse(null, 0, 0, null, true, 'E:D:002', 'No entries found in database that matches to your criterion.', $timeStamp, time());
+			return new ModelResponse(null, 0, 0, null, true, 'E:D:002', 'No entries found in database that matches to your criterion.', $timeStamp, microtime(true));
 		}
-		return new ModelResponse($entities, $totalRows, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+		return new ModelResponse($entities, $totalRows, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, microtime(true));
 	}
 
 	/**
@@ -2188,8 +2188,8 @@ class ContentManagementModel extends CoreModel{
 	 *
 	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
-    public function listNavigationItemsOfNavigation($navigation, \string $level = 'top', array $sortOrder = null, array $limit = null){
-        $timeStamp = time();
+    public function listNavigationItemsOfNavigation($navigation, string $level = 'top', array $sortOrder = null, array $limit = null){
+        $timeStamp = microtime(true);
 		$response = $this->getNavigation($navigation);
 		if($response->error->exist){
 			return $response;
@@ -2224,7 +2224,7 @@ class ContentManagementModel extends CoreModel{
         );
         $response =  $this->listNavigationItems($filter, $sortOrder, $limit);
 		$response->stats->execution->start = $timeStamp;
-		$response->stats->execution->end = time();
+		$response->stats->execution->end = microtime(true);
 
 		return $response;
     }
@@ -2237,7 +2237,7 @@ class ContentManagementModel extends CoreModel{
 	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
     public function listNavigationItemsOfParent($parent, array $sortOrder = null, array $limit = null){
-        $timeStamp = time();
+        $timeStamp = microtime(true);
 		$response = $this->getNavigationItem($parent);
 		if($response->error->exist){
 			return $response;
@@ -2254,7 +2254,7 @@ class ContentManagementModel extends CoreModel{
         );
         $response = $this->listNavigationItems($filter, $sortOrder, $limit);
 		$response->stats->execution->start = $timeStamp;
-		$response->stats->execution->end = time();
+		$response->stats->execution->end = microtime(true);
 
 		return $response;
     }
@@ -2267,7 +2267,7 @@ class ContentManagementModel extends CoreModel{
 	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function listNavigations(array $filter = null, array $sortOrder = null, array $limit = null){
-		$timeStamp = time();
+		$timeStamp = microtime(true);
 		if(!is_array($sortOrder) && !is_null($sortOrder)){
 			return $this->createException('InvalidSortOrderException', '$sortOrder must be an array with key => value pairs where value can only be "asc" or "desc".', 'E:S:002');
 		}
@@ -2310,7 +2310,7 @@ class ContentManagementModel extends CoreModel{
 
 		$result = $q->getResult();
 
-		$entities = array();
+		$entities = [];
 		foreach($result as $entry){
 			$id = $entry->getNavigation()->getId();
 			if(!isset($unique[$id])){
@@ -2320,9 +2320,9 @@ class ContentManagementModel extends CoreModel{
 		}
 		$totalRows = count($entities);
 		if ($totalRows < 1) {
-			return new ModelResponse(null, 0, 0, null, true, 'E:D:002', 'No entries found in database that matches to your criterion.', $timeStamp, time());
+			return new ModelResponse(null, 0, 0, null, true, 'E:D:002', 'No entries found in database that matches to your criterion.', $timeStamp, microtime(true));
 		}
-		return new ModelResponse($entities, $totalRows, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+		return new ModelResponse($entities, $totalRows, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, microtime(true));
 	}
 
 	/**
@@ -2333,7 +2333,7 @@ class ContentManagementModel extends CoreModel{
 	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function listPageRevisions(array $filter = null, array $sortOrder = null, array $limit = null){
-		$timeStamp = time();
+		$timeStamp = microtime(true);
 		if(!is_array($sortOrder) && !is_null($sortOrder)){
 			return $this->createException('InvalidSortOrderException', '$sortOrder must be an array with key => value pairs where value can only be "asc" or "desc".', 'E:S:002');
 		}
@@ -2375,9 +2375,9 @@ class ContentManagementModel extends CoreModel{
 
 		$totalRows = count($result);
 		if ($totalRows < 1) {
-			return new ModelResponse(null, 0, 0, null, true, 'E:D:002', 'No entries found in database that matches to your criterion.', $timeStamp, time());
+			return new ModelResponse(null, 0, 0, null, true, 'E:D:002', 'No entries found in database that matches to your criterion.', $timeStamp, microtime(true));
 		}
-		return new ModelResponse($result, $totalRows, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+		return new ModelResponse($result, $totalRows, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, microtime(true));
 	}
 
 	/**
@@ -2388,7 +2388,7 @@ class ContentManagementModel extends CoreModel{
 	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function listPages(array $filter = null, array $sortOrder = null, array $limit = null){
-		$timeStamp = time();
+		$timeStamp = microtime(true);
 		if(!is_array($sortOrder) && !is_null($sortOrder)){
 			return $this->createException('InvalidSortOrderException', '$sortOrder must be an array with key => value pairs where value can only be "asc" or "desc".', 'E:S:002');
 		}
@@ -2429,7 +2429,7 @@ class ContentManagementModel extends CoreModel{
 
 		$result = $q->getResult();
 
-		$entities = array();
+		$entities = [];
 		foreach($result as $entry){
 			$id = $entry->getPage()->getId();
 			if(!isset($unique[$id])){
@@ -2439,9 +2439,9 @@ class ContentManagementModel extends CoreModel{
 		}
 		$totalRows = count($entities);
 		if ($totalRows < 1) {
-			return new ModelResponse(null, 0, 0, null, true, 'E:D:002', 'No entries found in database that matches to your criterion.', $timeStamp, time());
+			return new ModelResponse(null, 0, 0, null, true, 'E:D:002', 'No entries found in database that matches to your criterion.', $timeStamp, microtime(true));
 		}
-		return new ModelResponse($entities, $totalRows, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+		return new ModelResponse($entities, $totalRows, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, microtime(true));
 	}
 
 	/**
@@ -2452,7 +2452,7 @@ class ContentManagementModel extends CoreModel{
 	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
     public function listPagesOfLayout($layout, array $sortOrder, array $limit) {
-        $timeStamp = time();
+        $timeStamp = microtime(true);
         $response = $this->getLayout($layout);
 		if($response->error->exist){
 			return $response;
@@ -2471,7 +2471,7 @@ class ContentManagementModel extends CoreModel{
 
         $response = $this->listPages($filter, $sortOrder, $limit);
 		$response->stats->execution->start = $timeStamp;
-		$response->stats->execution->end = time();
+		$response->stats->execution->end = microtime(true);
 
 		return $response;
     }
@@ -2484,7 +2484,7 @@ class ContentManagementModel extends CoreModel{
 	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
     public function listPagesOfSite($site = 1, array $sortOrder, array $limit){
-		$timeStamp = time();
+		$timeStamp = microtime(true);
 		$sModel = $this->kernel->getContainer()->get('sitemanagement.model');
 		$response = $sModel->getSite($site);
 		if($response->error->exist){
@@ -2504,7 +2504,7 @@ class ContentManagementModel extends CoreModel{
 
 		$response = $this->listPages($filter, $sortOrder, $limit);
 		$response->stats->execution->start = $timeStamp;
-		$response->stats->execution->end = time();
+		$response->stats->execution->end = microtime(true);
 
 		return $response;
     }
@@ -2517,7 +2517,7 @@ class ContentManagementModel extends CoreModel{
 	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function listThemes(array $filter = null, array $sortOrder = null, array $limit = null){
-		$timeStamp = time();
+		$timeStamp = microtime(true);
 		if(!is_array($sortOrder) && !is_null($sortOrder)){
 			return $this->createException('InvalidSortOrderException', '$sortOrder must be an array with key => value pairs where value can only be "asc" or "desc".', 'E:S:002');
 		}
@@ -2562,7 +2562,7 @@ class ContentManagementModel extends CoreModel{
 
 		$result = $q->getResult();
 
-		$entities = array();
+		$entities = [];
 		foreach($result as $entry){
 			$id = $entry->getTheme()->getId();
 			if(!isset($unique[$id])){
@@ -2572,9 +2572,9 @@ class ContentManagementModel extends CoreModel{
 		}
 		$totalRows = count($entities);
 		if ($totalRows < 1) {
-			return new ModelResponse(null, 0, 0, null, true, 'E:D:002', 'No entries found in database that matches to your criterion.', $timeStamp, time());
+			return new ModelResponse(null, 0, 0, null, true, 'E:D:002', 'No entries found in database that matches to your criterion.', $timeStamp, microtime(true));
 		}
-		return new ModelResponse($entities, $totalRows, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+		return new ModelResponse($entities, $totalRows, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, microtime(true));
 	}
 
 	/**
@@ -2585,7 +2585,7 @@ class ContentManagementModel extends CoreModel{
 	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function listThemesOfSite($site = 1, array $sortOrder, array $limit){
-		$timeStamp = time();
+		$timeStamp = microtime(true);
 		$sModel = $this->kernel->getContainer()->get('sitemanagement.model');
 		$response = $sModel->getSite($site);
 		if($response->error->exist){
@@ -2605,7 +2605,7 @@ class ContentManagementModel extends CoreModel{
 
 		$response = $this->listThemes($filter, $sortOrder, $limit);
 		$response->stats->execution->start = $timeStamp;
-		$response->stats->execution->end = time();
+		$response->stats->execution->end = microtime(true);
 
 		return $response;
 	}
@@ -2616,12 +2616,12 @@ class ContentManagementModel extends CoreModel{
 	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function markPagesAsDeleted(array $collection){
-		$timeStamp = time();
+		$timeStamp = microtime(true);
 		if (!is_array($collection)) {
 			return $this->createException('InvalidParameterValueException', 'Invalid parameter value. Parameter must be an array collection', 'E:S:001');
 		}
 		$now = new \DateTime('now', new \DateTimeZone($this->kernel->getContainer()->getParameter('app_timezone')));
-		$toUpdate = array();
+		$toUpdate = [];
 		foreach ($collection as $page) {
 			if(!$page instanceof BundleEntity\Page){
 				$response = $this->getPage($page);
@@ -2636,7 +2636,7 @@ class ContentManagementModel extends CoreModel{
 		}
 		$response = $this->updatePages($toUpdate);
 		$response->stats->execution->start = $timeStamp;
-		$response->stats->execution->end = time();
+		$response->stats->execution->end = microtime(true);
 
 		return $response;
 	}
@@ -2656,13 +2656,13 @@ class ContentManagementModel extends CoreModel{
 	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function updateLayouts(array $collection){
-		$timeStamp = time();
+		$timeStamp = microtime(true);
 		/** Parameter must be an array */
 		if (!is_array($collection)) {
 			return $this->createException('InvalidParameter', 'Array', 'err.invalid.parameter.collection');
 		}
 		$countUpdates = 0;
-		$updatedItems = array();
+		$updatedItems = [];
 		foreach ($collection as $data) {
 			if ($data instanceof BundleEntity\Layout) {
 				$entity = $data;
@@ -2689,7 +2689,7 @@ class ContentManagementModel extends CoreModel{
 					$set = 'set' . $this->translateColumnName($column);
 					switch ($column) {
 						case 'local':
-							$localizations = array();
+							$localizations = [];
 							foreach ($value as $langCode => $translation) {
 								$localization = $oldEntity->getLocalization($langCode, true);
 								$newLocalization = false;
@@ -2748,9 +2748,9 @@ class ContentManagementModel extends CoreModel{
 		}
 		if($countUpdates > 0){
 			$this->em->flush();
-			return new ModelResponse($updatedItems, $countUpdates, 0, null, false, 'S:D:004', 'Selected entries have been successfully updated within database.', $timeStamp, time());
+			return new ModelResponse($updatedItems, $countUpdates, 0, null, false, 'S:D:004', 'Selected entries have been successfully updated within database.', $timeStamp, microtime(true));
 		}
-		return new ModelResponse(null, 0, 0, null, true, 'E:D:004', 'One or more entities cannot be updated within database.', $timeStamp, time());
+		return new ModelResponse(null, 0, 0, null, true, 'E:D:004', 'One or more entities cannot be updated within database.', $timeStamp, microtime(true));
 	}
 
 	/**
@@ -2768,13 +2768,13 @@ class ContentManagementModel extends CoreModel{
 	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function updateModules(array $collection){
-		$timeStamp = time();
+		$timeStamp = microtime(true);
 		/** Parameter must be an array */
 		if (!is_array($collection)) {
 			return $this->createException('InvalidParameterValueException', 'Invalid parameter value. Parameter must be an array collection', 'E:S:001');
 		}
 		$countUpdates = 0;
-		$updatedItems = array();
+		$updatedItems = [];
 		foreach ($collection as $data) {
 			if ($data instanceof BundleEntity\Module) {
 				$entity = $data;
@@ -2801,7 +2801,7 @@ class ContentManagementModel extends CoreModel{
 					$set = 'set' . $this->translateColumnName($column);
 					switch ($column) {
 						case 'local':
-							$localizations = array();
+							$localizations = [];
 							foreach ($value as $langCode => $translation) {
 								$localization = $oldEntity->getLocalization($langCode, true);
 								$newLocalization = false;
@@ -2861,9 +2861,9 @@ class ContentManagementModel extends CoreModel{
 		}
 		if($countUpdates > 0){
 			$this->em->flush();
-			return new ModelResponse($updatedItems, $countUpdates, 0, null, false, 'S:D:004', 'Selected entries have been successfully updated within database.', $timeStamp, time());
+			return new ModelResponse($updatedItems, $countUpdates, 0, null, false, 'S:D:004', 'Selected entries have been successfully updated within database.', $timeStamp, microtime(true));
 		}
-		return new ModelResponse(null, 0, 0, null, true, 'E:D:004', 'One or more entities cannot be updated within database.', $timeStamp, time());
+		return new ModelResponse(null, 0, 0, null, true, 'E:D:004', 'One or more entities cannot be updated within database.', $timeStamp, microtime(true));
 	}
 
 	/**
@@ -2881,12 +2881,12 @@ class ContentManagementModel extends CoreModel{
 	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function updateModuleLayoutEntries(array $collection){
-		$timeStamp = time();
+		$timeStamp = microtime(true);
 		if (!is_array($collection)) {
 			return $this->createException('InvalidParameterValueException', 'Invalid parameter value. Parameter must be an array collection', 'E:S:001');
 		}
 		$countUpdates = 0;
-		$updatedItems = array();
+		$updatedItems = [];
 		foreach ($collection as $data) {
 			if ($data instanceof BundleEntity\ModulesOfLayout) {
 				$entity = $data;
@@ -2955,9 +2955,9 @@ class ContentManagementModel extends CoreModel{
 		}
 		if($countUpdates > 0){
 			$this->em->flush();
-			return new ModelResponse($updatedItems, $countUpdates, 0, null, false, 'S:D:004', 'Selected entries have been successfully updated within database.', $timeStamp, time());
+			return new ModelResponse($updatedItems, $countUpdates, 0, null, false, 'S:D:004', 'Selected entries have been successfully updated within database.', $timeStamp, microtime(true));
 		}
-		return new ModelResponse(null, 0, 0, null, true, 'E:D:004', 'One or more entities cannot be updated within database.', $timeStamp, time());
+		return new ModelResponse(null, 0, 0, null, true, 'E:D:004', 'One or more entities cannot be updated within database.', $timeStamp, microtime(true));
 	}
 
 	/**
@@ -2975,12 +2975,12 @@ class ContentManagementModel extends CoreModel{
 	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function updateNavigations(array $collection){
-		$timeStamp = time();
+		$timeStamp = microtime(true);
 		if (!is_array($collection)) {
 			return $this->createException('InvalidParameterValueException', 'Invalid parameter value. Parameter must be an array collection', 'E:S:001');
 		}
 		$countUpdates = 0;
-		$updatedItems = array();
+		$updatedItems = [];
 		foreach ($collection as $data) {
 			if ($data instanceof BundleEntity\Navigation) {
 				$entity = $data;
@@ -3007,7 +3007,7 @@ class ContentManagementModel extends CoreModel{
 					$set = 'set' . $this->translateColumnName($column);
 					switch ($column) {
 						case 'local':
-							$localizations = array();
+							$localizations = [];
 							foreach ($value as $langCode => $translation) {
 								$localization = $oldEntity->getLocalization($langCode, true);
 								$newLocalization = false;
@@ -3057,9 +3057,9 @@ class ContentManagementModel extends CoreModel{
 		}
 		if($countUpdates > 0){
 			$this->em->flush();
-			return new ModelResponse($updatedItems, $countUpdates, 0, null, false, 'S:D:004', 'Selected entries have been successfully updated within database.', $timeStamp, time());
+			return new ModelResponse($updatedItems, $countUpdates, 0, null, false, 'S:D:004', 'Selected entries have been successfully updated within database.', $timeStamp, microtime(true));
 		}
-		return new ModelResponse(null, 0, 0, null, true, 'E:D:004', 'One or more entities cannot be updated within database.', $timeStamp, time());
+		return new ModelResponse(null, 0, 0, null, true, 'E:D:004', 'One or more entities cannot be updated within database.', $timeStamp, microtime(true));
 	}
 
 	/**
@@ -3077,13 +3077,13 @@ class ContentManagementModel extends CoreModel{
 	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function updateNavigationItems(array $collection){
-		$timeStamp = time();
+		$timeStamp = microtime(true);
 		/** Parameter must be an array */
 		if (!is_array($collection)) {
 			return $this->createException('InvalidParameterValueException', 'Invalid parameter value. Parameter must be an array collection', 'E:S:001');
 		}
 		$countUpdates = 0;
-		$updatedItems = array();
+		$updatedItems = [];
 		foreach ($collection as $data) {
 			if ($data instanceof BundleEntity\NavigationItem) {
 				$entity = $data;
@@ -3104,7 +3104,7 @@ class ContentManagementModel extends CoreModel{
 					$set = 'set' . $this->translateColumnName($column);
 					switch ($column) {
 						case 'local':
-							$localizations = array();
+							$localizations = [];
 							foreach ($value as $langCode => $translation) {
 								$localization = $oldEntity->getLocalization($langCode, true);
 								$newLocalization = false;
@@ -3172,9 +3172,9 @@ class ContentManagementModel extends CoreModel{
 		}
 		if($countUpdates > 0){
 			$this->em->flush();
-			return new ModelResponse($updatedItems, $countUpdates, 0, null, false, 'S:D:004', 'Selected entries have been successfully updated within database.', $timeStamp, time());
+			return new ModelResponse($updatedItems, $countUpdates, 0, null, false, 'S:D:004', 'Selected entries have been successfully updated within database.', $timeStamp, microtime(true));
 		}
-		return new ModelResponse(null, 0, 0, null, true, 'E:D:004', 'One or more entities cannot be updated within database.', $timeStamp, time());
+		return new ModelResponse(null, 0, 0, null, true, 'E:D:004', 'One or more entities cannot be updated within database.', $timeStamp, microtime(true));
 	}
 
 	/**
@@ -3192,13 +3192,13 @@ class ContentManagementModel extends CoreModel{
 	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function updatePageLocalizations(array $collection) {
-		$timeStamp = time();
+		$timeStamp = microtime(true);
 		/** Parameter must be an array */
 		if (!is_array($collection)) {
 			return $this->createException('InvalidParameterValueException', 'Invalid parameter value. Parameter must be an array collection', 'E:S:001');
 		}
 		$countUpdates = 0;
-		$updatedItems = array();
+		$updatedItems = [];
 		foreach ($collection as $data) {
 			if ($data instanceof BundleEntity\PageLocalization) {
 				$entity = $data;
@@ -3209,9 +3209,9 @@ class ContentManagementModel extends CoreModel{
 		}
 		if($countUpdates > 0){
 			$this->em->flush();
-			return new ModelResponse($updatedItems, $countUpdates, 0, null, false, 'S:D:004', 'Selected entries have been successfully updated within database.', $timeStamp, time());
+			return new ModelResponse($updatedItems, $countUpdates, 0, null, false, 'S:D:004', 'Selected entries have been successfully updated within database.', $timeStamp, microtime(true));
 		}
-		return new ModelResponse(null, 0, 0, null, true, 'E:D:004', 'One or more entities cannot be updated within database.', $timeStamp, time());
+		return new ModelResponse(null, 0, 0, null, true, 'E:D:004', 'One or more entities cannot be updated within database.', $timeStamp, microtime(true));
 	}
 
 	/**
@@ -3229,13 +3229,13 @@ class ContentManagementModel extends CoreModel{
 	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
 	public function updatePageRevisions(array $collection) {
-		$timeStamp = time();
+		$timeStamp = microtime(true);
 		/** Parameter must be an array */
 		if (!is_array($collection)) {
 			return $this->createException('InvalidParameterValueException', 'Invalid parameter value. Parameter must be an array collection', 'E:S:001');
 		}
 		$countUpdates = 0;
-		$updatedItems = array();
+		$updatedItems = [];
 		foreach ($collection as $data) {
 			if ($data instanceof BundleEntity\PageRevision) {
 				$entity = $data;
@@ -3294,9 +3294,9 @@ class ContentManagementModel extends CoreModel{
 		}
 		if($countUpdates > 0){
 			$this->em->flush();
-			return new ModelResponse($updatedItems, $countUpdates, 0, null, false, 'S:D:004', 'Selected entries have been successfully updated within database.', $timeStamp, time());
+			return new ModelResponse($updatedItems, $countUpdates, 0, null, false, 'S:D:004', 'Selected entries have been successfully updated within database.', $timeStamp, microtime(true));
 		}
-		return new ModelResponse(null, 0, 0, null, true, 'E:D:004', 'One or more entities cannot be updated within database.', $timeStamp, time());
+		return new ModelResponse(null, 0, 0, null, true, 'E:D:004', 'One or more entities cannot be updated within database.', $timeStamp, microtime(true));
 	}
 
 	/**
@@ -3305,12 +3305,12 @@ class ContentManagementModel extends CoreModel{
 	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
     public function updatePages(array $collection){
-		$timeStamp = time();
+		$timeStamp = microtime(true);
 		if (!is_array($collection)) {
 			return $this->createException('InvalidParameterValueException', 'Invalid parameter value. Parameter must be an array collection', 'E:S:001');
 		}
         $countUpdates = 0;
-        $updatedItems = array();
+        $updatedItems = [];
         foreach ($collection as $data) {
             if ($data instanceof BundleEntity\Page) {
                 $entity = $data;
@@ -3336,7 +3336,7 @@ class ContentManagementModel extends CoreModel{
                     $set = 'set' . $this->translateColumnName($column);
                     switch ($column) {
                         case 'local':
-                            $localizations = array();
+                            $localizations = [];
                             foreach ($value as $langCode => $translation) {
                                 $localization = $oldEntity->getLocalization($langCode, true);
                                 $newLocalization = false;
@@ -3385,9 +3385,9 @@ class ContentManagementModel extends CoreModel{
         }
 		if($countUpdates > 0){
 			$this->em->flush();
-			return new ModelResponse($updatedItems, $countUpdates, 0, null, false, 'S:D:004', 'Selected entries have been successfully updated within database.', $timeStamp, time());
+			return new ModelResponse($updatedItems, $countUpdates, 0, null, false, 'S:D:004', 'Selected entries have been successfully updated within database.', $timeStamp, microtime(true));
 		}
-		return new ModelResponse(null, 0, 0, null, true, 'E:D:004', 'One or more entities cannot be updated within database.', $timeStamp, time());
+		return new ModelResponse(null, 0, 0, null, true, 'E:D:004', 'One or more entities cannot be updated within database.', $timeStamp, microtime(true));
 	}
 
 	/**
@@ -3405,12 +3405,12 @@ class ContentManagementModel extends CoreModel{
 	 * @return \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
 	 */
     public function updateThemes(array $collection){
-        $timeStamp = time();
+        $timeStamp = microtime(true);
 		if (!is_array($collection)) {
 			return $this->createException('InvalidParameterValueException', 'Invalid parameter value. Parameter must be an array collection', 'E:S:001');
 		}
         $countUpdates = 0;
-        $updatedItems = array();
+        $updatedItems = [];
         foreach ($collection as $data) {
             if ($data instanceof BundleEntity\Theme) {
                 $entity = $data;
@@ -3446,7 +3446,7 @@ class ContentManagementModel extends CoreModel{
                     $set = 'set' . $this->translateColumnName($column);
                     switch ($column) {
                         case 'local':
-                            $localizations = array();
+                            $localizations = [];
                             foreach ($value as $langCode => $translation) {
                                 $localization = $oldEntity->getLocalization($langCode, true);
                                 $newLocalization = false;
@@ -3495,8 +3495,8 @@ class ContentManagementModel extends CoreModel{
         }
 		if($countUpdates > 0){
 			$this->em->flush();
-			return new ModelResponse($updatedItems, $countUpdates, 0, null, false, 'S:D:004', 'Selected entries have been successfully updated within database.', $timeStamp, time());
+			return new ModelResponse($updatedItems, $countUpdates, 0, null, false, 'S:D:004', 'Selected entries have been successfully updated within database.', $timeStamp, microtime(true));
 		}
-		return new ModelResponse(null, 0, 0, null, true, 'E:D:004', 'One or more entities cannot be updated within database.', $timeStamp, time());
+		return new ModelResponse(null, 0, 0, null, true, 'E:D:004', 'One or more entities cannot be updated within database.', $timeStamp, microtime(true));
 	}
 }

@@ -114,7 +114,7 @@ class NavigationItem extends CoreLocalizableEntity
      *
      * @return $this
      */
-    public function setIsChild(\string $is_child) {
+    public function setIsChild(string $is_child) {
         if($this->setModified('is_child', $is_child)->isModified()) {
             $this->is_child = $is_child;
         }
@@ -216,7 +216,7 @@ class NavigationItem extends CoreLocalizableEntity
      *
      * @return $this
      */
-    public function setSortOrder(\integer $sort_order) {
+    public function setSortOrder(int $sort_order) {
         if($this->setModified('sort_order', $sort_order)->isModified()) {
             $this->sort_order = $sort_order;
         }
@@ -235,7 +235,7 @@ class NavigationItem extends CoreLocalizableEntity
      *
      * @return $this
      */
-    public function setTarget(\string $target) {
+    public function setTarget(string $target) {
         if($this->setModified('target', $target)->isModified()) {
             $this->target = $target;
         }
@@ -254,7 +254,7 @@ class NavigationItem extends CoreLocalizableEntity
      *
      * @return $this
      */
-    public function setUrl(\string $url) {
+    public function setUrl(string $url) {
         if($this->setModified('url', $url)->isModified()) {
             $this->url = $url;
         }
@@ -273,7 +273,7 @@ class NavigationItem extends CoreLocalizableEntity
      *
      * @return $this
      */
-    public function setIcon(\string $icon) {
+    public function setIcon(string $icon) {
         if($this->setModified('icon', $icon)->isModified()) {
             $this->icon = $icon;
         }
