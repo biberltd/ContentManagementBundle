@@ -118,7 +118,7 @@ class Theme extends CoreLocalizableEntity
      *
      * @return $this
      */
-    public function setCountLayouts(\int $count_layouts) {
+    public function setCountLayouts(int $count_layouts) {
         if(!$this->setModified('count_layouts', $count_layouts)->isModified()) {
             return $this;
         }
