@@ -28,9 +28,9 @@ CREATE TABLE `files_of_page` (
   KEY `idxNFilesOfPageDateAdded` (`date_added`) USING BTREE,
   KEY `idxNFilesOfPageDateUpdated` (`date_updated`),
   KEY `idxNFilesOfPageDateRemoved` (`date_removed`),
-  CONSTRAINT `idxFFileOfPage` FOREIGN KEY (`file`) REFERENCES `file` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `idxFLanguageOfFile` FOREIGN KEY (`language`) REFERENCES `language` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `idxFPageOfFile` FOREIGN KEY (`page`) REFERENCES `page` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `idxFFileOfFilesOfPage` FOREIGN KEY (`file`) REFERENCES `file` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `idxFLanguageOfFilesOfPage` FOREIGN KEY (`language`) REFERENCES `language` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `idxFPageOfFilesOfPage` FOREIGN KEY (`page`) REFERENCES `page` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_turkish_ci ROW_FORMAT=COMPACT;
 
 -- ----------------------------
@@ -67,8 +67,8 @@ CREATE TABLE `layout_localization` (
   UNIQUE KEY `idxULayoutUrlKey` (`language`,`layout`,`url_key`) USING BTREE,
   KEY `idxFLocalizedLayout` (`layout`) USING BTREE,
   KEY `idxFLayoutLocalizationLanguage` (`language`) USING BTREE,
-  CONSTRAINT `idxFLayoutLocalizationLanguage` FOREIGN KEY (`language`) REFERENCES `language` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `idxFLocalizedLayout` FOREIGN KEY (`layout`) REFERENCES `layout` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `idxFLanguageOfLayoutLocalization` FOREIGN KEY (`language`) REFERENCES `language` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `idxFLayoutOfLayoutLocalization` FOREIGN KEY (`layout`) REFERENCES `layout` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_turkish_ci ROW_FORMAT=COMPACT;
 
 -- ----------------------------
@@ -88,8 +88,8 @@ CREATE TABLE `module` (
   UNIQUE KEY `idxUModuleCode` (`code`) USING BTREE,
   KEY `idxFSiteOfModule` (`site`) USING BTREE,
   KEY `idxFThemeOfModule` (`theme`) USING BTREE,
-  CONSTRAINT `idx_f_module_site` FOREIGN KEY (`site`) REFERENCES `site` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `idx_f_module_theme` FOREIGN KEY (`theme`) REFERENCES `theme` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `idxFSiteOfModule` FOREIGN KEY (`site`) REFERENCES `site` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `idxFThemeOfModule` FOREIGN KEY (`theme`) REFERENCES `theme` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_turkish_ci ROW_FORMAT=COMPACT;
 
 -- ----------------------------
@@ -128,9 +128,9 @@ CREATE TABLE `modules_of_layout` (
   KEY `idxFModuleOfLayout` (`module`) USING BTREE,
   KEY `idxFPageOfModule` (`page`) USING BTREE,
   KEY `idxNSectionOfLayout` (`section`) USING BTREE,
-  CONSTRAINT `idxFLayoutOfModule` FOREIGN KEY (`layout`) REFERENCES `layout` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `idxFModuleOfLayout` FOREIGN KEY (`module`) REFERENCES `module` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `idxFPageOfModule` FOREIGN KEY (`page`) REFERENCES `page` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `idxFLayoutOfModulesOfLayout` FOREIGN KEY (`layout`) REFERENCES `layout` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `idxFModuleOfModulesOfLayout` FOREIGN KEY (`module`) REFERENCES `module` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `idxFPageOfModulesOfLayout` FOREIGN KEY (`page`) REFERENCES `page` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_turkish_ci ROW_FORMAT=COMPACT;
 
 -- ----------------------------
@@ -172,9 +172,9 @@ CREATE TABLE `navigation_item` (
   KEY `idxFNavigationOfNavigationItem` (`navigation`) USING BTREE,
   KEY `idxFParentNavigationItem` (`parent`) USING BTREE,
   KEY `idxUPageOfNavigationItem` (`page`) USING BTREE,
-  CONSTRAINT `idx_f_navigation_item_navigation` FOREIGN KEY (`navigation`) REFERENCES `navigation` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `idx_f_navigation_item_page` FOREIGN KEY (`page`) REFERENCES `page` (`id`) ON UPDATE CASCADE,
-  CONSTRAINT `idx_f_navigation__item_parent` FOREIGN KEY (`parent`) REFERENCES `navigation_item` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `idxFNavigationOfNavigationItem` FOREIGN KEY (`navigation`) REFERENCES `navigation` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `idxUPageOfNavigationItem` FOREIGN KEY (`page`) REFERENCES `page` (`id`) ON UPDATE CASCADE,
+  CONSTRAINT `idxFParentOfNavigationItem` FOREIGN KEY (`parent`) REFERENCES `navigation_item` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_turkish_ci ROW_FORMAT=COMPACT;
 
 -- ----------------------------
@@ -192,8 +192,8 @@ CREATE TABLE `navigation_item_localization` (
   UNIQUE KEY `idxUNavigationItemUrlKey` (`language`,`navigation_item`,`url_key`) USING BTREE,
   KEY `idxFNavigationItemLocalizationLanguage` (`language`) USING BTREE,
   KEY `idxFLocalizedNavigationItem` (`navigation_item`) USING BTREE,
-  CONSTRAINT `idxFLocalizedNavigationItem` FOREIGN KEY (`navigation_item`) REFERENCES `navigation_item` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `idxFNavigationItemLocalizationLanguage` FOREIGN KEY (`language`) REFERENCES `language` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `idxFNavigationItemOfNavigationItemLocalization` FOREIGN KEY (`navigation_item`) REFERENCES `navigation_item` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `idxFLanguageOfNavigationItemLocalization` FOREIGN KEY (`language`) REFERENCES `language` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_turkish_ci ROW_FORMAT=COMPACT;
 
 -- ----------------------------
@@ -211,8 +211,8 @@ CREATE TABLE `navigation_localization` (
   UNIQUE KEY `idxUNavigationUrlKey` (`language`,`navigation`,`url_key`) USING BTREE,
   KEY `idxFNavigationLocalizationLanguage` (`language`) USING BTREE,
   KEY `idxFLocalizedNavigation` (`navigation`) USING BTREE,
-  CONSTRAINT `idxFLocalizedNavigation` FOREIGN KEY (`navigation`) REFERENCES `navigation` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `idxFNavigationLocalizationLanguage` FOREIGN KEY (`language`) REFERENCES `language` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `idxFNavigationOfNavigationLocalization` FOREIGN KEY (`navigation`) REFERENCES `navigation` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `idxFLanguageOfNavigationLocalization` FOREIGN KEY (`language`) REFERENCES `language` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_turkish_ci ROW_FORMAT=COMPACT;
 
 -- ----------------------------
@@ -253,8 +253,8 @@ CREATE TABLE `page_localization` (
   UNIQUE KEY `idxUPageUrlKey` (`page`,`language`,`url_key`) USING BTREE,
   KEY `idxFLayoutLocalizationLanguage` (`language`) USING BTREE,
   KEY `idxFLocalizedPage` (`page`) USING BTREE,
-  CONSTRAINT `idxFLocalizedPage` FOREIGN KEY (`page`) REFERENCES `page` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `idxFPageLocalizationLanguage` FOREIGN KEY (`language`) REFERENCES `language` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `idxFPageOfPageLocalization` FOREIGN KEY (`page`) REFERENCES `page` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `idxFLanguageOfPageLocalization` FOREIGN KEY (`language`) REFERENCES `language` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_turkish_ci ROW_FORMAT=COMPACT;
 
 -- ----------------------------
@@ -278,8 +278,8 @@ CREATE TABLE `page_revision` (
   UNIQUE KEY `idxUPageRevision` (`language`,`page`,`revision_number`) USING BTREE,
   KEY `idxFLanguageOfRevision` (`language`) USING BTREE,
   KEY `idxFPageOfRevision` (`page`) USING BTREE,
-  CONSTRAINT `idxFLanguageOfRevision` FOREIGN KEY (`language`) REFERENCES `language` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `idxFPageOfRevision` FOREIGN KEY (`page`) REFERENCES `page` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `idxFLanguageOfPageRevision` FOREIGN KEY (`language`) REFERENCES `language` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `idxFPageOfPageRevision` FOREIGN KEY (`page`) REFERENCES `page` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_turkish_ci ROW_FORMAT=COMPACT;
 
 -- ----------------------------
@@ -317,6 +317,6 @@ CREATE TABLE `theme_localization` (
   UNIQUE KEY `idxUThemeLocalization` (`name`,`language`) USING BTREE,
   KEY `idxFThemeLocalizationLanguage` (`language`) USING BTREE,
   KEY `idxFLocalizedTheme` (`theme`) USING BTREE,
-  CONSTRAINT `idxFLocalizedTheme` FOREIGN KEY (`theme`) REFERENCES `theme` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `idxFThemeLocalizationLanguage` FOREIGN KEY (`language`) REFERENCES `language` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `idxFThemeOfThemeLocalization` FOREIGN KEY (`theme`) REFERENCES `theme` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `idxFLanguageOfThemeLocalization` FOREIGN KEY (`language`) REFERENCES `language` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_turkish_ci ROW_FORMAT=COMPACT;
